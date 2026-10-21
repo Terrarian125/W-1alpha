@@ -1,11 +1,13 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include "Engine/FontText.hpp"
 
 
 //プレイシーンを管理するクラス
 class PlayScene : public GameObject
 {
 	const int ENEMY_NUM;	//敵の数
+	FontText text_;		//テキスト描画用のオブジェクト
 
 public:
 	//コンストラクタ

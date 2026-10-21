@@ -11,6 +11,11 @@
 #include "Camera.h"
 #include "Input.h"
 #include "Audio.h"
+#include "imgui.h"
+#include "imgui_impl_win32.h"
+#include "imgui_impl_dx11.h"
+#include "Direct3D.h"
+
 
 //定数宣言
 const char* WIN_CLASS_NAME = "SampleGame";	//ウィンドウクラス名
@@ -45,6 +50,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	//Direct3D準備
 	Direct3D::Initialize(hWnd, screenWidth, screenHeight);
+
+	// ImGui準備
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGui::StyleColorsDark();
+
+	ImGui_ImplWin32_Init(hWnd);
+	ImGui_ImplDX11_Init(
+		Direct3D::pDevice_,
+		Direct3D::pContext_);
 
 	//カメラを準備
 	Camera::Initialize();
@@ -117,20 +132,26 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				//ルートオブジェクトのUpdateを呼んだあと、自動的に子、孫のUpdateが呼ばれる
 				pRootObject->UpdateSub();
 
+
+				ImGui_ImplDX11_NewFrame();
+				ImGui_ImplWin32_NewFrame();
+				ImGui::NewFrame();
+
 				//カメラを更新
 				Camera::Update();
 
 
 
-
-				//このフレームの描画開始
+				//描画処理
 				Direct3D::BeginDraw();
 
-				//全オブジェクトを描画
-				//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
+				// ゲームオブジェクトの描画
 				pRootObject->DrawSub();
 
-				//描画終了
+				// ImGuiの描画
+				ImGui::Render();
+				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
 				Direct3D::EndDraw();
 
 
@@ -152,6 +173,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Image::AllRelease();
 	pRootObject->ReleaseSub();
 	SAFE_DELETE(pRootObject);
+	ImGui_ImplDX11_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
 	Direct3D::Release();
 
 	return 0;
@@ -206,15 +230,30 @@ HWND InitApp(HINSTANCE hInstance, int screenWidth, int screenHeight, int nCmdSho
 	return hWnd;
 }
 
+extern IMGUI_IMPL_API LRESULT
+ImGui_ImplWin32_WndProcHandler(
+	HWND hWnd,
+	UINT msg,
+	WPARAM wParam,
+	LPARAM lParam);
 
 //ウィンドウプロシージャ（何かあった時によばれる関数）
-LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK WndProc(
+	HWND hWnd, UINT msg,
+	WPARAM wParam, LPARAM lParam)
 {
+	if (ImGui_ImplWin32_WndProcHandler(
+		hWnd, msg, wParam, lParam))
+	{
+		return TRUE;
+	}
+
 	switch (msg)
 	{
 	case WM_DESTROY:
-		PostQuitMessage(0);	//プログラム終了
+		PostQuitMessage(0);
 		return 0;
 	}
+
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }

@@ -1,5 +1,6 @@
 #include "camera.h"
 #include "Direct3D.h"
+#include  <Imgui.h>
 
 XMVECTOR _position;
 XMVECTOR _target;
@@ -22,6 +23,13 @@ void Camera::Update()
 	//ビュー行列
 	_view = XMMatrixLookAtLH(XMVectorSet(_position.vecX, _position.vecY, _position.vecZ, 0),
 		XMVectorSet(_target.vecX, _target.vecY, _target.vecZ, 0), XMVectorSet(0, 1, 0, 0));
+
+	ImGui::Begin("Camera");
+	ImGui::InputFloat("RotX", &_position.vecX);
+	ImGui::InputFloat("RotY", &_position.vecY);
+	ImGui::InputFloat("RotZ", &_position.vecZ);
+	ImGui::End();
+
 }
 
 //焦点を設定

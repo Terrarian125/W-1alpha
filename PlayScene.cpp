@@ -3,6 +3,7 @@
 #include "Ground.h"
 #include "Enemy.h"
 #include "Infomation.h"
+#include "Engine\\FontText.hpp"
 
 //コンストラクタ
 PlayScene::PlayScene(GameObject * parent)
@@ -23,6 +24,8 @@ void PlayScene::Initialize()
 	}
 
 	Instantiate<Infomation>(this);
+
+	text_.Initialize("Fonts/Rye-Regular.ttf", 32.0f);
 }
 
 //更新
@@ -33,6 +36,7 @@ void PlayScene::Update()
 //描画
 void PlayScene::Draw()
 {
+	text_.Draw(32, 32, "Yes!TakasuClinic");
 }
 
 //開放
