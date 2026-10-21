@@ -1,21 +1,35 @@
+//#ifdef isButtonHovered
+//#undef isButtonHovered
+//#endif
+//
+//#ifdef clicked
+//#undef clicked
+//#endif
+//
+//#ifdef hovered
+//#undef hovered
+//#endif
+#include <algorithm>
 #include "GuiButton.h"
 
 #include <imgui.h>
-
-#include <algorithm>
-#include <cstdint>
 #include <cstdio>
 #include <utility>
+#include <Windows.h>
 
 namespace
 {
     //0xRRGGBBAA 形式の色を ImGui 用の色に変換する
     ImU32 ToImU32(unsigned int rgba)
     {
-        const unsigned char r = static_cast<unsigned char>((rgba >> 24) & 0xFF);
-        const unsigned char g = static_cast<unsigned char>((rgba >> 16) & 0xFF);
-        const unsigned char b = static_cast<unsigned char>((rgba >> 8) & 0xFF);
-        const unsigned char a = static_cast<unsigned char>(rgba & 0xFF);
+        const unsigned char r =
+            static_cast<unsigned char>((rgba >> 24) & 0xFF);
+        const unsigned char g =
+            static_cast<unsigned char>((rgba >> 16) & 0xFF);
+        const unsigned char b =
+            static_cast<unsigned char>((rgba >> 8) & 0xFF);
+        const unsigned char a =
+            static_cast<unsigned char>(rgba & 0xFF);
 
         return IM_COL32(r, g, b, a);
     }
@@ -47,24 +61,12 @@ GuiButton::GuiButton(
 void GuiButton::Draw()
 {
     if (!active_ || width <= 0 || height <= 0)
-    {
         return;
-    }
 
-    //ImGui が初期化されていなければ描画しない
     if (ImGui::GetCurrentContext() == nullptr)
-    {
         return;
-    }
 
-    //ImGui::Begin("GuiButton Internal Debug");
-    //ImGui::Text("Draw entered");
-    //ImGui::Text("x=%d y=%d w=%d h=%d", x, y, width, height);
-    //ImGui::End();
-
-    //ボタンのインスタンスごとに異なるウィンドウ名を生成する
     char windowName[64];
-
     std::snprintf(
         windowName,
         sizeof(windowName),
@@ -97,9 +99,8 @@ void GuiButton::Draw()
         ImGui::End();
         return;
     }
-    //ImGui::Text("GuiButton is working!");
 
-    ImGui::PushID(this);
+    ImGui::SetCursorPos(ImVec2(0.0f, 0.0f));
 
     const ImVec2 buttonSize(
         static_cast<float>(width),
@@ -107,54 +108,62 @@ void GuiButton::Draw()
     );
 
     const ImVec2 buttonMin = ImGui::GetCursorScreenPos();
+
     const ImVec2 buttonMax(
         buttonMin.x + buttonSize.x,
         buttonMin.y + buttonSize.y
     );
 
+
     ImDrawList* drawList = ImGui::GetWindowDrawList();
 
-    const bool hovered =
+    // マウスがボタンの範囲内にあるか
+    const bool isButtonHovered =
         ImGui::IsMouseHoveringRect(buttonMin, buttonMax);
 
+    // ホバー中に左クリックされたか
     const bool clicked =
-        hovered &&
+        isButtonHovered &&
         ImGui::IsMouseClicked(ImGuiMouseButton_Left);
 
-    //背景色
+    // 背景色
     unsigned int backgroundColor = normalColor_;
 
-    if (hovered)
-    {
+    if (isButtonHovered)
         backgroundColor = hoveredColor_;
-    }
 
-    if (ImGui::IsMouseDown(ImGuiMouseButton_Left) && hovered)
+    if (isButtonHovered &&
+        ImGui::IsMouseDown(ImGuiMouseButton_Left))
     {
         backgroundColor = activeColor_;
     }
 
-    //背景を描画
+    // ボタン背景を描画
     drawList->AddRectFilled(
         buttonMin,
         buttonMax,
         ToImU32(backgroundColor)
     );
 
-    //画像が設定されていれば画像を描画
+    // 画像を描画
     if (textureId_ != nullptr)
     {
         drawList->AddImage(
             static_cast<ImTextureID>(textureId_),
             buttonMin,
-            buttonMax
+            buttonMax,
+            ImVec2(0.0f, 0.0f),
+            ImVec2(1.0f, 1.0f),
+            ToImU32(imageTint_)
         );
     }
 
-    //ボタンの文字を描画
+    // テキストを描画
     if (!label.empty())
     {
-        const ImVec2 textSize = ImGui::CalcTextSize(label.c_str());
+        const ImVec2 textSize = ImGui::CalcTextSize(
+            label.c_str()
+        );
 
         const ImVec2 textPos(
             buttonMin.x + (buttonSize.x - textSize.x) * 0.5f,
@@ -168,37 +177,39 @@ void GuiButton::Draw()
         );
     }
 
-    //説明文が設定されていればツールチップとして表示
-    if (hovered && !description_.empty())
+    // 説明を表示
+    if (isButtonHovered && !description_.empty())
     {
-        ImGui::SetTooltip("%s", description_.c_str());
+        ImGui::SetTooltip(
+            "%s",
+            description_.c_str()
+        );
     }
 
-    //ImGui の入力処理領域を確保する
-    ImGui::SetCursorScreenPos(buttonMin);
+    // ボタンの入力領域
+    ImGui::SetCursorPos(ImVec2(0.0f, 0.0f));
 
     ImGui::InvisibleButton(
         "##ButtonHitArea",
         buttonSize
     );
 
-    //フォーカス枠
+    // フォーカス枠
     if (focused_)
     {
         drawList->AddRect(
             buttonMin,
             buttonMax,
-            IM_COL32(255, 220, 0, 255),
+            IM_COL32(255, 255, 0, 255),
             0.0f,
             0,
             2.0f
         );
     }
 
-    ImGui::PopID();
     ImGui::End();
 
-    //コールバックはウィンドウを閉じた後に呼び出す
+    // クリック時のコールバック
     if (clicked && onClick)
     {
         onClick();
@@ -213,8 +224,8 @@ void GuiButton::SetPosition(int newX, int newY)
 
 void GuiButton::SetSize(int newWidth, int newHeight)
 {
-    width = std::max(0, newWidth);
-    height = std::max(0, newHeight);
+    width = (std::max)(0, newWidth);
+    height = (std::max)(0, newHeight);
 }
 
 void GuiButton::SetText(std::string text)

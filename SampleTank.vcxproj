@@ -152,7 +152,9 @@
     <ClCompile Include="Engine\FbxParts.cpp" />
     <ClCompile Include="Engine\FontText.cpp" />
     <ClCompile Include="Engine\GameObject.cpp" />
-    <ClCompile Include="Engine\GuiButton.cpp" />
+    <ClCompile Include="Engine\GuiButton.cpp">
+      <PreprocessToFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</PreprocessToFile>
+    </ClCompile>
     <ClCompile Include="Engine\Image.cpp" />
     <ClCompile Include="Engine\Input.cpp" />
     <ClCompile Include="Engine\Main.cpp" />
