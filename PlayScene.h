@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include "Engine/FontText.hpp"
+#include "Engine/GuiButton.h"
 
 
 //プレイシーンを管理するクラス
@@ -25,4 +26,7 @@ public:
 
 	//開放
 	void Release() override;
+
+private:
+	GuiButton* startButton = nullptr;
 };
