@@ -36,6 +36,9 @@
     <Filter Include="03Scene\03Gameover">
       <UniqueIdentifier>{241ee9f3-a84c-496c-8609-08c136f3420f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03Scene\01Play\Obstacle">
+      <UniqueIdentifier>{6ee15fd6-678c-4528-8e5a-2f868036dda7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\BoxCollider.cpp">
@@ -98,27 +101,6 @@
     <ClCompile Include="Engine\Transform.cpp">
       <Filter>01Engine\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet.cpp">
-      <Filter>03Scene\01Play</Filter>
-    </ClCompile>
-    <ClCompile Include="Cannon.cpp">
-      <Filter>03Scene\01Play</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>03Scene\01Play</Filter>
-    </ClCompile>
-    <ClCompile Include="Ground.cpp">
-      <Filter>03Scene\01Play</Filter>
-    </ClCompile>
-    <ClCompile Include="Infomation.cpp">
-      <Filter>03Scene\01Play</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayScene.cpp">
-      <Filter>03Scene\01Play</Filter>
-    </ClCompile>
-    <ClCompile Include="Tank.cpp">
-      <Filter>03Scene\01Play</Filter>
-    </ClCompile>
     <ClCompile Include="ClearScene.cpp">
       <Filter>03Scene\02Clear</Filter>
     </ClCompile>
@@ -136,6 +118,15 @@
     <ClCompile Include="ImGui\imgui_ja_gryph_ranges.cpp" />
     <ClCompile Include="ImGui\imgui_tables.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="Source\RaceScene.cpp">
+      <Filter>03Scene\01Play</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Horse.cpp">
+      <Filter>03Scene\01Play</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Obstacle.cpp">
+      <Filter>03Scene\01Play\Obstacle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -198,27 +189,6 @@
     <ClInclude Include="Engine\Transform.h">
       <Filter>01Engine\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Bullet.h">
-      <Filter>03Scene\01Play</Filter>
-    </ClInclude>
-    <ClInclude Include="Cannon.h">
-      <Filter>03Scene\01Play</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>03Scene\01Play</Filter>
-    </ClInclude>
-    <ClInclude Include="Ground.h">
-      <Filter>03Scene\01Play</Filter>
-    </ClInclude>
-    <ClInclude Include="Infomation.h">
-      <Filter>03Scene\01Play</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayScene.h">
-      <Filter>03Scene\01Play</Filter>
-    </ClInclude>
-    <ClInclude Include="Tank.h">
-      <Filter>03Scene\01Play</Filter>
-    </ClInclude>
     <ClInclude Include="ClearScene.h">
       <Filter>03Scene\02Clear</Filter>
     </ClInclude>
@@ -238,6 +208,33 @@
     <ClInclude Include="ImGui\imstb_rectpack.h" />
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
+    <ClInclude Include="Source\RaceScene.hpp">
+      <Filter>03Scene\01Play</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Horse.hpp">
+      <Filter>03Scene\01Play</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Obstacle.hpp">
+      <Filter>03Scene\01Play\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\cactus1.hpp">
+      <Filter>03Scene\01Play\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\cactus2.hpp">
+      <Filter>03Scene\01Play\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Tumbleweed.hpp">
+      <Filter>03Scene\01Play\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Fence.hpp">
+      <Filter>03Scene\01Play\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rock.hpp">
+      <Filter>03Scene\01Play\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\FallingRock.hpp">
+      <Filter>03Scene\01Play\Obstacle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

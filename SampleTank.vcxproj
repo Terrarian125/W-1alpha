@@ -138,10 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Bullet.cpp" />
-    <ClCompile Include="Cannon.cpp" />
     <ClCompile Include="ClearScene.cpp" />
-    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Engine\Audio.cpp" />
     <ClCompile Include="Engine\BoxCollider.cpp" />
     <ClCompile Include="Engine\Camera.cpp" />
@@ -172,16 +169,12 @@
     <ClCompile Include="ImGui\imgui_ja_gryph_ranges.cpp" />
     <ClCompile Include="ImGui\imgui_tables.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
-    <ClCompile Include="Infomation.cpp" />
-    <ClCompile Include="PlayScene.cpp" />
-    <ClCompile Include="Ground.cpp" />
-    <ClCompile Include="Tank.cpp" />
+    <ClCompile Include="Source\Horse.cpp" />
+    <ClCompile Include="Source\Obstacle.cpp" />
+    <ClCompile Include="Source\RaceScene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bullet.h" />
-    <ClInclude Include="Cannon.h" />
     <ClInclude Include="ClearScene.h" />
-    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Engine\Audio.h" />
     <ClInclude Include="Engine\BoxCollider.h" />
     <ClInclude Include="Engine\Camera.h" />
@@ -214,10 +207,15 @@
     <ClInclude Include="ImGui\imstb_rectpack.h" />
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
-    <ClInclude Include="Infomation.h" />
-    <ClInclude Include="PlayScene.h" />
-    <ClInclude Include="Ground.h" />
-    <ClInclude Include="Tank.h" />
+    <ClInclude Include="Source\cactus1.hpp" />
+    <ClInclude Include="Source\cactus2.hpp" />
+    <ClInclude Include="Source\FallingRock.hpp" />
+    <ClInclude Include="Source\Fence.hpp" />
+    <ClInclude Include="Source\Horse.hpp" />
+    <ClInclude Include="Source\Obstacle.hpp" />
+    <ClInclude Include="Source\RaceScene.hpp" />
+    <ClInclude Include="Source\Rock.hpp" />
+    <ClInclude Include="Source\Tumbleweed.hpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Debug3D.hlsl">
