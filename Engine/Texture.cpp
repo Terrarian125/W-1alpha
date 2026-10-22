@@ -84,3 +84,8 @@ HRESULT Texture::Load(std::string fileName)
 
 	return S_OK;
 }
+
+ID3D11ShaderResourceView* Texture::GetSRV() const
+{
+	return pTextureSRV_;
+}

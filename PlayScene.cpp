@@ -54,22 +54,15 @@ void PlayScene::Update()
 //•`‰æ
 void PlayScene::Draw()
 {
-    text_.Draw(32, 32, "Yes!TakasuClinic");
+    //text_.Draw(32, 32, "Yes!TakasuClinic");
 
-    ImGui::Begin("PlayScene Debug");
-    ImGui::Text("PlayScene::Draw called");
+    //ImGui::Begin("PlayScene Debug");
+    //ImGui::Text("PlayScene::Draw called");
 
-    if (startButton != nullptr)
-    {
-        ImGui::Text("startButton is not null");
-        startButton->Draw();
-    }
-    else
-    {
-        ImGui::Text("startButton is null");
-    }
-
-    ImGui::End();
+    //if (startButton != nullptr)
+    //{
+    //    startButton->Draw();
+    //}
 }
 
 //ŠJ•ú

@@ -37,5 +37,7 @@ public:
 	ID3D11SamplerState* GetSampler() { return pSampleLinear_; }	//サンプラーの取得
 	ID3D11ShaderResourceView* GetSRV() { return pTextureSRV_; }	//シェーダーリソースビューの取得
 	XMVECTOR GetSize() { return size_; }	//画像サイズの取得
+
+	ID3D11ShaderResourceView* GetSRV() const;//マウスカーソル用
 };
 

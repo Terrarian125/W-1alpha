@@ -16,6 +16,9 @@
 #include "imgui_impl_dx11.h"
 #include "Direct3D.h"
 
+#include "MyCursor.h"
+#include "Texture.h"
+
 
 //定数宣言
 const char* WIN_CLASS_NAME = "SampleGame";	//ウィンドウクラス名
@@ -26,7 +29,7 @@ HWND InitApp(HINSTANCE hInstance, int screenWidth, int screenHeight, int nCmdSho
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 
-// エントリーポイント
+//エントリーポイント
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 //#if defined(DEBUG) | defined(_DEBUG)
@@ -51,7 +54,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//Direct3D準備
 	Direct3D::Initialize(hWnd, screenWidth, screenHeight);
 
-	// ImGui準備
+	//ImGui準備
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
@@ -69,6 +72,28 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	//オーディオ（効果音）の準備
 	Audio::Initialize(hWnd);
+
+	//独自マウスカーソル
+	Texture cursorTexture;
+	MyCursor myCursor;
+
+	//カーソル画像をロード
+	HRESULT hr = cursorTexture.Load("Cursor.png");
+
+	if (SUCCEEDED(hr))
+	{
+		myCursor.SetTexture(
+			(ImTextureID)cursorTexture.GetSRV()
+		);
+
+		myCursor.SetSize(64.0f, 64.0f);
+		myCursor.SetHotspot(32.0f, 32.0f);
+		myCursor.SetVisible(true);
+	}
+	else
+	{
+		myCursor.SetVisible(false);
+	}
 
 
 	//ルートオブジェクト準備
@@ -152,10 +177,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				//描画処理
 				Direct3D::BeginDraw();
 
-				// ゲームオブジェクトの描画
+				//ゲームオブジェクトの描画
 				pRootObject->DrawSub();
 
-				// ImGuiの描画
+				//ゲームオブジェクトの描画
+				pRootObject->DrawSub();
+
+				//独自カーソルを最前面に描画
+				myCursor.Draw();
+
+				//ImGuiの描画
 				ImGui::Render();
 				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
@@ -249,6 +280,13 @@ LRESULT CALLBACK WndProc(
 	HWND hWnd, UINT msg,
 	WPARAM wParam, LPARAM lParam)
 {
+	// クライアント領域ではWindows標準カーソルを隠す
+	if (msg == WM_SETCURSOR && LOWORD(lParam) == HTCLIENT)
+	{
+		SetCursor(nullptr);
+		return TRUE;
+	}
+
 	if (ImGui_ImplWin32_WndProcHandler(
 		hWnd, msg, wParam, lParam))
 	{

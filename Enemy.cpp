@@ -67,8 +67,8 @@ void Enemy::Update()
 //•`‰æ
 void Enemy::Draw()
 {
-	Model::SetTransform(hModel_, transform_);
-	Model::Draw(hModel_);
+	//Model::SetTransform(hModel_, transform_);
+	//Model::Draw(hModel_);
 }
 
 //ŠJ•ú
