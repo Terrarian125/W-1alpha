@@ -35,7 +35,7 @@ void PlayScene::Initialize()
         100,  // Y座標
         200,  // 幅
         60,   // 高さ
-        "ゲームスタート"
+        "GameStart"
     );
     // クリックされたときの処理
     startButton->onClick = [this]()
@@ -43,7 +43,7 @@ void PlayScene::Initialize()
         };
 
     // 説明文
-    startButton->SetDescription("クリックしてゲームを開始します");
+    startButton->SetDescription("Click to start the game");
 }
 
 //更新
