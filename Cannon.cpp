@@ -20,7 +20,7 @@ Cannon::~Cannon()
 void Cannon::Initialize()
 {
 	//モデルデータのロード
-	hModel_ = Model::Load("Model/TankHead.fbx");
+	hModel_ = Model::Load("Model/Gun03.fbx");
 	assert(hModel_ >= 0);
 }
 

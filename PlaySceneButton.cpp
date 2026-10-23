@@ -19,7 +19,7 @@ bool PlaySceneButton::Initialize(
     leftStopButton_.reset(new GuiButton(0, 0, 180, 56, "STOP"));
     rightStopButton_.reset(new GuiButton(0, 0, 180, 56, "STOP"));
 
-    startButton_->SetDescription("Timer Set Game Staeryttt");
+    startButton_->SetDescription("");
     leftStopButton_->SetDescription("L Stop");
     rightStopButton_->SetDescription("R Stop");
 
