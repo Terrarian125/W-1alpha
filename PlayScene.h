@@ -2,13 +2,16 @@
 #include "Engine/GameObject.h"
 #include "Engine/FontText.hpp"
 #include "Engine/GuiButton.h"
-
+#include "Engine/GameTimer.h"
+#include "PlaySceneButton.h"
 
 //プレイシーンを管理するクラス
 class PlayScene : public GameObject
 {
 	const int ENEMY_NUM;	//敵の数
 	FontText text_;		//テキスト描画用のオブジェクト
+	GameTimer timer_;
+	PlaySceneButton playSceneButton_;
 
 public:
 	//コンストラクタ

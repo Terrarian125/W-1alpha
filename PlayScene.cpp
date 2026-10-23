@@ -17,33 +17,18 @@ PlayScene::PlayScene(GameObject * parent)
 //初期化
 void PlayScene::Initialize()
 {
-	Instantiate<Tank>(this);
-	Instantiate<Ground>(this);
+    Instantiate<Tank>(this);
+    Instantiate<Ground>(this);
 
-	for (int i = 0; i < ENEMY_NUM; i++)
-	{
-		Instantiate<Enemy>(this);
-	}
+    for (int i = 0; i < ENEMY_NUM; ++i)
+        Instantiate<Enemy>(this);
 
-	Instantiate<Infomation>(this);
+    Instantiate<Infomation>(this);
 
-	text_.Initialize("Fonts/Rye-Regular.ttf", 32.0f);
+    text_.Initialize("Fonts/Rye-Regular.ttf", 32.0f);
 
-    // ボタンを生成（位置X、位置Y、幅、高さ、表示文字）
-    startButton = new GuiButton(
-        100,  // X座標
-        100,  // Y座標
-        200,  // 幅
-        60,   // 高さ
-        "GameStart"
-    );
-    // クリックされたときの処理
-    startButton->onClick = [this]()
-        {
-        };
-
-    // 説明文
-    startButton->SetDescription("Click to start the game");
+    const ImVec2 size = ImGui::GetIO().DisplaySize;
+    playSceneButton_.Initialize(size.x, size.y, &text_, &timer_);
 }
 
 //更新
@@ -63,11 +48,14 @@ void PlayScene::Draw()
     //{
     //    startButton->Draw();
     //}
+    const ImVec2 size = ImGui::GetIO().DisplaySize;
+    playSceneButton_.SetScreenSize(size.x, size.y);
+    playSceneButton_.Draw();
 }
 
 //開放
 void PlayScene::Release()
 {
-    delete startButton;
-    startButton = nullptr;
+    playSceneButton_.Reset();
+    text_.Release();
 }

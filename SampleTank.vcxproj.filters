@@ -37,7 +37,7 @@
       <UniqueIdentifier>{241ee9f3-a84c-496c-8609-08c136f3420f}</UniqueIdentifier>
     </Filter>
     <Filter Include="01Engine\ImGui">
-      <UniqueIdentifier>{b4ab37e6-ef58-4ceb-88d1-4dbc27ba8d7d}</UniqueIdentifier>
+      <UniqueIdentifier>{546b90c2-6fb4-4113-b7d9-f89c4bf981f6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -131,6 +131,8 @@
     <ClCompile Include="Engine\FontText.cpp">
       <Filter>01Engine\ResourceManager</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\GuiButton.cpp" />
+    <ClCompile Include="Engine\MyCursor.cpp" />
     <ClCompile Include="ImGui\imgui.cpp">
       <Filter>01Engine\ImGui</Filter>
     </ClCompile>
@@ -155,6 +157,10 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp">
       <Filter>01Engine\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="PlaySceneButton.cpp">
+      <Filter>03Scene\01Play</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GameTimer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -247,6 +253,8 @@
     <ClInclude Include="Engine\FontText.hpp">
       <Filter>01Engine\ResourceManager</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\GuiButton.h" />
+    <ClInclude Include="Engine\MyCursor.h" />
     <ClInclude Include="ImGui\imconfig.h">
       <Filter>01Engine\ImGui</Filter>
     </ClInclude>
@@ -277,6 +285,10 @@
     <ClInclude Include="ImGui\imstb_truetype.h">
       <Filter>01Engine\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="PlaySceneButton.h">
+      <Filter>03Scene\01Play</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GameTimer.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">
