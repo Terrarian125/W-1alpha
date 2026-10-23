@@ -1,7 +1,7 @@
 #include "PlayScene.h"
 #include "Tank.h"
 #include "Ground.h"
-#include "Enemy.h"
+//#include "Enemy.h"
 #include "Infomation.h"
 #include "Engine\\FontText.hpp"
 #include "Engine\\GUIbutton.h"
@@ -20,8 +20,8 @@ void PlayScene::Initialize()
     Instantiate<Tank>(this);
     Instantiate<Ground>(this);
 
-    for (int i = 0; i < ENEMY_NUM; ++i)
-        Instantiate<Enemy>(this);
+ /*   for (int i = 0; i < ENEMY_NUM; ++i)
+        Instantiate<Enemy>(this);*/
 
     Instantiate<Infomation>(this);
 

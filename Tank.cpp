@@ -23,7 +23,8 @@ Tank::~Tank()
 void Tank::Initialize()
 {
 	//モデルデータのロード
-	hModel_ = Model::Load("/Model/TankBody.fbx");
+	hModel_ = Model::Load("/Model/Cowboy00.fbx");
+	transform_.scale_ = XMVectorSet(0.01f, 0.01f, 0.01f, 0);
 	assert(hModel_ >= 0);
 
 	//子供として砲台を作成
@@ -49,11 +50,11 @@ void Tank::Update()
 	FollowGround();
 
 	//敵がもういなかったらクリア画面へ
-	if (FindObject("Enemy") == nullptr)
-	{
-		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-		pSceneManager->ChangeScene(SCENE_ID_CLEAR);
-	}
+	//if (FindObject("Enemy") == nullptr)
+	//{
+	//	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+	//	pSceneManager->ChangeScene(SCENE_ID_CLEAR);
+	//}
 }
 
 //移動
