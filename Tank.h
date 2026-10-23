@@ -4,34 +4,33 @@
 //戦車（本体）を管理するクラス
 class Tank : public GameObject
 {
-	int hModel_;		//モデル番号
-	int hGroundModel_;	//地面のモデル番号
+    int hModel_;        //モデル番号
+    int hGroundModel_;  //地面のモデル番号
+    //int hImage_;        // 画像読み込み
 
+    //移動
+    void Move();
 
-	//移動
-	void Move();
-
-	//地面に沿わせる
-	void FollowGround();
-
+    //地面に沿わせる
+    void FollowGround();
 
 public:
-	//コンストラクタ
-	Tank(GameObject* parent);
+    //コンストラクタ
+    Tank(GameObject* parent);
 
-	//デストラクタ
-	~Tank();
+    //デストラクタ
+    ~Tank();
 
-	//初期化
-	void Initialize() override;
+    //初期化
+    void Initialize() override;
 
-	//更新
-	void Update() override;
+    //更新
+    void Update() override;
 
 
-	//描画
-	void Draw() override;
+    //描画
+    void Draw() override;
 
-	//開放
-	void Release() override;
+    //開放
+    void Release() override;
 };

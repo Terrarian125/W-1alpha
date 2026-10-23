@@ -175,6 +175,7 @@
     <ClCompile Include="Infomation.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="Reticle.cpp" />
     <ClCompile Include="Tank.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -217,6 +218,7 @@
     <ClInclude Include="Infomation.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Ground.h" />
+    <ClInclude Include="Reticle.hpp" />
     <ClInclude Include="Tank.h" />
   </ItemGroup>
   <ItemGroup>

@@ -4,13 +4,14 @@
 #include "Engine/SceneManager.h"
 #include "Cannon.h"
 #include "Ground.h"
+#include "Engine/Image.h"
 
 #include <DirectXMath.h>
 using namespace DirectX;
 
 //コンストラクタ
 Tank::Tank(GameObject * parent)
-	:GameObject(parent, "Tank"), hModel_(-1), hGroundModel_(-1)
+	:GameObject(parent, "Tank"), hModel_(-1), hGroundModel_(-1)//, hImage_(-1)
 {
 }
 
@@ -28,6 +29,10 @@ void Tank::Initialize()
 
 	//子供として砲台を作成
 	Instantiate<Cannon>(this);
+
+	//画像データのロード
+	//hImage_ = Image::Load("Image/UI1.png");
+	//assert(hImage_ >= 0);
 
 	//弾を撃ったときにロードすると処理落ちするので、予めロードしておく
 	int hBulletModel;
@@ -59,13 +64,16 @@ void Tank::Update()
 //移動
 void Tank::Move()
 {
+
 	//戦車が向いている方向に回転させる行列
 	XMMATRIX rotateMatrix = XMMatrixRotationY(transform_.rotate_.vecY / 180 * 3.14f);
 
 	//移動ベクトル
 	XMVECTOR  moveVector = XMVector3TransformCoord(XMVectorSet(0, 0, 0.2f, 0), rotateMatrix);
 
-
+	//コントローラー対応
+	//transform_.position_ += Input::GetPadStickL();
+	//transform_.position_ -= Input::GetPadStickL();
 
 	//前進
 	if (Input::IsKey(DIK_W))
@@ -131,6 +139,9 @@ void Tank::Draw()
 {
 	Model::SetTransform(hModel_, transform_);
 	Model::Draw(hModel_);
+
+	//Image::SetTransform(hImage_, transform_);
+	//Image::Draw(hImage_);
 }
 
 //開放

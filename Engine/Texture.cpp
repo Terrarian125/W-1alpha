@@ -60,9 +60,11 @@ HRESULT Texture::Load(std::string fileName)
 	// テクスチャを送る
 	D3D11_MAPPED_SUBRESOURCE hMappedres;
 	Direct3D::pContext_->Map(pTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &hMappedres);
-	pFormatConverter->CopyPixels(NULL, imgWidth * 4, imgWidth * imgHeight * 4, (BYTE*)hMappedres.pData);
+	// ↓修正前
+	//pFormatConverter->CopyPixels(NULL, imgWidth * 4, imgWidth * imgHeight * 4, (BYTE*)hMappedres.pData);
+	// ↓修正後：ここ修正しないとUI画像が崩れる
+	pFormatConverter->CopyPixels(NULL, hMappedres.RowPitch, hMappedres.RowPitch * imgHeight, (BYTE*)hMappedres.pData);
 	Direct3D::pContext_->Unmap(pTexture, 0);
-
 
 	// シェーダリソースビュー(テクスチャ用)の設定
 	D3D11_SHADER_RESOURCE_VIEW_DESC srv = {};

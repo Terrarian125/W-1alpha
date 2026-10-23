@@ -39,8 +39,8 @@ void Cannon::Update()
 		transform_.rotate_.vecY -= SWING_SPEED;
 	}
 
-	//発射
-	if (Input::IsKeyDown(DIK_SPACE))
+	//発射(試しにコントローラー右トリガー対応)
+	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_RIGHT_SHOULDER, 0))
 	{
 		//弾をシーンに追加
 		GameObject* playScene = FindObject("PlayScene");
