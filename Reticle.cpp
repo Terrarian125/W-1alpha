@@ -5,7 +5,6 @@
 #include "ImGui/imgui.h"
 
 #include <DirectXMath.h>
-#include <algorithm>
 
 using namespace DirectX;
 using namespace std;
@@ -71,16 +70,23 @@ void Reticle::Draw()
         ImGui::End();
 
         // ======= 発射の状況 =======
+        // 右トリガーを一瞬だけ押したときに使う、メンバ変数
+        bool triggerOld_ = false;
+        bool triggerNow = Input::GetPadTrrigerR(0) > 0.5f;
+
         ImGui::Begin("Shoot_status");
         if ((Input::IsMouseButtonDown(0)
             || Input::IsPadButtonDown(XINPUT_GAMEPAD_B)
-            || Input::IsPadButtonDown(XINPUT_GAMEPAD_RIGHT_SHOULDER)))
+            || triggerNow && !triggerOld_))
         {
             ImGui::Text("Shoot!!");
             ImGui::Text("%.2f", position_.x);
             ImGui::Text("%.2f", position_.y);
         }
         ImGui::End();
+
+        triggerOld_ = triggerNow;
+
     }
 }
 
@@ -94,8 +100,17 @@ void Reticle::Move()
 {
     float f = 0.02f;
 
-    ////移動ベクトル
-    //XMVECTOR  moveVector = Input::GetPadStickL();
+    //移動ベクトル
+    XMVECTOR  moveVector = Input::GetPadStickL();
+
+    // コントローラー対応
+    {
+        //前進 or 後退
+        position_.x += XMVectorGetX(moveVector) * f;
+
+        // 右移動 or 左移動
+        position_.y += XMVectorGetX(moveVector) * f;
+    }
 
     //前進
     if (Input::IsKey(DIK_W))
@@ -129,9 +144,15 @@ void Reticle::Move()
 // 発射
 void Reticle::Shoot()
 {
+    // 右トリガーを一瞬だけ押したときに使う、メンバ変数
+    bool triggerOld_ = false;
+    bool triggerNow = Input::GetPadTrrigerR(0) > 0.5f;
+
     if (Input::IsMouseButtonDown(0)
         || Input::IsPadButtonDown(XINPUT_GAMEPAD_B)
-        || Input::IsPadButtonDown(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+        || triggerNow && !triggerOld_)
     {
     }
+
+    triggerOld_ = triggerNow;
 }

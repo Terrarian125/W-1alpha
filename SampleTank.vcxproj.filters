@@ -139,6 +139,9 @@
     <ClCompile Include="Reticle.cpp">
       <Filter>03Scene\01Play</Filter>
     </ClCompile>
+    <ClCompile Include="Clay.cpp">
+      <Filter>03Scene\01Play</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -242,6 +245,9 @@
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="Reticle.hpp">
+      <Filter>03Scene\01Play</Filter>
+    </ClInclude>
+    <ClInclude Include="Clay.h">
       <Filter>03Scene\01Play</Filter>
     </ClInclude>
   </ItemGroup>

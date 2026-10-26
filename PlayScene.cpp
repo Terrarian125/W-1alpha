@@ -1,5 +1,6 @@
 #include "PlayScene.h"
 #include "Reticle.hpp"
+#include "Clay.h"
 //#include "Tank.h"
 //#include "Ground.h"
 //#include "Enemy.h"
@@ -17,6 +18,7 @@ void PlayScene::Initialize()
 {
     //Instantiate<Tank>(this);
     //Instantiate<Ground>(this);
+    Instantiate<Clay>(this);
     Instantiate<Reticle>(this);
 
     //for (int i = 0; i < ENEMY_NUM; i++) {
