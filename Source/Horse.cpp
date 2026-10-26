@@ -1,5 +1,7 @@
 #include "Horse.hpp"
 #include "../Engine/Input.h"
+#include "../Engine/Model.h"
+#include "../Engine/Camera.h"
 
 Horse::Horse(GameObject* parent)
 	:GameObject(parent, "Horse"), hModel_(-1)
@@ -8,6 +10,7 @@ Horse::Horse(GameObject* parent)
 
 void Horse::Initialize()
 {
+	hModel_ = Model::Load("Assets/Model/Horse/Horse00.fbx");
 }
 
 void Horse::Update()
@@ -23,11 +26,15 @@ void Horse::Update()
 	else if (Input::IsPadButton(XINPUT_GAMEPAD_DPAD_RIGHT))
 	{
 	}
+
+	
 }
 
 
 void Horse::Draw()
 {
+	Model::SetTransform(hModel_, transform_);
+	Model::Draw(hModel_);
 }
 
 void Horse::Release()

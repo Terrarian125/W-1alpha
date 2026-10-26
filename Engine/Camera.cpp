@@ -1,6 +1,6 @@
 #include "camera.h"
 #include "Direct3D.h"
-#include  <Imgui.h>
+#include  <../ImGui/imgui.h>
 
 XMVECTOR _position;
 XMVECTOR _target;
