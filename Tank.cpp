@@ -2,7 +2,7 @@
 #include "Engine/Model.h"
 #include "Engine/Input.h"
 #include "Engine/SceneManager.h"
-#include "Cannon.h"
+//#include "Cannon.h"
 #include "Ground.h"
 
 #include <DirectXMath.h>
@@ -24,11 +24,11 @@ void Tank::Initialize()
 {
 	//モデルデータのロード
 	hModel_ = Model::Load("/Model/Cowboy00.fbx");
-	transform_.scale_ = XMVectorSet(0.01f, 0.01f, 0.01f, 0);
+	transform_.scale_ = XMFLOAT3(0.01f, 0.01f, 0.01f);
 	assert(hModel_ >= 0);
 
 	//子供として砲台を作成
-	Instantiate<Cannon>(this);
+	//Instantiate<Cannon>(this);
 
 	//弾を撃ったときにロードすると処理落ちするので、予めロードしておく
 	int hBulletModel;
@@ -36,7 +36,10 @@ void Tank::Initialize()
 	assert(hBulletModel >= 0);
 
 	//箱型の当たり判定を作る
-	BoxCollider* collision = new BoxCollider(XMVectorSet(0, 0.5f, 0, 0), XMVectorSet(1, 1, 1, 0));
+	BoxCollider* collision = new BoxCollider(
+		XMFLOAT3(0.0f, 0.5f, 0.0f),
+		XMFLOAT3(1.0f, 1.0f, 1.0f)
+	);
 	AddCollider(collision);
 }
 
@@ -61,35 +64,40 @@ void Tank::Update()
 void Tank::Move()
 {
 	//戦車が向いている方向に回転させる行列
-	XMMATRIX rotateMatrix = XMMatrixRotationY(transform_.rotate_.vecY / 180 * 3.14f);
+	XMMATRIX rotateMatrix =XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
 
 	//移動ベクトル
-	XMVECTOR  moveVector = XMVector3TransformCoord(XMVectorSet(0, 0, 0.2f, 0), rotateMatrix);
+	XMVECTOR moveVector =XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.2f, 1.0f),rotateMatrix);
 
+	XMFLOAT3 move;
+	XMStoreFloat3(&move, moveVector);
 
-
-	//前進
+	// 前進
 	if (Input::IsKey(DIK_W))
 	{
-		transform_.position_ += moveVector;
+		transform_.position_.x += move.x;
+		transform_.position_.y += move.y;
+		transform_.position_.z += move.z;
 	}
 
-	//後退
+	// 後退
 	if (Input::IsKey(DIK_S))
 	{
-		transform_.position_ -= moveVector;
+		transform_.position_.x -= move.x;
+		transform_.position_.y -= move.y;
+		transform_.position_.z -= move.z;
 	}
 
-	//右旋回
+	// 右旋回
 	if (Input::IsKey(DIK_D))
 	{
-		transform_.rotate_.vecY += 1;
+		transform_.rotate_.y += 1.0f;
 	}
 
-	//左旋回
+	// 左旋回
 	if (Input::IsKey(DIK_A))
 	{
-		transform_.rotate_.vecY -= 1;
+		transform_.rotate_.y -= 1.0f;
 	}
 }
 
@@ -109,20 +117,18 @@ void Tank::FollowGround()
 	{
 		//レイを撃つ準備
 		RayCastData data;
-		data.start = transform_.position_;		//戦車の原点から
-		data.start.vecY = 0;						//高さ0（地面は一番高いところでもY<0になっている）
-		data.dir = XMVectorSet(0, -1, 0, 0);			//真下方向
+		data.start = transform_.position_;  //戦車の原点から
+		data.start.y = 0.0f;                //高さ0
+		data.dir = XMFLOAT3(0.0f, -1.0f, 0.0f); //真下方向
 
-														//地面に対してレイを撃つ
+		//地面に対してレイを撃つ
 		Model::RayCast(hGroundModel_, &data);
 
 		//レイが地面に当たったら
 		if (data.hit)
 		{
-			//戦車の高さを地面にあわせる
-			//（Y=0の高さからレイ撃って、data.distメートル先に地面があったということは
-			//　そこの標高は『-data.distメートル』ということになる）
-			transform_.position_.vecY = -data.dist;
+			//戦車の高さを地面に合わせる
+			transform_.position_.y = -data.dist;
 		}
 	}
 }

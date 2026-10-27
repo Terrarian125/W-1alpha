@@ -9,8 +9,7 @@
 
 //コンストラクタ
 PlayScene::PlayScene(GameObject * parent)
-	: GameObject(parent, "PlayScene"),
-	ENEMY_NUM(5)
+	: GameObject(parent, "PlayScene")
 {
 }
 

@@ -10,7 +10,7 @@ Infomation::Infomation(GameObject * parent)
 	assert(hPict_ >= 0);
 
 	//位置
-	transform_.position_ = XMVectorSet(-0.75f, 0.8f, 0, 0);
+	transform_.position_ = XMFLOAT3(-0.75f, 0.8f, 0.0f);
 }
 
 //デストラクタ

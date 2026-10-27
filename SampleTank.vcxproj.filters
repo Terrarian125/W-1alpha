@@ -161,6 +161,10 @@
       <Filter>03Scene\01Play</Filter>
     </ClCompile>
     <ClCompile Include="Engine\GameTimer.cpp" />
+    <ClCompile Include="Engine\BillBoard.cpp" />
+    <ClCompile Include="Engine\Debug.cpp" />
+    <ClCompile Include="Engine\Text.cpp" />
+    <ClCompile Include="Engine\VFX.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -289,6 +293,10 @@
       <Filter>03Scene\01Play</Filter>
     </ClInclude>
     <ClInclude Include="Engine\GameTimer.h" />
+    <ClInclude Include="Engine\BillBoard.h" />
+    <ClInclude Include="Engine\Debug.h" />
+    <ClInclude Include="Engine\Text.h" />
+    <ClInclude Include="Engine\VFX.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">
