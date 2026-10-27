@@ -16,11 +16,12 @@ using namespace DirectX;
 //-----------------------------------------------------------
 class Sprite
 {
+protected:
 	// 一つの頂点情報を格納する構造体
 	struct VERTEX
 	{
-		XMVECTOR position;
-		XMVECTOR uv;
+		XMFLOAT3 position;
+		XMFLOAT3 uv;
 	};
 
 
@@ -69,11 +70,12 @@ public:
 	//描画
 	//引数：matrix	変換行列（ワールド行列）
 	//引数：rect	画像の切り抜き範囲
-	void Draw(Transform& transform, RECT rect);
+	//引数：alpha	アルファ値（不透明度）
+	void Draw(Transform& transform, RECT rect, float alpha);
 
 
 	//画像サイズの取得
 	//戻値：画像サイズ
-	XMVECTOR GetTextureSize() {	return pTexture_->GetSize();}
+	XMFLOAT3 GetTextureSize() {	return pTexture_->GetSize();}
 
 };

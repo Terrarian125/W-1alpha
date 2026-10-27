@@ -2,6 +2,7 @@
 #include "SphereCollider.h"
 #include "GameObject.h"
 #include "Model.h"
+#include "Transform.h"
 
 //コンストラクタ
 Collider::Collider():
@@ -21,16 +22,16 @@ Collider::~Collider()
 bool Collider::IsHitBoxVsBox(BoxCollider* boxA, BoxCollider* boxB)
 {
 
-	XMVECTOR boxPosA = boxA->pGameObject_->GetPosition() + boxA->center_;
-	XMVECTOR boxPosB = boxB->pGameObject_->GetPosition() + boxB->center_;
+	XMFLOAT3 boxPosA = Transform::Float3Add(boxA->pGameObject_->GetWorldPosition(), boxA->center_);
+	XMFLOAT3 boxPosB = Transform::Float3Add(boxB->pGameObject_->GetWorldPosition(), boxB->center_);
 
 
-	if ((boxPosA.vecX + boxA->size_.vecX / 2) > (boxPosB.vecX - boxB->size_.vecX / 2) &&
-		(boxPosA.vecX - boxA->size_.vecX / 2) < (boxPosB.vecX + boxB->size_.vecX / 2) &&
-		(boxPosA.vecY + boxA->size_.vecY / 2) > (boxPosB.vecY - boxB->size_.vecY / 2) &&
-		(boxPosA.vecY - boxA->size_.vecY / 2) < (boxPosB.vecY + boxB->size_.vecY / 2) &&
-		(boxPosA.vecZ + boxA->size_.vecZ / 2) > (boxPosB.vecZ - boxB->size_.vecZ / 2) &&
-		(boxPosA.vecZ - boxA->size_.vecZ / 2) < (boxPosB.vecZ + boxB->size_.vecZ / 2))
+	if ((boxPosA.x + boxA->size_.x / 2) > (boxPosB.x - boxB->size_.x / 2) &&
+		(boxPosA.x - boxA->size_.x / 2) < (boxPosB.x + boxB->size_.x / 2) &&
+		(boxPosA.y + boxA->size_.y / 2) > (boxPosB.y - boxB->size_.y / 2) &&
+		(boxPosA.y - boxA->size_.y / 2) < (boxPosB.y + boxB->size_.y / 2) &&
+		(boxPosA.z + boxA->size_.z / 2) > (boxPosB.z - boxB->size_.z / 2) &&
+		(boxPosA.z - boxA->size_.z / 2) < (boxPosB.z + boxB->size_.z / 2))
 	{
 		return true;
 	}
@@ -43,17 +44,17 @@ bool Collider::IsHitBoxVsBox(BoxCollider* boxA, BoxCollider* boxB)
 //戻値：接触していればtrue
 bool Collider::IsHitBoxVsCircle(BoxCollider* box, SphereCollider* sphere)
 {
-	XMVECTOR circlePos = sphere->pGameObject_->GetPosition() + sphere->center_;
-	XMVECTOR boxPos = box->pGameObject_->GetPosition() + box->center_;
+	XMFLOAT3 circlePos = Transform::Float3Add(sphere->pGameObject_->GetWorldPosition(), sphere->center_);
+	XMFLOAT3 boxPos = Transform::Float3Add(box->pGameObject_->GetWorldPosition(), box->center_);
 
 
 
-	if (circlePos.vecX > boxPos.vecX - box->size_.vecX - sphere->size_.vecX &&
-		circlePos.vecX < boxPos.vecX + box->size_.vecX + sphere->size_.vecX &&
-		circlePos.vecY > boxPos.vecY - box->size_.vecY - sphere->size_.vecX &&
-		circlePos.vecY < boxPos.vecY + box->size_.vecY + sphere->size_.vecX &&
-		circlePos.vecZ > boxPos.vecZ - box->size_.vecZ - sphere->size_.vecX &&
-		circlePos.vecZ < boxPos.vecZ + box->size_.vecZ + sphere->size_.vecX )
+	if (circlePos.x > boxPos.x - box->size_.x - sphere->size_.x &&
+		circlePos.x < boxPos.x + box->size_.x + sphere->size_.x &&
+		circlePos.y > boxPos.y - box->size_.y - sphere->size_.x &&
+		circlePos.y < boxPos.y + box->size_.y + sphere->size_.x &&
+		circlePos.z > boxPos.z - box->size_.z - sphere->size_.x &&
+		circlePos.z < boxPos.z + box->size_.z + sphere->size_.x )
 	{
 		return true;
 	}
@@ -67,11 +68,15 @@ bool Collider::IsHitBoxVsCircle(BoxCollider* box, SphereCollider* sphere)
 //戻値：接触していればtrue
 bool Collider::IsHitCircleVsCircle(SphereCollider* circleA, SphereCollider* circleB)
 {
+	XMFLOAT3 centerA = circleA->center_;
+	XMFLOAT3 positionA = circleA->pGameObject_->GetWorldPosition();
+	XMFLOAT3 centerB = circleB->center_;
+	XMFLOAT3 positionB = circleB->pGameObject_->GetWorldPosition();
 
-	XMVECTOR Vec = (circleA->center_ + circleA->pGameObject_->GetPosition()) - (circleB->center_ + circleB->pGameObject_->GetPosition());
-	Vec = XMVector3Length(Vec);
+	XMVECTOR v = (XMLoadFloat3(&centerA) + XMLoadFloat3(&positionA))
+		- (XMLoadFloat3(&centerB) + XMLoadFloat3(&positionB));
 
-	if (Vec.vecX <= (circleA->size_.vecX + circleB->size_.vecX))
+	if (XMVector3Length(v).m128_f32[0] <= circleA->size_.x + circleB->size_.x)
 	{
 		return true;
 	}
@@ -80,12 +85,12 @@ bool Collider::IsHitCircleVsCircle(SphereCollider* circleA, SphereCollider* circ
 }
 
 //テスト表示用の枠を描画
-//引数：position	位置
-void Collider::Draw(XMVECTOR position)
+//引数：position	オブジェクトの位置
+void Collider::Draw(XMFLOAT3 position)
 {
 	Transform transform;
-	transform.position_ = XMVectorSet(position.vecX + center_.vecX, position.vecY + center_.vecY, position.vecZ + center_.vecZ, 0);
-	transform.scale_ = XMVectorSet(size_.vecX, size_.vecY, size_.vecZ, 0.0f);
+	transform.position_ = XMFLOAT3(position.x + center_.x, position.y + center_.y, position.z + center_.z);
+	transform.scale_ = size_;
 	transform.Calclation();
 	Model::SetTransform(hDebugModel_, transform);
 	Model::Draw(hDebugModel_);

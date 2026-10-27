@@ -21,7 +21,7 @@ class Texture
 {
 	ID3D11SamplerState*			pSampleLinear_;		//テクスチャサンプラー（テクスチャの貼り方）
 	ID3D11ShaderResourceView*	pTextureSRV_;		//シェーダーリソースビュー（テクスチャをシェーダーに送るためのもの）
-	XMVECTOR					size_;				//画像ファイルのサイズ
+	XMFLOAT3					size_;				//画像ファイルのサイズ
 
 public:
 	Texture();
@@ -36,8 +36,6 @@ public:
 	//各アクセス関数
 	ID3D11SamplerState* GetSampler() { return pSampleLinear_; }	//サンプラーの取得
 	ID3D11ShaderResourceView* GetSRV() { return pTextureSRV_; }	//シェーダーリソースビューの取得
-	XMVECTOR GetSize() { return size_; }	//画像サイズの取得
-
-	ID3D11ShaderResourceView* GetSRV() const;//マウスカーソル用
+	XMFLOAT3 GetSize() { return size_; }	//画像サイズの取得
 };
 

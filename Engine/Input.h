@@ -60,11 +60,15 @@ namespace Input
 
 	//マウスカーソルの位置を取得
 	//戻値：マウスカーソルの位置
-	XMVECTOR GetMousePosition();
+	XMFLOAT3 GetMousePosition();
+
+	//マウスカーソルの位置をセット
+	//引数：マウスカーソルの位置
+	void SetMousePosition(int x, int y);
 
 	//そのフレームでのマウスの移動量を取得
 	//戻値：X,Y マウスの移動量　／　Z,ホイールの回転量
-	XMVECTOR GetMouseMove();
+	XMFLOAT3 GetMouseMove();
 
 
 	///////////////////////////　コントローラー　//////////////////////////////////
@@ -85,11 +89,11 @@ namespace Input
 
 	//左スティックの傾きを取得
 	//戻値:傾き具合（-1～1）
-	XMVECTOR GetPadStickL(int padID = 0);
+	XMFLOAT3 GetPadStickL(int padID = 0);
 
 	//右スティックの傾きを取得
 	//戻値:傾き具合（-1～1）
-	XMVECTOR GetPadStickR(int padID = 0);
+	XMFLOAT3 GetPadStickR(int padID = 0);
 
 	//左トリガーの押し込み具合を取得
 	//戻値:押し込み具合（0～1）
