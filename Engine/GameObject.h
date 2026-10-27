@@ -117,6 +117,9 @@ public:
 	//引数：pTarget	衝突した相手
 	virtual void OnCollision(GameObject* pTarget) {};
 
+	//コライダー（衝突判定）を削除
+	void ClearCollider();
+
 	//衝突判定
 	//引数：pTarget	衝突してるか調べる相手
 	void Collision(GameObject* pTarget);
@@ -129,18 +132,21 @@ public:
 
 
 	//各アクセス関数
-	XMVECTOR GetPosition() { return transform_.position_; }
-	XMVECTOR GetRotate() { return transform_.rotate_; }
-	XMVECTOR GetScale() { return transform_.scale_; }
-	void SetPosition(XMVECTOR position) { transform_.position_ = position; }
-	void SetPosition(float x, float y, float z) { SetPosition(XMVECTOR{ x, y, z }); }
-	void SetRotate(XMVECTOR rotate) { transform_.rotate_ = rotate; }
-	void SetRotate(float x, float y, float z) { SetRotate(XMVECTOR{ x, y, z }); }
-	void SetRotateX(float x) { SetRotate(x, transform_.rotate_.vecY, transform_.rotate_.vecZ); }
-	void SetRotateY(float y) { SetRotate(transform_.rotate_.vecX, y, transform_.rotate_.vecZ); }
-	void SetRotateZ(float z) { SetRotate(transform_.rotate_.vecX, transform_.rotate_.vecY, z); }
-	void SetScale(XMVECTOR scale) { transform_.scale_ = scale; }
-	void SetScale(float x, float y, float z) { SetScale(XMVectorSet(x, y, z, 0)); }
+	XMFLOAT3 GetPosition() { return transform_.position_; }
+	XMFLOAT3 GetRotate() { return transform_.rotate_; }
+	XMFLOAT3 GetScale() { return transform_.scale_; }
+	XMFLOAT3 GetWorldPosition() { return Transform::Float3Add(GetParent()->transform_.position_ , transform_.position_); }
+	XMFLOAT3 GetWorldRotate() { return Transform::Float3Add(GetParent()->transform_.rotate_, transform_.rotate_); }
+	XMFLOAT3 GetWorldScale() { return Transform::Float3Add(GetParent()->transform_.scale_, transform_.scale_); }
+	void SetPosition(XMFLOAT3 position) { transform_.position_ = position; }
+	void SetPosition(float x, float y, float z) { SetPosition(XMFLOAT3( x, y, z )); }
+	void SetRotate(XMFLOAT3 rotate) { transform_.rotate_ = rotate; }
+	void SetRotate(float x, float y, float z) { SetRotate(XMFLOAT3( x, y, z )); }
+	void SetRotateX(float x) { SetRotate(x, transform_.rotate_.y, transform_.rotate_.z); }
+	void SetRotateY(float y) { SetRotate(transform_.rotate_.x, y, transform_.rotate_.z); }
+	void SetRotateZ(float z) { SetRotate(transform_.rotate_.x, transform_.rotate_.y, z); }
+	void SetScale(XMFLOAT3 scale) { transform_.scale_ = scale; }
+	void SetScale(float x, float y, float z) { SetScale(XMFLOAT3(x, y, z)); }
 
 
 private:

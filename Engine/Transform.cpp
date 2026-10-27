@@ -4,9 +4,9 @@
 
 Transform::Transform(): pParent_(nullptr)
 {
-	position_ = XMVectorSet(0, 0, 0, 0);
-	rotate_ = XMVectorSet(0, 0, 0, 0);
-	scale_ = XMVectorSet(1, 1, 1, 0);
+	position_ = XMFLOAT3(0, 0, 0);
+	rotate_ = XMFLOAT3(0, 0, 0);
+	scale_ = XMFLOAT3(1, 1, 1);
 	matTranslate_ = XMMatrixIdentity();
 	matRotate_ = XMMatrixIdentity();
 	matScale_ = XMMatrixIdentity();
@@ -20,17 +20,17 @@ Transform::~Transform()
 void Transform::Calclation()
 {
 	//à⁄ìÆçsóÒ
-	matTranslate_ = XMMatrixTranslation(position_.vecX, position_.vecY, position_.vecZ);
+	matTranslate_ = XMMatrixTranslation(position_.x, position_.y, position_.z);
 
 	//âÒì]çsóÒ
 	XMMATRIX rotateX, rotateY, rotateZ;
-	rotateX = XMMatrixRotationX(XMConvertToRadians(rotate_.vecX));
-	rotateY = XMMatrixRotationY(XMConvertToRadians(rotate_.vecY));
-	rotateZ = XMMatrixRotationZ(XMConvertToRadians(rotate_.vecZ));
+	rotateX = XMMatrixRotationX(XMConvertToRadians(rotate_.x));
+	rotateY = XMMatrixRotationY(XMConvertToRadians(rotate_.y));
+	rotateZ = XMMatrixRotationZ(XMConvertToRadians(rotate_.z));
 	matRotate_ = rotateZ * rotateX * rotateY;
 
 	//ägëÂèkè¨
-	matScale_ = XMMatrixScaling(scale_.vecX, scale_.vecY, scale_.vecZ);
+	matScale_ = XMMatrixScaling(scale_.x, scale_.y, scale_.z);
 }
 
 XMMATRIX Transform::GetWorldMatrix() 

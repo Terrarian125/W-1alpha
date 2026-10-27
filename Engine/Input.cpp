@@ -18,6 +18,7 @@ namespace Input
 	LPDIRECTINPUTDEVICE8	pMouseDevice_;	//デバイスオブジェクト
 	DIMOUSESTATE mouseState_;				//マウスの状態
 	DIMOUSESTATE prevMouseState_;			//前フレームのマウスの状態
+	POINT mousePos_;							//マウスカーソルの位置
 
 	//コントローラー
 	const int MAX_PAD_NUM = 4;
@@ -157,19 +158,24 @@ namespace Input
 	}
 
 	//マウスカーソルの位置を取得
-	XMVECTOR GetMousePosition()
+	XMFLOAT3 GetMousePosition()
 	{
-		POINT mousePos;
-		GetCursorPos(&mousePos);
-		XMVECTOR result = XMVectorSet((float)mousePos.x, (float)mousePos.y, 0, 0);
+		XMFLOAT3 result = XMFLOAT3((float)mousePos_.x, (float)mousePos_.y, 0);
 		return result;
+	}
+
+	//マウスカーソルの位置をセット
+	void SetMousePosition(int x, int y)
+	{
+		mousePos_.x = x;
+		mousePos_.y = y;
 	}
 
 
 	//そのフレームでのマウスの移動量を取得
-	XMVECTOR GetMouseMove()
+	XMFLOAT3 GetMouseMove()
 	{
-		XMVECTOR result = XMVectorSet((float)mouseState_.lX, (float)mouseState_.lY, (float)mouseState_.lZ, 0);
+		XMFLOAT3 result = XMFLOAT3((float)mouseState_.lX, (float)mouseState_.lY, (float)mouseState_.lZ);
 		return result;
 	}
 
@@ -244,19 +250,19 @@ namespace Input
 
 
 	//左スティックの傾きを取得
-	XMVECTOR GetPadStickL(int padID)
+	XMFLOAT3 GetPadStickL(int padID)
 	{
 		float x = GetAnalogValue(controllerState_[padID].Gamepad.sThumbLX, 32767, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
 		float y = GetAnalogValue(controllerState_[padID].Gamepad.sThumbLY, 32767, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
-		return XMVectorSet(x, y, 0, 0);
+		return XMFLOAT3(x, y, 0);
 	}
 
 	//右スティックの傾きを取得
-	XMVECTOR GetPadStickR(int padID)
+	XMFLOAT3 GetPadStickR(int padID)
 	{
 		float x = GetAnalogValue(controllerState_[padID].Gamepad.sThumbRX, 32767, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE);
 		float y = GetAnalogValue(controllerState_[padID].Gamepad.sThumbRY, 32767, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE);
-		return XMVectorSet(x, y, 0, 0);
+		return XMFLOAT3(x, y, 0);
 	}
 
 	//左トリガーの押し込み具合を取得

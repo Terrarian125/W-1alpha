@@ -24,12 +24,18 @@ namespace Image
 		//切り抜き範囲
 		RECT		rect;
 
+		//アルファ
+		float		alpha;
+
 		//行列
 		Transform transform;
 
 		//コンストラクタ
 		ImageData() : pSprite(nullptr)
 		{
+			fileName = "";
+			alpha = 1.0f;
+			pSprite = nullptr;
 		}
 	};
 
@@ -65,7 +71,13 @@ namespace Image
 	void SetRect(int handle, int x, int y, int width, int height);
 
 	//切り抜き範囲をリセット（画像全体を表示する）
+	//引数：handle	設定したい画像の番号
 	void ResetRect(int handle);
+
+	//アルファ値を指定
+	//引数：handle	設定したい画像の番号
+	//引数：alpha アルファ値（不透明度）　0～255で指定
+	void SetAlpha(int handle, int alpha);
 
 	//ワールド行列を設定
 	//引数：handle	設定したい画像の番号

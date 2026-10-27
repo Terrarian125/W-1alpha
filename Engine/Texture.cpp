@@ -3,7 +3,7 @@
 #include "Global.h"
 
 Texture::Texture():
-	pSampleLinear_(nullptr), pTextureSRV_(nullptr), size_(XMVectorSet(0,0,0,0))
+	pSampleLinear_(nullptr), pTextureSRV_(nullptr), size_(XMFLOAT3(0,0,0))
 {
 }
 
@@ -31,6 +31,9 @@ HRESULT Texture::Load(std::string fileName)
 	HRESULT hr = pFactory->CreateDecoderFromFilename(wtext, NULL, GENERIC_READ, WICDecodeMetadataCacheOnDemand, &pDecoder);
 	if(FAILED(hr))
 	{
+		char message[256];
+		wsprintf(message, "「%s」が見つかりまん", fileName.c_str());
+		MessageBox(0, message, "画像ファイルの読み込みに失敗", MB_OK);
 		return hr;
 	}
 	pDecoder->GetFrame(0, &pFrame);
@@ -39,7 +42,7 @@ HRESULT Texture::Load(std::string fileName)
 	UINT imgWidth;
 	UINT imgHeight;
 	pFormatConverter->GetSize(&imgWidth, &imgHeight);
-	size_ = XMVectorSet((float)imgWidth, (float)imgHeight, 0, 0);
+	size_ = XMFLOAT3((float)imgWidth, (float)imgHeight, 0);
 
 	// テクスチャの設定
 	ID3D11Texture2D*	pTexture;			// テクスチャデータ
@@ -60,11 +63,9 @@ HRESULT Texture::Load(std::string fileName)
 	// テクスチャを送る
 	D3D11_MAPPED_SUBRESOURCE hMappedres;
 	Direct3D::pContext_->Map(pTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &hMappedres);
-	// ↓修正前
-	//pFormatConverter->CopyPixels(NULL, imgWidth * 4, imgWidth * imgHeight * 4, (BYTE*)hMappedres.pData);
-	// ↓修正後：ここ修正しないとUI画像が崩れる
-	pFormatConverter->CopyPixels(NULL, hMappedres.RowPitch, hMappedres.RowPitch * imgHeight, (BYTE*)hMappedres.pData);
+	pFormatConverter->CopyPixels(NULL, imgWidth * 4, imgWidth * imgHeight * 4, (BYTE*)hMappedres.pData);
 	Direct3D::pContext_->Unmap(pTexture, 0);
+
 
 	// シェーダリソースビュー(テクスチャ用)の設定
 	D3D11_SHADER_RESOURCE_VIEW_DESC srv = {};
@@ -83,6 +84,11 @@ HRESULT Texture::Load(std::string fileName)
 	SamDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 	Direct3D::pDevice_->CreateSamplerState(&SamDesc, &pSampleLinear_);
 
+	pTexture->Release();
+	pFormatConverter->Release();
+	pFrame->Release();
+	pDecoder->Release();
+	pFactory->Release();
 
 	return S_OK;
 }

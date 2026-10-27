@@ -1,5 +1,6 @@
 #include "FontText.hpp"
-#include "../ImGui/imgui.h"
+
+#include <imgui.h>
 
 HRESULT FontText::Initialize(const char* fileName, float fontSize)
 {
