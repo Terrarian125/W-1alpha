@@ -18,9 +18,9 @@ class FbxParts
 	// 一つの頂点情報を格納する構造体
 	struct VERTEX
 	{
-		XMVECTOR position;
-		XMVECTOR normal;
-		XMVECTOR uv;
+		XMFLOAT3 position;
+		XMFLOAT3 normal;
+		XMFLOAT3 uv;
 	};
 
 	//【コンスタントバッファー】
@@ -62,8 +62,8 @@ class FbxParts
 	// ウェイト構造体（ボーンと頂点の関連付け）
 	struct Weight
 	{
-		XMVECTOR	posOrigin;		// 元々の頂点座標
-		XMVECTOR	normalOrigin;	// 元々の法線ベクトル
+		XMFLOAT3	posOrigin;		// 元々の頂点座標
+		XMFLOAT3	normalOrigin;	// 元々の法線ベクトル
 		int*		pBoneIndex;		// 関連するボーンのID
 		float*		pBoneWeight;	// ボーンの重み
 	};
@@ -142,7 +142,7 @@ public:
 	//引数：boneName	取得したいボーンの位置
 	//引数：position	ワールド座標での位置【out】
 	//戻値：見つかればtrue
-	bool GetBonePosition(std::string boneName, XMVECTOR	* position);
+	bool GetBonePosition(std::string boneName, XMFLOAT3	* position);
 
 	//スキンメッシュ情報を取得
 	//戻値：スキンメッシュ情報

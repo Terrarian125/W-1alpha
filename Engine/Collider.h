@@ -28,8 +28,8 @@ class Collider
 protected:
 	GameObject*		pGameObject_;	//この判定をつけたゲームオブジェクト
 	ColliderType	type_;			//種類
-	XMVECTOR		center_;		//中心位置（ゲームオブジェクトの原点から見た位置）
-	XMVECTOR		size_;			//判定サイズ（幅、高さ、奥行き）
+	XMFLOAT3		center_;		//中心位置（ゲームオブジェクトの原点から見た位置）
+	XMFLOAT3		size_;			//判定サイズ（幅、高さ、奥行き）
 	int				hDebugModel_;	//デバッグ表示用のモデルのID
 
 public:
@@ -63,8 +63,8 @@ public:
 	bool IsHitCircleVsCircle(SphereCollider* circleA, SphereCollider* circleB);
 
 	//テスト表示用の枠を描画
-	//引数：position	位置
-	void Draw(XMVECTOR position);
+	//引数：position	オブジェクトの位置
+	void Draw(XMFLOAT3 position);
 
 	//セッター
 	void SetGameObject(GameObject* gameObject) { pGameObject_ = gameObject; }

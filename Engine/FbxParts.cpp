@@ -82,18 +82,18 @@ void FbxParts::InitVertex(fbxsdk::FbxMesh * mesh)
 
 			/////////////////////////頂点の位置/////////////////////////////////////
 			FbxVector4 pos = mesh->GetControlPointAt(index);
-			pVertexData_[index].position = XMVectorSet((float)-pos[0], (float)pos[1], (float)pos[2], 0.0f);
+			pVertexData_[index].position = XMFLOAT3((float)pos[0], (float)pos[1], (float)pos[2]);
 
 			/////////////////////////頂点の法線/////////////////////////////////////
 			FbxVector4 Normal;
 			mesh->GetPolygonVertexNormal(poly, vertex, Normal);	//ｉ番目のポリゴンの、ｊ番目の頂点の法線をゲット
-			pVertexData_[index].normal = XMVectorSet((float)-Normal[0], (float)Normal[1], (float)Normal[2], 0.0f);
+			pVertexData_[index].normal = XMFLOAT3((float)Normal[0], (float)Normal[1], (float)Normal[2]);
 
 			///////////////////////////頂点のＵＶ/////////////////////////////////////
 			FbxLayerElementUV * pUV = mesh->GetLayer(0)->GetUVs();
 			int uvIndex = mesh->GetTextureUVIndex(poly, vertex, FbxLayerElement::eTextureDiffuse);
 			FbxVector2  uv = pUV->GetDirectArray().GetAt(uvIndex);
-			pVertexData_[index].uv = XMVectorSet((float)uv.mData[0], (float)(1.0f - uv.mData[1]), 0.0f, 0.0f);
+			pVertexData_[index].uv = XMFLOAT3((float)uv.mData[0], (float)(1.0f - uv.mData[1]), 0.0f);
 		}
 	}
 
@@ -106,7 +106,7 @@ void FbxParts::InitVertex(fbxsdk::FbxMesh * mesh)
 		for (int k = 0; k < m_dwNumUV; k++)
 		{
 			FbxVector2 uv = pUV->GetDirectArray().GetAt(k);
-			pVertexData_[k].uv = XMVectorSet((float)uv.mData[0], (float)(1.0f - uv.mData[1]), 0.0f, 0.0f);
+			pVertexData_[k].uv = XMFLOAT3((float)uv.mData[0], (float)(1.0f - uv.mData[1]), 0.0f);
 		}
 	}
 
@@ -448,7 +448,7 @@ void FbxParts::Draw(Transform& transform)
 		cb.diffuse = pMaterial_[i].diffuse;
 		cb.speculer = pMaterial_[i].specular;
 		cb.shininess = pMaterial_[i].shininess;
-		cb.cameraPosition = XMFLOAT4(Camera::GetPosition().vecX, Camera::GetPosition().vecY, Camera::GetPosition().vecZ, 0);
+		cb.cameraPosition = XMFLOAT4(Camera::GetPosition().x, Camera::GetPosition().y, Camera::GetPosition().z, 0);
 		cb.lightDirection = XMFLOAT4(1, -1, 1, 0);
 		cb.isTexture = pMaterial_[i].pTexture != nullptr;
 
@@ -518,10 +518,10 @@ void FbxParts::DrawSkinAnime(Transform& transform, FbxTime time)
 		}
 
 		// 作成された関節行列を使って、頂点を変形する
-		XMVECTOR Pos = pWeightArray_[i].posOrigin;
-		XMVECTOR Normal = pWeightArray_[i].normalOrigin;
-		pVertexData_[i].position = XMVector3TransformCoord(Pos, matrix);
-		pVertexData_[i].normal = XMVector3TransformCoord(Normal, matrix);
+		XMVECTOR Pos = XMLoadFloat3(&pWeightArray_[i].posOrigin);
+		XMVECTOR Normal = XMLoadFloat3(&pWeightArray_[i].normalOrigin);
+		XMStoreFloat3(&pVertexData_[i].position,XMVector3TransformCoord(Pos, matrix));
+		XMStoreFloat3(&pVertexData_[i].normal, XMVector3TransformCoord(Normal, matrix));
 
 	}
 
@@ -557,7 +557,7 @@ void FbxParts::DrawMeshAnime(Transform& transform, FbxTime time, FbxScene * scen
 	Draw(transform);
 }
 
-bool FbxParts::GetBonePosition(std::string boneName, XMVECTOR * position)
+bool FbxParts::GetBonePosition(std::string boneName, XMFLOAT3 * position)
 {
 	for (int i = 0; i < numBone_; i++)
 	{
@@ -566,9 +566,9 @@ bool FbxParts::GetBonePosition(std::string boneName, XMVECTOR * position)
 			FbxAMatrix  matrix;
 			ppCluster_[i]->GetTransformLinkMatrix(matrix);
 
-			position->vecX = (float)matrix[3][0];
-			position->vecY = (float)matrix[3][1];
-			position->vecZ = (float)matrix[3][2];
+			position->x = (float)matrix[3][0];
+			position->y = (float)matrix[3][1];
+			position->z = (float)matrix[3][2];
 
 			return true;
 		}
@@ -589,7 +589,7 @@ void FbxParts::RayCast(RayCastData * data)
 		for (DWORD j = 0; j < pMaterial_[i].polygonCount; j++)
 		{
 			//3頂点
-			XMVECTOR ver[3];
+			XMFLOAT3 ver[3];
 			ver[0] = pVertexData_[ppIndexData_[i][j * 3 + 0]].position;
 			ver[1] = pVertexData_[ppIndexData_[i][j * 3 + 1]].position;
 			ver[2] = pVertexData_[ppIndexData_[i][j * 3 + 2]].position;

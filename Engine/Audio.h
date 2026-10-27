@@ -1,64 +1,34 @@
 #pragma once
-
-#pragma once
-
-#include <vector>
 #include <string>
-#include "Global.h"
-#include "Sound.h"
-
 
 //-----------------------------------------------------------
-//効果音を管理する
+//サウンドを管理する（XAudio使用）
 //-----------------------------------------------------------
 namespace Audio
 {
-	//ひとつのサウンドの情報
-	struct AudioData
-	{
-		//ファイル名
-		std::string fileName;
-
-		//サウンドバッファ（読み込んだサウンドを入れる）
-		LPDIRECTSOUNDBUFFER* 	psoundBuffer;
-
-
-		//コンストラクタ
-		AudioData() :psoundBuffer(nullptr)
-		{
-		}
-
-	};
-
-
-
 	//初期化
-	//引数：hWnd	ウィンドウハンドル
-	void Initialize(HWND hWnd);
+	void Initialize();
 
-
-	//サウンドファイルをロード
+	//サウンドファイル(.wav）をロード
 	//すでに同じ名前のファイルをロード済みの場合は、既存のデータの番号を返す
-	//引数：fileName　ファイル名
-	//戻値：そのサウンドデータに割り当てられた番号
-	int Load(std::string fileName);
+	//引数：fileName	ファイル名
+	//引数：isLoop		ループ再生させたいならtrue
+	//引数：svNum　		同時に鳴らす最大数（省略可）
+	//戻値：そのデータに割り当てられた番号
+	int Load(std::string fileName, bool isLoop = false, int svNum = 1);
 
 	//再生
-	//引数：handle	再生したいサウンドの番号
-	void Play(int handle);
+	//引数：handle	鳴らしたいサウンドの番号
+	void Play(int ID);
 
 	//停止
 	//引数：handle	止めたいサウンドの番号
-	void Stop(int handle);
+	void Stop(int ID);
 
-	//任意のサウンドを開放
-	//引数：handle	開放したいサウンドの番号
-	void Release(int handle);
+	//シーンごとの解放（ロードしたサウンドを解放）
+	void Release();
 
-	//全てのサウンドを解放
-	//（シーンが切り替わるときは必ず実行）
+	//本体も解放
 	void AllRelease();
+};
 
-	//ゲーム終了時に行う処理
-	void ReleaseDirectSound();
-}
