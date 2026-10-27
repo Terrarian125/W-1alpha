@@ -1,7 +1,18 @@
+
+//
+//　最終更新日：2023/10/20
+//
+
+
+#include "imgui.h"
+#include "imgui_impl_win32.h"
+#include "imgui_impl_dx11.h"
+
+#include "MyCursor.h"
+#include "Texture.h"
 #include <Windows.h>
 #include <stdlib.h>
 #include <assert.h>
-//#include <crtdbg.h>
 #include <time.h>
 
 #include "global.h"
@@ -11,11 +22,9 @@
 #include "Camera.h"
 #include "Input.h"
 #include "Audio.h"
-#include "imgui.h"
-#include "imgui_impl_win32.h"
-#include "imgui_impl_dx11.h"
-#include "Direct3D.h"
+#include "VFX.h"
 
+#pragma comment(lib,"Winmm.lib")
 
 //定数宣言
 const char* WIN_CLASS_NAME = "SampleGame";	//ウィンドウクラス名
@@ -29,9 +38,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 // エントリーポイント
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-//#if defined(DEBUG) | defined(_DEBUG)
-//	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-//#endif
+	//#if defined(DEBUG) | defined(_DEBUG)
+	//	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	//#endif
 
 	srand((unsigned)time(NULL));
 	SetCurrentDirectory("Assets");
@@ -51,7 +60,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//Direct3D準備
 	Direct3D::Initialize(hWnd, screenWidth, screenHeight);
 
-	// ImGui準備
+	//ImGuiの準備
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
@@ -59,7 +68,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	ImGui_ImplWin32_Init(hWnd);
 	ImGui_ImplDX11_Init(
 		Direct3D::pDevice_,
-		Direct3D::pContext_);
+		Direct3D::pContext_
+	);
 
 	//カメラを準備
 	Camera::Initialize();
@@ -67,8 +77,28 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//入力処理（キーボード、マウス、コントローラー）の準備
 	Input::Initialize(hWnd);
 
+	Texture cursorTexture;
+	MyCursor myCursor;
+
+	HRESULT hr = cursorTexture.Load("Cursor.png");
+
+	if (SUCCEEDED(hr))
+	{
+		myCursor.SetTexture(
+			(ImTextureID)cursorTexture.GetSRV()
+		);
+
+		myCursor.SetSize(64.0f, 64.0f);
+		myCursor.SetHotspot(32.0f, 32.0f);
+		myCursor.SetVisible(true);
+	}
+	else
+	{
+		myCursor.SetVisible(false);
+	}
+
 	//オーディオ（効果音）の準備
-	Audio::Initialize(hWnd);
+	Audio::Initialize();
 
 
 	//ルートオブジェクト準備
@@ -127,31 +157,46 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 				//入力（キーボード、マウス、コントローラー）情報を更新
 				Input::Update();
+				ImGui_ImplDX11_NewFrame();
+				ImGui_ImplWin32_NewFrame();
+				ImGui::NewFrame();
+
+				ImGui::Begin("ImGui Test");
+
+				ImGui::Text("ImGui is working!");
+
+				if (ImGui::Button("Test Button"))
+				{
+					OutputDebugStringA("Button clicked!\n");
+				}
+
+				ImGui::End();
 
 				//全オブジェクトの更新処理
 				//ルートオブジェクトのUpdateを呼んだあと、自動的に子、孫のUpdateが呼ばれる
 				pRootObject->UpdateSub();
 
-
-				ImGui_ImplDX11_NewFrame();
-				ImGui_ImplWin32_NewFrame();
-				ImGui::NewFrame();
-
 				//カメラを更新
 				Camera::Update();
 
+				//エフェクトの更新
+				VFX::Update();
 
 
-				//描画処理
+				//このフレームの描画開始
 				Direct3D::BeginDraw();
 
-				// ゲームオブジェクトの描画
+				//ゲームオブジェクトの描画
 				pRootObject->DrawSub();
 
-				// ImGuiの描画
+				//エフェクトの描画
+				VFX::Draw();
+
+				//ImGuiの描画
 				ImGui::Render();
 				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
+				//描画終了
 				Direct3D::EndDraw();
 
 
@@ -167,15 +212,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	
 
 	//いろいろ解放
+	VFX::Release();
 	Audio::AllRelease();
-	Audio::ReleaseDirectSound();
 	Model::AllRelease();
 	Image::AllRelease();
+
 	pRootObject->ReleaseSub();
 	SAFE_DELETE(pRootObject);
+
+	//ImGuiの解放
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
+
 	Direct3D::Release();
 
 	return 0;
@@ -235,12 +284,12 @@ ImGui_ImplWin32_WndProcHandler(
 	HWND hWnd,
 	UINT msg,
 	WPARAM wParam,
-	LPARAM lParam);
+	LPARAM lParam
+);
 
 //ウィンドウプロシージャ（何かあった時によばれる関数）
 LRESULT CALLBACK WndProc(
-	HWND hWnd, UINT msg,
-	WPARAM wParam, LPARAM lParam)
+	HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	if (ImGui_ImplWin32_WndProcHandler(
 		hWnd, msg, wParam, lParam))
@@ -252,6 +301,13 @@ LRESULT CALLBACK WndProc(
 	{
 	case WM_DESTROY:
 		PostQuitMessage(0);
+		return 0;
+
+	case WM_MOUSEMOVE:
+		Input::SetMousePosition(
+			LOWORD(lParam),
+			HIWORD(lParam)
+		);
 		return 0;
 	}
 

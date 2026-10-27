@@ -10,11 +10,11 @@ class FbxParts;
 //レイキャスト用構造体
 struct RayCastData
 {
-	XMVECTOR	start;	//レイ発射位置
-	XMVECTOR	dir;	//レイの向きベクトル
+	XMFLOAT3	start;	//レイ発射位置
+	XMFLOAT3	dir;	//レイの向きベクトル
 	float       dist;	//衝突点までの距離
 	BOOL        hit;	//レイが当たったか
-	XMVECTOR normal;	//法線
+	XMFLOAT3 normal;	//法線
 
 	RayCastData() { dist = 99999.0f; }
 };
@@ -81,7 +81,7 @@ public:
 	//任意のボーンの位置を取得
 	//引数：boneName	取得したいボーンの位置
 	//戻値：ボーンの位置
-	XMVECTOR GetBonePosition(std::string boneName);
+	XMFLOAT3 GetBonePosition(std::string boneName);
 
 	//レイキャスト（レイを飛ばして当たり判定）
 	//引数：data	必要なものをまとめたデータ
