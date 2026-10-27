@@ -1,32 +1,36 @@
 #pragma once
 #include "Engine/GameObject.h"
 
-// ã‚¯ãƒ¬ãƒ¼ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹
+// ƒNƒŒ[‚ğŠÇ—‚·‚éƒNƒ‰ƒX
 class Clay : public GameObject
 {
-    int hModel_[3];     //ãƒ¢ãƒ‡ãƒ«ç•ªå·
-    //int hImage_;      // ç”»åƒèª­ã¿è¾¼ã¿
+    int hModel_[3];     //ƒ‚ƒfƒ‹”Ô†
+    //int hImage_;      // ‰æ‘œ“Ç‚İ‚İ
 
-    //ç§»å‹•
+    //ˆÚ“®
     void Move();
 
 public:
-    //ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+    //ƒRƒ“ƒXƒgƒ‰ƒNƒ^
     Clay(GameObject* parent);
 
-    //ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+    //ƒfƒXƒgƒ‰ƒNƒ^
     ~Clay();
 
-    //åˆæœŸåŒ–
+    //‰Šú‰»
     void Initialize() override;
 
-    //æ›´æ–°
+    //XV
     void Update() override;
 
 
-    //æç”»
+    //•`‰æ
     void Draw() override;
 
-    //é–‹æ”¾
+    //ŠJ•ú
     void Release() override;
+
+    //‰½‚©‚É“–‚½‚Á‚½
+    //ˆø”FpTarget@“–‚½‚Á‚½‘Šè
+    void OnCollision(GameObject* pTarget) override;
 };

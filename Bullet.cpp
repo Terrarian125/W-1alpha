@@ -5,7 +5,7 @@
 //コンストラクタ
 Bullet::Bullet(GameObject * parent)
 	:GameObject(parent, "Bullet"), hModel_(-1),
-	SPEED(0.3f), GRAVITY(0.001f)
+	SPEED(2.0f), GRAVITY(0.000f)
 {
 }
 
@@ -31,14 +31,19 @@ void Bullet::Update()
 {
 	//移動
 	transform_.position_ += move_;
+	move_.vecZ = SPEED;
 
 	//重力
-	move_.vecY += dy_;
-	dy_ -= GRAVITY;
+	// move_.vecY += dy_;
+	// dy_ -= GRAVITY;
 
 
 	//ある程度低い位置まで落ちたら消す
-	if (transform_.position_.vecY < -5)
+	//if (transform_.position_.vecY < -5)
+	//{
+	//	KillMe();
+	//}
+	if (transform_.position_.vecZ > 30.0f)
 	{
 		KillMe();
 	}

@@ -7,39 +7,46 @@
 #include <DirectXMath.h>
 using namespace DirectX;
 
-//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+//ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 Clay::Clay(GameObject* parent)
     :GameObject(parent, "Clay"), hModel_{ (-1,-1,-1) }
 {
 }
 
-//ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+//ƒfƒXƒgƒ‰ƒNƒ^
 Clay::~Clay()
 {
 }
 
-//åˆæœŸåŒ–
+//‰Šú‰»
 void Clay::Initialize()
 {
-    //ãƒ¢ãƒ‡ãƒ«ãƒ‡ãƒ¼ã‚¿ã®ãƒ­ãƒ¼ãƒ‰
+    //ƒ‚ƒfƒ‹ƒf[ƒ^‚Ìƒ[ƒh
     hModel_[0] = Model::Load("/Model/Bullet.fbx");
     assert(hModel_[0] >= 0);
 
-    // ä¸€å¿œã‚ã‚‹ã¨æ¥½ã ã‹ã‚‰ã“ã“ã«
-    // transform_.position_ = { position_.x,position_.y,position_.z };  // ä½ç½®
-    transform_.rotate_ = { 0.0f,0.0f,0.0f };  // å›è»¢
-    transform_.scale_ = { 0.2f, 0.2f,0.2f }; // æ‹¡å¤§ç‡
+    // ˆê‰‚ ‚é‚ÆŠy‚¾‚©‚ç‚±‚±‚É
+    // transform_.position_ = { position_.x,position_.y,position_.z };  // ˆÊ’u
+    transform_.rotate_ = { 0.0f,0.0f,0.0f };  // ‰ñ“]
+    transform_.scale_ = { 0.2f, 0.2f,0.2f }; // Šg‘å—¦
 
-    //ã‚µã‚¤ã‚º
-    transform_.scale_ = { 0.2f, 0.2f,0.2f }; // æ‹¡å¤§ç‡
+    //ƒTƒCƒY
+    transform_.scale_ = { 1.0f, 1.0f,1.0f }; // Šg‘å—¦
 
     //  (float)(rand() % 10 - 5)
-    //ä½ç½®
-    transform_.position_ = { 0,0, 0};  // ä½ç½®
+    //ˆÊ’u
+    // X - 1.2`1.2
+    // Y 2.0`3.0
+    // Z - 6.5` - 8.0
+    transform_.position_ = { 0, 0.0f, 0};  // ˆÊ’u
+
+    //“–‚½‚è”»’è’Ç‰Á
+    SphereCollider* collision = new SphereCollider(XMVectorSet(0, 0, 0, 0), 0.8f);
+    AddCollider(collision);
 
 }
 
-//æ›´æ–°
+//XV
 void Clay::Update()
 {
     Move();
@@ -47,38 +54,38 @@ void Clay::Update()
 
 void Clay::Move()
 {
-    //æˆ¦è»ŠãŒå‘ã„ã¦ã„ã‚‹æ–¹å‘ã«å›è»¢ã•ã›ã‚‹è¡Œåˆ—
+    //íÔ‚ªŒü‚¢‚Ä‚¢‚é•ûŒü‚É‰ñ“]‚³‚¹‚és—ñ
     XMMATRIX rotateMatrix = XMMatrixRotationY(transform_.rotate_.vecY / 180 * 3.14f);
 
-    //ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«
+    //ˆÚ“®ƒxƒNƒgƒ‹
     XMVECTOR  moveVector = XMVector3TransformCoord(XMVectorSet(0, 0, 0.2f, 0), rotateMatrix);
 
-    //ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼å¯¾å¿œ
+    //ƒRƒ“ƒgƒ[ƒ‰[‘Î‰
     //transform_.position_ += Input::GetPadStickL();
     //transform_.position_ -= Input::GetPadStickL();
 
-    //å³æ—‹å›
+    //‰Eù‰ñ
     if (Input::IsKey(DIK_O))
     {
         transform_.rotate_.vecY += 2.5;
     }
 
-    //å·¦æ—‹å›
+    //¶ù‰ñ
     if (Input::IsKey(DIK_P))
     {
         transform_.rotate_.vecY -= 2.5;
     }
 }
 
-//æç”»
+//•`‰æ
 void Clay::Draw()
 {
     Model::SetTransform(hModel_[0], transform_);
     Model::Draw(hModel_[0]);
 
-    // ImGui (ãƒ‡ãƒãƒƒã‚¯ç”¨)
+    // ImGui (ƒfƒoƒbƒN—p)
     {
-        // ======= ãƒ¬ãƒ†ã‚£ã‚¯ãƒ«ã®ä½ç½®åº§æ¨™ =======
+        // ======= ƒŒƒeƒBƒNƒ‹‚ÌˆÊ’uÀ•W =======
         ImGui::Begin("Clay_position");
         ImGui::InputFloat("pos.X", &transform_.position_.vecX);
         ImGui::InputFloat("pos.Y", &transform_.position_.vecY);
@@ -89,4 +96,14 @@ void Clay::Draw()
 
 void Clay::Release()
 {
+}
+
+void Clay::OnCollision(GameObject* pTarget)
+{
+    //’e‚É“–‚½‚Á‚½
+    if (pTarget->GetObjectName() == "Bullet")
+    {
+        //©•ª‚ğÁ‚·
+        KillMe();
+    }
 }

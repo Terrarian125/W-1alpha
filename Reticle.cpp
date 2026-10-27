@@ -5,6 +5,8 @@
 #include "ImGui/imgui.h"
 
 #include <DirectXMath.h>
+#include "Bullet.h"
+#include "Engine/Model.h"
 
 using namespace DirectX;
 using namespace std;
@@ -31,6 +33,7 @@ void Reticle::Initialize()
     // transform_.position_ = { position_.x,position_.y,position_.z };  // 位置
     transform_.rotate_   = { 0.0f,0.0f,0.0f };  // 回転
     transform_.scale_    = { 0.2f, 0.2f,0.2f }; // 拡大率
+
 }
 
 // 更新
@@ -109,7 +112,7 @@ void Reticle::Move()
         position_.x += XMVectorGetX(moveVector) * f;
 
         // 右移動 or 左移動
-        position_.y += XMVectorGetX(moveVector) * f;
+        position_.y += XMVectorGetY(moveVector) * f;
     }
 
     //前進
@@ -152,6 +155,17 @@ void Reticle::Shoot()
         || Input::IsPadButtonDown(XINPUT_GAMEPAD_B)
         || triggerNow && !triggerOld_)
     {
+        //弾をシーンに追加
+        GameObject* playScene = FindObject("PlayScene");
+        Bullet* pBullet = Instantiate<Bullet>(FindObject("PlayScene"));
+
+        //砲台の先端と根本の位置を取得
+        //XMMATRIX shotPos = Image::GetMatrix(hImage_);    //先端
+        //XMMATRIX cannonRoot = Image::GetMatrix(hImage_); //根本
+        position_.x;
+
+        //撃つ
+        pBullet->Shot(transform_.position_, transform_.position_);
     }
 
     triggerOld_ = triggerNow;
