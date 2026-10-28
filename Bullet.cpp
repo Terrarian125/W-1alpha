@@ -22,7 +22,7 @@ void Bullet::Initialize()
 	assert(hModel_ >= 0);
 
 	//衝突判定
-	SphereCollider* collision = new SphereCollider(XMVectorSet(0, 0, 0, 0), 0.5f);
+	SphereCollider* collision = new SphereCollider(XMFLOAT3(0.0f, 0.0f, 0.0f), 0.5f);
 	AddCollider(collision);
 }
 
@@ -30,8 +30,9 @@ void Bullet::Initialize()
 void Bullet::Update()
 {
 	//移動
-	transform_.position_ += move_;
-	move_.vecZ = SPEED;
+	XMVECTOR pos = XMLoadFloat3(&transform_.position_);
+	pos += XMLoadFloat3(&move_);
+	XMStoreFloat3(&transform_.position_, pos);
 
 	//重力
 	// move_.vecY += dy_;
@@ -43,7 +44,7 @@ void Bullet::Update()
 	//{
 	//	KillMe();
 	//}
-	if (transform_.position_.vecZ > 30.0f)
+	if (transform_.position_.z > 30.0f)
 	{
 		KillMe();
 	}
@@ -63,11 +64,14 @@ void Bullet::Release()
 
 
 //発射
-void Bullet::Shot(XMVECTOR position, XMVECTOR direction)
+void Bullet::Shot(XMFLOAT3 position, XMFLOAT3 direction)
 {
 	//位置
 	transform_.position_ = position;
 
 	//移動は、引数で渡された方向にSPEEDの速さ
-	move_ = XMVector3Normalize(direction) * SPEED;
+	XMStoreFloat3(&move_, XMVector3Normalize(XMLoadFloat3(&direction)) * SPEED);
+
+	//重力による落下速度を初期化
+	dy_ = 0;
 }

@@ -41,7 +41,7 @@ void Clay::Initialize()
     transform_.position_ = { 0, 0.0f, 0};  // 位置
 
     //当たり判定追加
-    SphereCollider* collision = new SphereCollider(XMVectorSet(0, 0, 0, 0), 0.8f);
+    SphereCollider* collision = new SphereCollider(XMFLOAT3(0.0f, 0.0f, 0.0f), 0.8f);
     AddCollider(collision);
 
 }
@@ -55,7 +55,7 @@ void Clay::Update()
 void Clay::Move()
 {
     //戦車が向いている方向に回転させる行列
-    XMMATRIX rotateMatrix = XMMatrixRotationY(transform_.rotate_.vecY / 180 * 3.14f);
+    XMMATRIX rotateMatrix = XMMatrixRotationY(transform_.rotate_.y / 180 * 3.14f);
 
     //移動ベクトル
     XMVECTOR  moveVector = XMVector3TransformCoord(XMVectorSet(0, 0, 0.2f, 0), rotateMatrix);
@@ -67,13 +67,13 @@ void Clay::Move()
     //右旋回
     if (Input::IsKey(DIK_O))
     {
-        transform_.rotate_.vecY += 2.5;
+        transform_.rotate_.y += 2.5;
     }
 
     //左旋回
     if (Input::IsKey(DIK_P))
     {
-        transform_.rotate_.vecY -= 2.5;
+        transform_.rotate_.y -= 2.5;
     }
 }
 
@@ -87,9 +87,9 @@ void Clay::Draw()
     {
         // ======= レティクルの位置座標 =======
         ImGui::Begin("Clay_position");
-        ImGui::InputFloat("pos.X", &transform_.position_.vecX);
-        ImGui::InputFloat("pos.Y", &transform_.position_.vecY);
-        ImGui::InputFloat("pos.Z", &transform_.position_.vecZ);
+        ImGui::InputFloat("pos.X", &transform_.position_.x);
+        ImGui::InputFloat("pos.Y", &transform_.position_.y);
+        ImGui::InputFloat("pos.Z", &transform_.position_.z);
         ImGui::End();
     }
 }

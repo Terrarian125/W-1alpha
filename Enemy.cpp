@@ -28,29 +28,29 @@ void Enemy::Initialize()
 
 
 	//サイズ
-	transform_.scale_ = XMVectorSet(2.0f, 2.0f, 2.0f, 0);
+	transform_.scale_ = XMFLOAT3(2.0f, 2.0f, 2.0f);
 
 
 	//位置
-	transform_.position_.vecX = (float)(rand() % 100 - 50);
-	transform_.position_.vecZ = (float)(rand() % 100 - 50);
+	transform_.position_.x = (float)(rand() % 100 - 50);
+	transform_.position_.z = (float)(rand() % 100 - 50);
 
 
 	//地面の高さ
 	RayCastData data;
 	data.start = transform_.position_;
-	data.dir = XMVectorSet(0, -1, 0, 0);
+	data.dir = XMFLOAT3(0.0f, -1.0f, 0.0f);
 	int hGroundModel = ((Ground*)FindObject("Ground"))->GetModelHandle();
 	Model::RayCast(hGroundModel, &data);
-	transform_.position_.vecY = -data.dist;
+	transform_.position_.y = -data.dist;
 
 
 	//向き
-	transform_.rotate_.vecY = (float)(rand() % 360);
+	transform_.rotate_.y = (float)(rand() % 360);
 
 
 	//当たり判定追加
-	SphereCollider* collision = new SphereCollider(XMVectorSet(0, 0.7f, 0, 0), 2.0f);
+	SphereCollider* collision = new SphereCollider(XMFLOAT3(0.0f, 0.7f, 0.0f), 2.0f);
 	AddCollider(collision);
 
 

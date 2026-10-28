@@ -4,11 +4,11 @@
 //
 
 
-#include "imgui.h"
-#include "imgui_impl_win32.h"
-#include "imgui_impl_dx11.h"
+#include "../ImGui/imgui.h"
+#include "../ImGui/imgui_impl_win32.h"
+#include "../ImGui/imgui_impl_dx11.h"
 
-#include "MyCursor.h"
+//#include "MyCursor.h"
 #include "Texture.h"
 #include <Windows.h>
 #include <stdlib.h>
@@ -22,7 +22,7 @@
 #include "Camera.h"
 #include "Input.h"
 #include "Audio.h"
-#include "VFX.h"
+// #include "VFX.h"
 
 #pragma comment(lib,"Winmm.lib")
 
@@ -78,24 +78,26 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Input::Initialize(hWnd);
 
 	Texture cursorTexture;
-	MyCursor myCursor;
+	//MyCursor myCursor;
 
+	/*
 	HRESULT hr = cursorTexture.Load("Cursor.png");
 
 	if (SUCCEEDED(hr))
 	{
-		myCursor.SetTexture(
-			(ImTextureID)cursorTexture.GetSRV()
-		);
+		//myCursor.SetTexture(
+		//	(ImTextureID)cursorTexture.GetSRV()
+		//);
 
-		myCursor.SetSize(64.0f, 64.0f);
-		myCursor.SetHotspot(32.0f, 32.0f);
-		myCursor.SetVisible(true);
+		//myCursor.SetSize(64.0f, 64.0f);
+		//myCursor.SetHotspot(32.0f, 32.0f);
+		//myCursor.SetVisible(true);
 	}
 	else
 	{
-		myCursor.SetVisible(false);
+		//myCursor.SetVisible(false);
 	}
+	*/
 
 	//オーディオ（効果音）の準備
 	Audio::Initialize();
@@ -180,7 +182,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				Camera::Update();
 
 				//エフェクトの更新
-				VFX::Update();
+				//VFX::Update();
 
 
 				//このフレームの描画開始
@@ -190,7 +192,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				pRootObject->DrawSub();
 
 				//エフェクトの描画
-				VFX::Draw();
+				//VFX::Draw();
 
 				//ImGuiの描画
 				ImGui::Render();
@@ -212,7 +214,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	
 
 	//いろいろ解放
-	VFX::Release();
+	//VFX::Release();
 	Audio::AllRelease();
 	Model::AllRelease();
 	Image::AllRelease();

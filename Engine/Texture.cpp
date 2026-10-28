@@ -63,7 +63,10 @@ HRESULT Texture::Load(std::string fileName)
 	// ƒeƒNƒXƒ`ƒƒ‚ð‘—‚é
 	D3D11_MAPPED_SUBRESOURCE hMappedres;
 	Direct3D::pContext_->Map(pTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &hMappedres);
-	pFormatConverter->CopyPixels(NULL, imgWidth * 4, imgWidth * imgHeight * 4, (BYTE*)hMappedres.pData);
+	// «C³‘O
+	//pFormatConverter->CopyPixels(NULL, imgWidth * 4, imgWidth * imgHeight * 4, (BYTE*)hMappedres.pData);
+	// «C³ŒãF‚±‚±C³‚µ‚È‚¢‚ÆUI‰æ‘œ‚ª•ö‚ê‚é
+	pFormatConverter->CopyPixels(NULL, hMappedres.RowPitch, hMappedres.RowPitch * imgHeight, (BYTE*)hMappedres.pData);
 	Direct3D::pContext_->Unmap(pTexture, 0);
 
 

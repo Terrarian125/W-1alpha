@@ -40,7 +40,7 @@ void Tank::Initialize()
 	assert(hBulletModel >= 0);
 
 	//箱型の当たり判定を作る
-	BoxCollider* collision = new BoxCollider(XMVectorSet(0, 0.5f, 0, 0), XMVectorSet(1, 1, 1, 0));
+	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0.5f, 0), XMFLOAT3(1, 1, 1));
 	AddCollider(collision);
 }
 
@@ -64,50 +64,49 @@ void Tank::Update()
 //移動
 void Tank::Move()
 {
-
 	//戦車が向いている方向に回転させる行列
-	XMMATRIX rotateMatrix = XMMatrixRotationY(transform_.rotate_.vecY / 180 * 3.14f);
+	XMMATRIX rotateMatrix = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
 
 	//移動ベクトル
-	XMVECTOR  moveVector = XMVector3TransformCoord(XMVectorSet(0, 0, 0.2f, 0), rotateMatrix);
+	XMVECTOR moveVector = XMVector3TransformCoord(XMVectorSet(0, 0, 0.2f, 0), rotateMatrix);
 
-	//コントローラー対応
-	//transform_.position_ += Input::GetPadStickL();
-	//transform_.position_ -= Input::GetPadStickL();
+	//現在位置をXMVECTORに変換して計算
+	XMVECTOR pos = XMLoadFloat3(&transform_.position_);
 
 	//前進
 	if (Input::IsKey(DIK_W))
 	{
-		transform_.position_ += moveVector;
+		pos += moveVector;
 	}
 
 	//後退
 	if (Input::IsKey(DIK_S))
 	{
-		transform_.position_ -= moveVector;
+		pos -= moveVector;
 	}
+
+	//計算結果を戻す
+	XMStoreFloat3(&transform_.position_, pos);
 
 	//右旋回
 	if (Input::IsKey(DIK_D))
 	{
-		transform_.rotate_.vecY += 1;
+		transform_.rotate_.y += 1;
 	}
 
 	//左旋回
 	if (Input::IsKey(DIK_A))
 	{
-		transform_.rotate_.vecY -= 1;
+		transform_.rotate_.y -= 1;
 	}
 }
 
 //地面に沿わせる
 void Tank::FollowGround()
 {
-
 	//まだ地面のモデル番号を知らない
 	if (hGroundModel_ == -1)
 	{
-		//モデル番号を調べる
 		hGroundModel_ = ((Ground*)FindObject("Ground"))->GetModelHandle();
 	}
 
@@ -117,19 +116,16 @@ void Tank::FollowGround()
 		//レイを撃つ準備
 		RayCastData data;
 		data.start = transform_.position_;		//戦車の原点から
-		data.start.vecY = 0;						//高さ0（地面は一番高いところでもY<0になっている）
-		data.dir = XMVectorSet(0, -1, 0, 0);			//真下方向
+		data.start.y = 0;						//高さ0（地面は一番高いところでもY<0）
+		data.dir = XMFLOAT3(0, -1, 0);			//真下方向
 
-														//地面に対してレイを撃つ
+		//地面に対してレイを撃つ
 		Model::RayCast(hGroundModel_, &data);
 
 		//レイが地面に当たったら
 		if (data.hit)
 		{
-			//戦車の高さを地面にあわせる
-			//（Y=0の高さからレイ撃って、data.distメートル先に地面があったということは
-			//　そこの標高は『-data.distメートル』ということになる）
-			transform_.position_.vecY = -data.dist;
+			transform_.position_.y = -data.dist;
 		}
 	}
 }

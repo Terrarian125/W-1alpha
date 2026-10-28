@@ -104,43 +104,37 @@ void Reticle::Move()
     float f = 0.02f;
 
     //移動ベクトル
-    XMVECTOR  moveVector = Input::GetPadStickL();
+    XMFLOAT3 moveVector = Input::GetPadStickL();
 
     // コントローラー対応
     {
-        //前進 or 後退
-        position_.x += XMVectorGetX(moveVector) * f;
-
-        // 右移動 or 左移動
-        position_.y += XMVectorGetY(moveVector) * f;
+        // XMFLOAT3 から float への変換が必要
+        position_.x += moveVector.x * f;
+        position_.y += moveVector.y * f;
     }
 
     //前進
     if (Input::IsKey(DIK_W))
     {
         position_.y += f;
-        //transform_.position_ += moveVector;
     }
 
     //後退
     if (Input::IsKey(DIK_S))
     {
         position_.y -= f;
-        //transform_.position_ -= moveVector;
     }
 
     //右旋回
     if (Input::IsKey(DIK_D))
     {
         position_.x += f;
-        //transform_.rotate_.vecY += 1;
     }
 
     //左旋回
     if (Input::IsKey(DIK_A))
     {
         position_.x -= f;
-        //transform_.rotate_.vecY -= 1;
     }
 }
 

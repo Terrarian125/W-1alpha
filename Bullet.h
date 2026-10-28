@@ -6,7 +6,7 @@ class Bullet : public GameObject
 {
 
 	int hModel_;		//モデル番号
-	XMVECTOR move_;		//移動ベクトル
+	XMFLOAT3 move_;		//移動ベクトル
 	float dy_;			//Ｙ方向の加速度
 
 	const float SPEED;		//速度
@@ -35,5 +35,5 @@ public:
 	//発射
 	//引数；position	発射位置
 	//引数：direction	発射方向
-	void Shot(XMVECTOR position, XMVECTOR direction);
+	void Shot(XMFLOAT3 position, XMFLOAT3 direction);
 };

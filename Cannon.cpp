@@ -30,32 +30,38 @@ void Cannon::Update()
 	//右旋回
 	if (Input::IsKey(DIK_RIGHT))
 	{
-		transform_.rotate_.vecY+= SWING_SPEED;
+		transform_.rotate_.y += SWING_SPEED;
 	}
 
 	//左旋回
 	if (Input::IsKey(DIK_LEFT))
 	{
-		transform_.rotate_.vecY -= SWING_SPEED;
+		transform_.rotate_.y -= SWING_SPEED;
 	}
 
-	//発射(試しにコントローラー右トリガー対応)
-	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_RIGHT_SHOULDER, 0))
+	//発射
+	if (Input::IsKeyDown(DIK_SPACE))
 	{
 		//弾をシーンに追加
 		GameObject* playScene = FindObject("PlayScene");
-		Bullet* pBullet = Instantiate<Bullet>(FindObject("PlayScene"));
+		Bullet* pBullet = Instantiate<Bullet>(playScene);
 
 		//砲台の先端と根本の位置を取得
-		XMVECTOR shotPos = Model::GetBonePosition(hModel_, "ShotPoint");		//先端
-		XMVECTOR cannonRoot = Model::GetBonePosition(hModel_, "CannonRoot");	//根本
+		XMFLOAT3 shotPos = Model::GetBonePosition(hModel_, "ShotPoint");	//先端
+		XMFLOAT3 cannonRoot = Model::GetBonePosition(hModel_, "CannonRoot");	//根本
+
+		//発射方向 = 先端 - 根本
+		XMFLOAT3 dir;
+		XMStoreFloat3(&dir, XMLoadFloat3(&shotPos) - XMLoadFloat3(&cannonRoot));
 
 		//撃つ
-		pBullet->Shot(shotPos, shotPos - cannonRoot);
+		pBullet->Shot(shotPos, dir);
 	}
 
 	//カメラの焦点を砲台に合わせる
-	XMVECTOR target = XMVector3TransformCoord(transform_.position_, transform_.GetWorldMatrix());
+	XMVECTOR vTarget = XMVector3TransformCoord(XMLoadFloat3(&transform_.position_), transform_.GetWorldMatrix());
+	XMFLOAT3 target;
+	XMStoreFloat3(&target, vTarget);
 	Camera::SetTarget(target);
 }
 

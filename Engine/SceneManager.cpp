@@ -1,9 +1,13 @@
 #include "sceneManager.h"
 
 #include "../PlayScene.h"
+#include "../ClearScene.h"
+#include "../GameoverScene.h"
 #include "Model.h"
 #include "Image.h"
 #include "Audio.h"
+#include "../ClearScene.h"
+#include "../GameoverScene.h"
 
 
 //コンストラクタ
@@ -38,8 +42,9 @@ void SceneManager::Update()
 		//次のシーンを作成
 		switch (nextSceneID_)
 		{
-		case SCENE_ID_TEST: Instantiate<PlayScene>(this); break;
-
+		case SCENE_ID_PLAY: Instantiate<PlayScene>(this); break;
+		case SCENE_ID_CLEAR: Instantiate<ClearScene>(this); break;
+		case SCENE_ID_GAMEOVER: Instantiate<GameoverScene>(this); break;
 		}
 		Audio::Initialize();
 		currentSceneID_ = nextSceneID_;
