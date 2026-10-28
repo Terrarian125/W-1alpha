@@ -62,11 +62,6 @@ namespace Direct3D
 	extern int		screenHeight_;		//スクリーンの高さ
 	extern bool		isDrawCollision_;	//コリジョンを表示するかフラグ
 
-
-
-
-
-
 	////////////////////////ここからは関数///////////////////////////////
 
 	//初期化処理

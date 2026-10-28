@@ -1,20 +1,14 @@
-
-//
-//　最終更新日：2023/10/20
-//
-
-
 #include "imgui.h"
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 
-#include "MyCursor.h"
 #include "Texture.h"
 #include <Windows.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <time.h>
 
+#include "Direct3D.h"
 #include "global.h"
 #include "RootObject.h"
 #include "Model.h"
@@ -22,7 +16,6 @@
 #include "Camera.h"
 #include "Input.h"
 #include "Audio.h"
-#include "VFX.h"
 
 #pragma comment(lib,"Winmm.lib")
 
@@ -77,26 +70,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//入力処理（キーボード、マウス、コントローラー）の準備
 	Input::Initialize(hWnd);
 
-	Texture cursorTexture;
-	MyCursor myCursor;
-
-	HRESULT hr = cursorTexture.Load("Cursor.png");
-
-	if (SUCCEEDED(hr))
-	{
-		myCursor.SetTexture(
-			(ImTextureID)cursorTexture.GetSRV()
-		);
-
-		myCursor.SetSize(64.0f, 64.0f);
-		myCursor.SetHotspot(32.0f, 32.0f);
-		myCursor.SetVisible(true);
-	}
-	else
-	{
-		myCursor.SetVisible(false);
-	}
-
 	//オーディオ（効果音）の準備
 	Audio::Initialize();
 
@@ -146,31 +119,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 
 			//指定した時間（FPSを60に設定した場合は60分の1秒）経過していたら更新処理
-			if ((nowTime - lastUpdateTime) * fpsLimit > 1000.0f)
+			deltaTime = nowTime - lastUpdateTime;
+			if (deltaTime * fpsLimit > 1000.0f)
 			{
 				//時間計測関連
 				lastUpdateTime = nowTime;	//現在の時間（最後に画面を更新した時間）を覚えておく
 				FPS++;						//画面更新回数をカウントする
-
-
-
 
 				//入力（キーボード、マウス、コントローラー）情報を更新
 				Input::Update();
 				ImGui_ImplDX11_NewFrame();
 				ImGui_ImplWin32_NewFrame();
 				ImGui::NewFrame();
-
-				ImGui::Begin("ImGui Test");
-
-				ImGui::Text("ImGui is working!");
-
-				if (ImGui::Button("Test Button"))
-				{
-					OutputDebugStringA("Button clicked!\n");
-				}
-
-				ImGui::End();
 
 				//全オブジェクトの更新処理
 				//ルートオブジェクトのUpdateを呼んだあと、自動的に子、孫のUpdateが呼ばれる
@@ -179,18 +139,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				//カメラを更新
 				Camera::Update();
 
-				//エフェクトの更新
-				VFX::Update();
-
-
 				//このフレームの描画開始
 				Direct3D::BeginDraw();
 
 				//ゲームオブジェクトの描画
 				pRootObject->DrawSub();
-
-				//エフェクトの描画
-				VFX::Draw();
 
 				//ImGuiの描画
 				ImGui::Render();
@@ -198,9 +151,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 				//描画終了
 				Direct3D::EndDraw();
-
-
-
 				
 				//ちょっと休ませる
 				Sleep(1);
@@ -209,10 +159,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 	}
 
-	
-
-	//いろいろ解放
-	VFX::Release();
 	Audio::AllRelease();
 	Model::AllRelease();
 	Image::AllRelease();

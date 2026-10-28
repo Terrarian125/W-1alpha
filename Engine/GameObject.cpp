@@ -151,6 +151,11 @@ const std::string& GameObject::GetObjectName(void) const
 	return objectName_;
 }
 
+void GameObject::SetObjectName(const std::string &_name)
+{
+	objectName_ = _name;
+}
+
 //子オブジェクトを追加（リストの最後へ）
 void GameObject::PushBackChild(GameObject * obj)
 {

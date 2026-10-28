@@ -148,16 +148,17 @@ void FbxParts::InitMaterial(fbxsdk::FbxNode * pNode)
 		FbxDouble3  ambient = FbxDouble3(0, 0, 0);
 		FbxDouble3  diffuse = FbxDouble3(0, 0, 0);
 		FbxDouble3  specular = FbxDouble3(0, 0, 0);
+		FbxDouble   transparency = 0;
 		ambient = pPhong->Ambient;
 		diffuse = pPhong->Diffuse;
-
-
+		transparency = pPhong->TransparencyFactor;
 
 		// 環境光＆拡散反射光＆鏡面反射光の反射成分値をマテリアルバッファにコピー
 		pMaterial_[i].ambient = XMFLOAT4((float)ambient[0], (float)ambient[1], (float)ambient[2], 1.0f);
 		pMaterial_[i].diffuse = XMFLOAT4((float)diffuse[0], (float)diffuse[1], (float)diffuse[2], 1.0f);
 		pMaterial_[i].specular = XMFLOAT4(0, 0, 0, 0);
 		pMaterial_[i].shininess = 0;
+		pMaterial_[i].transparency = transparency;
 
 
 		if (pMaterial->GetClassId().Is(FbxSurfacePhong::ClassId))
@@ -448,8 +449,9 @@ void FbxParts::Draw(Transform& transform)
 		cb.diffuse = pMaterial_[i].diffuse;
 		cb.speculer = pMaterial_[i].specular;
 		cb.shininess = pMaterial_[i].shininess;
+		cb.transparency = pMaterial_[i].transparency;
 		cb.cameraPosition = XMFLOAT4(Camera::GetPosition().x, Camera::GetPosition().y, Camera::GetPosition().z, 0);
-		cb.lightDirection = XMFLOAT4(1, -1, 1, 0);
+		cb.lightDirection = XMFLOAT4(0, 0, 1, 0);
 		cb.isTexture = pMaterial_[i].pTexture != nullptr;
 
 

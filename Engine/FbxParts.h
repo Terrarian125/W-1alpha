@@ -36,7 +36,10 @@ class FbxParts
 		XMFLOAT4 ambient;		//アンビエント
 		XMFLOAT4 speculer;		//スペキュラー（Lambertの場合は0）
 		XMFLOAT4 cameraPosition;//カメラの位置（ハイライトの計算に必要）
+
 		FLOAT	 shininess;		//ハイライトの強さ（MayaのCosinePower）
+		FLOAT    transparency;
+		
 		BOOL	 isTexture;		//テクスチャの有無
 	};
 
@@ -48,6 +51,7 @@ class FbxParts
 		XMFLOAT4	ambient;			//環境光（アンビエント）への反射強度
 		XMFLOAT4	specular;			//鏡面反射光（スペキュラ）への反射強度
 		float		shininess;			//ハイライトの強さ（サイズ）
+		float       transparency;
 		Texture*	pTexture;			//テクスチャ
 	}*pMaterial_;
 

@@ -101,33 +101,6 @@
     <ClCompile Include="Engine\Transform.cpp">
       <Filter>01Engine\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet.cpp">
-      <Filter>03Scene\01Play</Filter>
-    </ClCompile>
-    <ClCompile Include="Cannon.cpp">
-      <Filter>03Scene\01Play</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>03Scene\01Play</Filter>
-    </ClCompile>
-    <ClCompile Include="Ground.cpp">
-      <Filter>03Scene\01Play</Filter>
-    </ClCompile>
-    <ClCompile Include="Infomation.cpp">
-      <Filter>03Scene\01Play</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayScene.cpp">
-      <Filter>03Scene\01Play</Filter>
-    </ClCompile>
-    <ClCompile Include="Tank.cpp">
-      <Filter>03Scene\01Play</Filter>
-    </ClCompile>
-    <ClCompile Include="ClearScene.cpp">
-      <Filter>03Scene\02Clear</Filter>
-    </ClCompile>
-    <ClCompile Include="GameoverScene.cpp">
-      <Filter>03Scene\03Gameover</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\FontText.cpp">
       <Filter>01Engine\ResourceManager</Filter>
     </ClCompile>
@@ -155,6 +128,16 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="ChickenRaceScene.cpp" />
+    <ClCompile Include="Engine\BillBoard.cpp" />
+    <ClCompile Include="Engine\Debug.cpp" />
+    <ClCompile Include="Engine\GuiButton.cpp" />
+    <ClCompile Include="Engine\MyCursor.cpp" />
+    <ClCompile Include="Engine\Text.cpp" />
+    <ClCompile Include="Engine\VFX.cpp" />
+    <ClCompile Include="Table.cpp" />
+    <ClCompile Include="Beermug.cpp" />
+    <ClCompile Include="Bin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -217,33 +200,6 @@
     <ClInclude Include="Engine\Transform.h">
       <Filter>01Engine\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Bullet.h">
-      <Filter>03Scene\01Play</Filter>
-    </ClInclude>
-    <ClInclude Include="Cannon.h">
-      <Filter>03Scene\01Play</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>03Scene\01Play</Filter>
-    </ClInclude>
-    <ClInclude Include="Ground.h">
-      <Filter>03Scene\01Play</Filter>
-    </ClInclude>
-    <ClInclude Include="Infomation.h">
-      <Filter>03Scene\01Play</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayScene.h">
-      <Filter>03Scene\01Play</Filter>
-    </ClInclude>
-    <ClInclude Include="Tank.h">
-      <Filter>03Scene\01Play</Filter>
-    </ClInclude>
-    <ClInclude Include="ClearScene.h">
-      <Filter>03Scene\02Clear</Filter>
-    </ClInclude>
-    <ClInclude Include="GameoverScene.h">
-      <Filter>03Scene\03Gameover</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\FontText.hpp">
       <Filter>01Engine\ResourceManager</Filter>
     </ClInclude>
@@ -277,6 +233,16 @@
     <ClInclude Include="ImGui\imstb_truetype.h">
       <Filter>ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="ChickenRaceScene.h" />
+    <ClInclude Include="Engine\BillBoard.h" />
+    <ClInclude Include="Engine\Debug.h" />
+    <ClInclude Include="Engine\GuiButton.h" />
+    <ClInclude Include="Engine\MyCursor.h" />
+    <ClInclude Include="Engine\Text.h" />
+    <ClInclude Include="Engine\VFX.h" />
+    <ClInclude Include="Table.h" />
+    <ClInclude Include="Beermug.h" />
+    <ClInclude Include="Bin.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

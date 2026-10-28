@@ -96,6 +96,7 @@ public:
 	//オブジェクトの名前を取得
 	//戻値：名前
 	const std::string& GetObjectName(void) const;
+	void SetObjectName(const std::string &_name);
 
 	//子オブジェクトを追加（リストの最後へ）
 	//引数：追加するオブジェクト
@@ -138,6 +139,7 @@ public:
 	XMFLOAT3 GetWorldPosition() { return Transform::Float3Add(GetParent()->transform_.position_ , transform_.position_); }
 	XMFLOAT3 GetWorldRotate() { return Transform::Float3Add(GetParent()->transform_.rotate_, transform_.rotate_); }
 	XMFLOAT3 GetWorldScale() { return Transform::Float3Add(GetParent()->transform_.scale_, transform_.scale_); }
+
 	void SetPosition(XMFLOAT3 position) { transform_.position_ = position; }
 	void SetPosition(float x, float y, float z) { SetPosition(XMFLOAT3( x, y, z )); }
 	void SetRotate(XMFLOAT3 rotate) { transform_.rotate_ = rotate; }
@@ -146,6 +148,7 @@ public:
 	void SetRotateY(float y) { SetRotate(transform_.rotate_.x, y, transform_.rotate_.z); }
 	void SetRotateZ(float z) { SetRotate(transform_.rotate_.x, transform_.rotate_.y, z); }
 	void SetScale(XMFLOAT3 scale) { transform_.scale_ = scale; }
+	void SetScale(float scale) { SetScale(scale, scale, scale); }
 	void SetScale(float x, float y, float z) { SetScale(XMFLOAT3(x, y, z)); }
 
 
