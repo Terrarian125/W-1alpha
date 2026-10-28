@@ -7,6 +7,7 @@
 #include <DirectXMath.h>
 #include "Bullet.h"
 #include "Engine/Model.h"
+#include "Gun.h"
 
 using namespace DirectX;
 using namespace std;
@@ -25,6 +26,9 @@ Reticle::~Reticle()
 // 初期化
 void Reticle::Initialize()
 {
+    // 銃表示（銃はレティクルの子クラス）
+    //Instantiate<Gun>(this);
+
     // レティクルの画像のロード
     hImage_ = Image::Load("Image/Reticle.png");
     assert(hImage_ >= 0);
@@ -159,7 +163,7 @@ void Reticle::Shoot()
         position_.x;
 
         //撃つ
-        pBullet->Shot(transform_.position_, transform_.position_);
+        pBullet->Shot(transform_.position_, position_);
     }
 
     triggerOld_ = triggerNow;

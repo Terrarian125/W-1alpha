@@ -22,7 +22,7 @@ Clay::~Clay()
 void Clay::Initialize()
 {
     //モデルデータのロード
-    hModel_[0] = Model::Load("/Model/Bullet.fbx");
+    hModel_[0] = Model::Load("/Model/Dish00.fbx");
     assert(hModel_[0] >= 0);
 
     // 一応あると楽だからここに
@@ -31,7 +31,7 @@ void Clay::Initialize()
     transform_.scale_ = { 0.2f, 0.2f,0.2f }; // 拡大率
 
     //サイズ
-    transform_.scale_ = { 1.0f, 1.0f,1.0f }; // 拡大率
+    transform_.scale_ = { 0.05f, 0.05f, 0.05f }; // 拡大率
 
     //  (float)(rand() % 10 - 5)
     //位置

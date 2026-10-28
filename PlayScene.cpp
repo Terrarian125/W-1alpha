@@ -6,6 +6,7 @@
 //#include "Enemy.h"
 //#include "Infomation.h"
 #include "Engine\\FontText.hpp"
+#include "Gun.h"
 
 // コンストラクタ
 PlayScene::PlayScene(GameObject * parent)
@@ -20,6 +21,9 @@ void PlayScene::Initialize()
     //Instantiate<Ground>(this);
     Instantiate<Clay>(this);
     Instantiate<Reticle>(this);
+
+    // 銃表示（銃はレティクルの子クラス）
+    Instantiate<Gun>(this);
 
     //for (int i = 0; i < ENEMY_NUM; i++) {
     //    Instantiate<Enemy>(this);
