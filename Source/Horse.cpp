@@ -10,7 +10,9 @@ Horse::Horse(GameObject* parent)
 
 void Horse::Initialize()
 {
-	hModel_ = Model::Load("Assets/Model/Horse00.fbx");
+	hModel_ = Model::Load("Model/Horse00.fbx");
+	assert(hModel_ >= 0);
+	transform_.position_ = XMFLOAT3(0, 0, 0);
 }
 
 void Horse::Update()
@@ -30,7 +32,9 @@ void Horse::Update()
 		transform_.position_.x += 0.1f;
 	}
 
-	Camera::SetPosition()
+	constexpr float backPosition = -1000.0f;
+	Camera::SetPosition(XMFLOAT3(0, 400, backPosition));
+	Camera::SetTarget(transform_.position_);
 }
 
 
