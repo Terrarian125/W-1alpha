@@ -245,6 +245,9 @@
     <ClInclude Include="Engine\BillBoard.h" />
     <ClInclude Include="Engine\Text.h" />
     <ClInclude Include="Engine\VFX.h" />
+    <ClInclude Include="Engine\XMFLOAT3Operator.h">
+      <Filter>01Engine\ResourceManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".github\copilot-instructions.md" />

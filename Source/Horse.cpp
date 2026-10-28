@@ -32,9 +32,13 @@ void Horse::Update()
 		transform_.position_.x += 0.1f;
 	}
 
-	constexpr float backPosition = -1000.0f;
-	Camera::SetPosition(XMFLOAT3(0, 400, backPosition));
-	Camera::SetTarget(transform_.position_);
+	constexpr float upPosition = 500.0f;
+	constexpr float backPosition = -500.0f;
+	Camera::SetPosition(XMFLOAT3(0, upPosition, backPosition));
+	
+
+	XMFLOAT3 targetPosition = transform_.position_ + XMFLOAT3(0, 200, 0);
+	Camera::SetTarget(targetPosition);
 }
 
 
