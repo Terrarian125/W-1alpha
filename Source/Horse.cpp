@@ -1,6 +1,7 @@
 #include "Horse.hpp"
 #include "../Engine/Input.h"
 #include "../Engine/Model.h"
+#include "../Engine/Camera.h"
 
 Horse::Horse(GameObject* parent)
 	:GameObject(parent, "Horse"), hModel_(-1)
@@ -17,6 +18,7 @@ void Horse::Update()
 	// ジャンプ
 	if (Input::IsPadButtonDown(0, XINPUT_GAMEPAD_A))
 	{
+
 	}
 	// 左右移動
 	if (Input::IsPadButton(XINPUT_GAMEPAD_DPAD_LEFT))
@@ -27,6 +29,8 @@ void Horse::Update()
 	{
 		transform_.position_.x += 0.1f;
 	}
+
+	Camera::SetPosition()
 }
 
 

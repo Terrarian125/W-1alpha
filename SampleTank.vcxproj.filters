@@ -127,6 +127,11 @@
     <ClCompile Include="Source\Obstacle.cpp">
       <Filter>03Scene\01Play\Obstacle</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\GuiButton.cpp" />
+    <ClCompile Include="Engine\Debug.cpp" />
+    <ClCompile Include="Engine\BillBoard.cpp" />
+    <ClCompile Include="Engine\Text.cpp" />
+    <ClCompile Include="Engine\VFX.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -235,17 +240,11 @@
     <ClInclude Include="Source\FallingRock.hpp">
       <Filter>03Scene\01Play\Obstacle</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Assets\Shader\Simple2D.hlsl">
-      <Filter>02Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="Assets\Shader\Simple3D.hlsl">
-      <Filter>02Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="Assets\Shader\Debug3D.hlsl">
-      <Filter>02Shader</Filter>
-    </FxCompile>
+    <ClInclude Include="Engine\GuiButton.h" />
+    <ClInclude Include="Engine\Debug.h" />
+    <ClInclude Include="Engine\BillBoard.h" />
+    <ClInclude Include="Engine\Text.h" />
+    <ClInclude Include="Engine\VFX.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".github\copilot-instructions.md" />

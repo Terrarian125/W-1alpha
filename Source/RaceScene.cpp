@@ -1,22 +1,24 @@
+#include "RaceScene.hpp"
 #include "Horse.hpp"
 
-Horse::Horse(GameObject* parent)
-	:GameObject(parent, "Horse")
+RaceScene::RaceScene(GameObject* parent)
+	:GameObject(parent, "RaceScene")
 {
 }
 
-void Horse::Initialize()
+void RaceScene::Initialize()
+{
+	Instantiate<Horse>(this);
+}
+
+void RaceScene::Update()
 {
 }
 
-void Horse::Update()
+void RaceScene::Draw()
 {
 }
 
-void Horse::Draw()
-{
-}
-
-void Horse::Release()
+void RaceScene::Release()
 {
 }
