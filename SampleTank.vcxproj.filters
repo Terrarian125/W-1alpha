@@ -132,6 +132,9 @@
     <ClCompile Include="Engine\BillBoard.cpp" />
     <ClCompile Include="Engine\Text.cpp" />
     <ClCompile Include="Engine\VFX.cpp" />
+    <ClCompile Include="Source\Stage.cpp">
+      <Filter>03Scene\01Play</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -247,6 +250,9 @@
     <ClInclude Include="Engine\VFX.h" />
     <ClInclude Include="Engine\XMFLOAT3Operator.h">
       <Filter>01Engine\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage.hpp">
+      <Filter>03Scene\01Play</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

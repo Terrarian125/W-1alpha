@@ -177,6 +177,7 @@
     <ClCompile Include="Source\Horse.cpp" />
     <ClCompile Include="Source\Obstacle.cpp" />
     <ClCompile Include="Source\RaceScene.cpp" />
+    <ClCompile Include="Source\Stage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClearScene.h" />
@@ -226,6 +227,7 @@
     <ClInclude Include="Source\Obstacle.hpp" />
     <ClInclude Include="Source\RaceScene.hpp" />
     <ClInclude Include="Source\Rock.hpp" />
+    <ClInclude Include="Source\Stage.hpp" />
     <ClInclude Include="Source\Tumbleweed.hpp" />
   </ItemGroup>
   <ItemGroup>
