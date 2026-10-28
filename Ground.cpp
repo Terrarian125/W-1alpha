@@ -6,6 +6,7 @@
 Ground::Ground(GameObject * parent)
 	:GameObject(parent, "Ground"), hModel_(-1)
 {
+	transform_.scale_ = XMFLOAT3(0.1f, 0.1f, 0.1f);
 }
 
 //デストラクタ
@@ -17,7 +18,7 @@ Ground::~Ground()
 void Ground::Initialize()
 {
 	//モデルデータのロード
-	hModel_ = Model::Load("Model/ground00.fbx");
+	hModel_ = Model::Load("Model/Wall00.fbx");
 	assert(hModel_ >= 0);
 }
 
