@@ -127,6 +127,24 @@
     <ClCompile Include="Source\Obstacle.cpp">
       <Filter>03Scene\01Play\Obstacle</Filter>
     </ClCompile>
+    <ClCompile Include="Source\cactus1.cpp">
+      <Filter>03Scene\01Play\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\cactus2.cpp">
+      <Filter>03Scene\01Play\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Fence.cpp">
+      <Filter>03Scene\01Play\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rock.cpp">
+      <Filter>03Scene\01Play\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Tumbleweed.cpp">
+      <Filter>03Scene\01Play\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\FallingRock.cpp">
+      <Filter>03Scene\01Play\Obstacle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">

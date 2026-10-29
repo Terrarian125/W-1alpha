@@ -169,9 +169,15 @@
     <ClCompile Include="ImGui\imgui_ja_gryph_ranges.cpp" />
     <ClCompile Include="ImGui\imgui_tables.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="Source\cactus1.cpp" />
+    <ClCompile Include="Source\cactus2.cpp" />
+    <ClCompile Include="Source\FallingRock.cpp" />
+    <ClCompile Include="Source\Fence.cpp" />
     <ClCompile Include="Source\Horse.cpp" />
     <ClCompile Include="Source\Obstacle.cpp" />
     <ClCompile Include="Source\RaceScene.cpp" />
+    <ClCompile Include="Source\Rock.cpp" />
+    <ClCompile Include="Source\Tumbleweed.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClearScene.h" />
