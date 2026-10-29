@@ -145,6 +145,14 @@
     <ClCompile Include="Source\FallingRock.cpp">
       <Filter>03Scene\01Play\Obstacle</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\GuiButton.cpp" />
+    <ClCompile Include="Engine\Debug.cpp" />
+    <ClCompile Include="Engine\BillBoard.cpp" />
+    <ClCompile Include="Engine\Text.cpp" />
+    <ClCompile Include="Engine\VFX.cpp" />
+    <ClCompile Include="Source\Stage.cpp">
+      <Filter>03Scene\01Play</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -253,17 +261,17 @@
     <ClInclude Include="Source\FallingRock.hpp">
       <Filter>03Scene\01Play\Obstacle</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Assets\Shader\Simple2D.hlsl">
-      <Filter>02Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="Assets\Shader\Simple3D.hlsl">
-      <Filter>02Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="Assets\Shader\Debug3D.hlsl">
-      <Filter>02Shader</Filter>
-    </FxCompile>
+    <ClInclude Include="Engine\GuiButton.h" />
+    <ClInclude Include="Engine\Debug.h" />
+    <ClInclude Include="Engine\BillBoard.h" />
+    <ClInclude Include="Engine\Text.h" />
+    <ClInclude Include="Engine\VFX.h" />
+    <ClInclude Include="Engine\XMFLOAT3Operator.h">
+      <Filter>01Engine\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage.hpp">
+      <Filter>03Scene\01Play</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".github\copilot-instructions.md" />

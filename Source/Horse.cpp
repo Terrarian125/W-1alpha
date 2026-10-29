@@ -1,6 +1,7 @@
 #include "Horse.hpp"
 #include "../Engine/Input.h"
 #include "../Engine/Model.h"
+#include "../Engine/Camera.h"
 
 Horse::Horse(GameObject* parent)
 	:GameObject(parent, "Horse"), hModel_(-1)
@@ -9,7 +10,9 @@ Horse::Horse(GameObject* parent)
 
 void Horse::Initialize()
 {
-	hModel_ = Model::Load("Assets/Model/Horse00.fbx");
+	hModel_ = Model::Load("Model/Horse00.fbx");
+	assert(hModel_ >= 0);
+	transform_.position_ = XMFLOAT3(0, 0, 0);
 }
 
 void Horse::Update()
@@ -17,6 +20,7 @@ void Horse::Update()
 	// ジャンプ
 	if (Input::IsPadButtonDown(0, XINPUT_GAMEPAD_A))
 	{
+
 	}
 	// 左右移動
 	if (Input::IsPadButton(XINPUT_GAMEPAD_DPAD_LEFT))
@@ -27,6 +31,14 @@ void Horse::Update()
 	{
 		transform_.position_.x += 0.1f;
 	}
+
+	constexpr float upPosition = 500.0f;
+	constexpr float backPosition = -500.0f;
+	Camera::SetPosition(XMFLOAT3(0, upPosition, backPosition));
+	
+
+	XMFLOAT3 targetPosition = transform_.position_ + XMFLOAT3(0, 200, 0);
+	Camera::SetTarget(targetPosition);
 }
 
 

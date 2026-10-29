@@ -1,6 +1,6 @@
 #include "sceneManager.h"
 
-#include "../PlayScene.h"
+#include "../Source/RaceScene.hpp"
 #include "Model.h"
 #include "Image.h"
 #include "Audio.h"
@@ -18,7 +18,7 @@ void SceneManager::Initialize()
 	//最初のシーンを準備
 	currentSceneID_ = SCENE_ID_TEST;
 	nextSceneID_ = currentSceneID_;
-	Instantiate<PlayScene>(this);
+	Instantiate<RaceScene>(this);
 }
 
 //更新
@@ -38,7 +38,7 @@ void SceneManager::Update()
 		//次のシーンを作成
 		switch (nextSceneID_)
 		{
-		case SCENE_ID_TEST: Instantiate<PlayScene>(this); break;
+		case SCENE_ID_TEST: Instantiate<RaceScene>(this); break;
 
 		}
 		Audio::Initialize();

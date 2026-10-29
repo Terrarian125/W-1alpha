@@ -8,7 +8,7 @@
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 
-#include "MyCursor.h"
+//#include "MyCursor.h"
 #include "Texture.h"
 #include <Windows.h>
 #include <stdlib.h>
@@ -78,24 +78,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Input::Initialize(hWnd);
 
 	Texture cursorTexture;
-	MyCursor myCursor;
+	//MyCursor myCursor;
 
-	HRESULT hr = cursorTexture.Load("Cursor.png");
+	//HRESULT hr = cursorTexture.Load("Cursor.png");
 
-	if (SUCCEEDED(hr))
-	{
-		myCursor.SetTexture(
-			(ImTextureID)cursorTexture.GetSRV()
-		);
+	//if (SUCCEEDED(hr))
+	//{
+	//	myCursor.SetTexture(
+	//		(ImTextureID)cursorTexture.GetSRV()
+	//	);
 
-		myCursor.SetSize(64.0f, 64.0f);
-		myCursor.SetHotspot(32.0f, 32.0f);
-		myCursor.SetVisible(true);
-	}
-	else
-	{
-		myCursor.SetVisible(false);
-	}
+	//	myCursor.SetSize(64.0f, 64.0f);
+	//	myCursor.SetHotspot(32.0f, 32.0f);
+	//	myCursor.SetVisible(true);
+	//}
+	//else
+	//{
+	//	myCursor.SetVisible(false);
+	//}
 
 	//オーディオ（効果音）の準備
 	Audio::Initialize();
@@ -180,7 +180,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				Camera::Update();
 
 				//エフェクトの更新
-				VFX::Update();
+				//VFX::Update();
 
 
 				//このフレームの描画開始
@@ -190,7 +190,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				pRootObject->DrawSub();
 
 				//エフェクトの描画
-				VFX::Draw();
+				//VFX::Draw();
 
 				//ImGuiの描画
 				ImGui::Render();
@@ -212,7 +212,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	
 
 	//いろいろ解放
-	VFX::Release();
+	//VFX::Release();
 	Audio::AllRelease();
 	Model::AllRelease();
 	Image::AllRelease();
