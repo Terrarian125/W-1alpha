@@ -350,3 +350,6 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+Assets/Model/TestBg02.fbx
+Assets/Model/Tumbleweed01.fbx

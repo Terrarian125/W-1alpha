@@ -1,5 +1,5 @@
 #include "PlaySceneButton.h"
-
+#include "Engine/Input.h"
 #include <imgui.h>
 #include <algorithm>
 #include <cstdio>
@@ -29,7 +29,7 @@ bool PlaySceneButton::Initialize(
     leftStopButton_->onClick = [this]() { OnStopClicked(-1); };
     rightStopButton_->onClick = [this]() { OnStopClicked(1); };
 
-    UpdateButtonPositions();
+    UpdateButtonPositions();//
     Reset();
     return true;
 }
@@ -208,6 +208,18 @@ void PlaySceneButton::OnStopClicked(int side)
 
 void PlaySceneButton::Draw()
 {
+    //コントローラー0：AボタンでL側のSTOP
+    if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A, 0))
+    {
+        OnStopClicked(-1);
+    }
+
+    //コントローラー1：AボタンでR側のSTOP
+    if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A, 1))
+    {
+        OnStopClicked(1);
+    }
+
     if (!font_ || !timer_ || !ImGui::GetCurrentContext())
         return;
 
