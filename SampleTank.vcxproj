@@ -230,7 +230,6 @@
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="Infomation.h" />
-    <ClInclude Include="PlayerAction.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="PlaySceneButton.h" />

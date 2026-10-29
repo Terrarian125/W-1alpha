@@ -297,9 +297,6 @@
     <ClInclude Include="Engine\Debug.h" />
     <ClInclude Include="Engine\Text.h" />
     <ClInclude Include="Engine\VFX.h" />
-    <ClInclude Include="PlayerAction.h">
-      <Filter>03Scene\01Play</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">
