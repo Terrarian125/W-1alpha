@@ -1,9 +1,3 @@
-
-//
-//　最終更新日：2023/10/20
-//
-
-
 #include "imgui.h"
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
@@ -161,16 +155,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				ImGui_ImplWin32_NewFrame();
 				ImGui::NewFrame();
 
-				ImGui::Begin("ImGui Test");
+				//ImGui::Begin("ImGui Test");
 
-				ImGui::Text("ImGui is working!");
+				//ImGui::Text("ImGui is working!");
 
-				if (ImGui::Button("Test Button"))
-				{
-					OutputDebugStringA("Button clicked!\n");
-				}
+				//if (ImGui::Button("Test Button"))
+				//{
+				//	OutputDebugStringA("Button clicked!\n");
+				//}
 
-				ImGui::End();
+				//ImGui::End();
 
 				//全オブジェクトの更新処理
 				//ルートオブジェクトのUpdateを呼んだあと、自動的に子、孫のUpdateが呼ばれる
