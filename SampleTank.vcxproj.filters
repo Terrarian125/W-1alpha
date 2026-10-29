@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="リソース ファイル">
@@ -39,6 +39,9 @@
     <Filter Include="03Scene\01Play\Obstacle">
       <UniqueIdentifier>{6ee15fd6-678c-4528-8e5a-2f868036dda7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01Engine\ImGui">
+      <UniqueIdentifier>{762a9b9f-5862-4e0e-88e6-b2fb52d76d26}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\BoxCollider.cpp">
@@ -68,6 +71,15 @@
     <ClCompile Include="Engine\Sprite.cpp">
       <Filter>01Engine\DirectX</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Texture.cpp">
+      <Filter>01Engine\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\BillBoard.cpp">
+      <Filter>01Engine\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\VFX.cpp">
+      <Filter>01Engine\DirectX</Filter>
+    </ClCompile>
     <ClCompile Include="Engine\Camera.cpp">
       <Filter>01Engine\GameObject</Filter>
     </ClCompile>
@@ -75,6 +87,9 @@
       <Filter>01Engine\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Engine\RootObject.cpp">
+      <Filter>01Engine\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Transform.cpp">
       <Filter>01Engine\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Audio.cpp">
@@ -89,17 +104,23 @@
     <ClCompile Include="Engine\Model.cpp">
       <Filter>01Engine\ResourceManager</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\FontText.cpp">
+      <Filter>01Engine\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Text.cpp">
+      <Filter>01Engine\ResourceManager</Filter>
+    </ClCompile>
     <ClCompile Include="Engine\Main.cpp">
       <Filter>01Engine</Filter>
     </ClCompile>
     <ClCompile Include="Engine\SceneManager.cpp">
       <Filter>01Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Texture.cpp">
-      <Filter>01Engine\DirectX</Filter>
+    <ClCompile Include="Engine\GuiButton.cpp">
+      <Filter>01Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Transform.cpp">
-      <Filter>01Engine\GameObject</Filter>
+    <ClCompile Include="Engine\Debug.cpp">
+      <Filter>01Engine</Filter>
     </ClCompile>
     <ClCompile Include="ClearScene.cpp">
       <Filter>03Scene\02Clear</Filter>
@@ -107,21 +128,13 @@
     <ClCompile Include="GameoverScene.cpp">
       <Filter>03Scene\03Gameover</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\FontText.cpp">
-      <Filter>01Engine\ResourceManager</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui.cpp" />
-    <ClCompile Include="ImGui\imgui_draw.cpp" />
-    <ClCompile Include="ImGui\imgui_impl_dx9.cpp" />
-    <ClCompile Include="ImGui\imgui_impl_dx11.cpp" />
-    <ClCompile Include="ImGui\imgui_impl_win32.cpp" />
-    <ClCompile Include="ImGui\imgui_ja_gryph_ranges.cpp" />
-    <ClCompile Include="ImGui\imgui_tables.cpp" />
-    <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Source\RaceScene.cpp">
       <Filter>03Scene\01Play</Filter>
     </ClCompile>
     <ClCompile Include="Source\Horse.cpp">
+      <Filter>03Scene\01Play</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stage.cpp">
       <Filter>03Scene\01Play</Filter>
     </ClCompile>
     <ClCompile Include="Source\Obstacle.cpp">
@@ -145,13 +158,29 @@
     <ClCompile Include="Source\FallingRock.cpp">
       <Filter>03Scene\01Play\Obstacle</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\GuiButton.cpp" />
-    <ClCompile Include="Engine\Debug.cpp" />
-    <ClCompile Include="Engine\BillBoard.cpp" />
-    <ClCompile Include="Engine\Text.cpp" />
-    <ClCompile Include="Engine\VFX.cpp" />
-    <ClCompile Include="Source\Stage.cpp">
-      <Filter>03Scene\01Play</Filter>
+    <ClCompile Include="ImGui\imgui.cpp">
+      <Filter>01Engine\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_dx9.cpp">
+      <Filter>01Engine\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_draw.cpp">
+      <Filter>01Engine\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_dx11.cpp">
+      <Filter>01Engine\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_win32.cpp">
+      <Filter>01Engine\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_ja_gryph_ranges.cpp">
+      <Filter>01Engine\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_tables.cpp">
+      <Filter>01Engine\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_widgets.cpp">
+      <Filter>01Engine\ImGui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -182,6 +211,15 @@
     <ClInclude Include="Engine\Sprite.h">
       <Filter>01Engine\DirectX</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Texture.h">
+      <Filter>01Engine\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\BillBoard.h">
+      <Filter>01Engine\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\VFX.h">
+      <Filter>01Engine\DirectX</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\Camera.h">
       <Filter>01Engine\GameObject</Filter>
     </ClInclude>
@@ -189,6 +227,9 @@
       <Filter>01Engine\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Engine\RootObject.h">
+      <Filter>01Engine\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Transform.h">
       <Filter>01Engine\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Audio.h">
@@ -203,17 +244,26 @@
     <ClInclude Include="Engine\Model.h">
       <Filter>01Engine\ResourceManager</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\FontText.hpp">
+      <Filter>01Engine\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Text.h">
+      <Filter>01Engine\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\XMFLOAT3Operator.h">
+      <Filter>01Engine\ResourceManager</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\Global.h">
       <Filter>01Engine</Filter>
     </ClInclude>
     <ClInclude Include="Engine\SceneManager.h">
       <Filter>01Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Texture.h">
-      <Filter>01Engine\DirectX</Filter>
+    <ClInclude Include="Engine\GuiButton.h">
+      <Filter>01Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Transform.h">
-      <Filter>01Engine\GameObject</Filter>
+    <ClInclude Include="Engine\Debug.h">
+      <Filter>01Engine</Filter>
     </ClInclude>
     <ClInclude Include="ClearScene.h">
       <Filter>03Scene\02Clear</Filter>
@@ -221,16 +271,7 @@
     <ClInclude Include="GameoverScene.h">
       <Filter>03Scene\03Gameover</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\FontText.hpp">
-      <Filter>01Engine\ResourceManager</Filter>
-    </ClInclude>
     <ClInclude Include="ImGui\imconfig.h" />
-    <ClInclude Include="ImGui\imgui.h" />
-    <ClInclude Include="ImGui\imgui_impl_dx9.h" />
-    <ClInclude Include="ImGui\imgui_impl_dx11.h" />
-    <ClInclude Include="ImGui\imgui_impl_dxlib.hpp" />
-    <ClInclude Include="ImGui\imgui_impl_win32.h" />
-    <ClInclude Include="ImGui\imgui_internal.h" />
     <ClInclude Include="ImGui\imstb_rectpack.h" />
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
@@ -238,6 +279,9 @@
       <Filter>03Scene\01Play</Filter>
     </ClInclude>
     <ClInclude Include="Source\Horse.hpp">
+      <Filter>03Scene\01Play</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage.hpp">
       <Filter>03Scene\01Play</Filter>
     </ClInclude>
     <ClInclude Include="Source\Obstacle.hpp">
@@ -261,16 +305,23 @@
     <ClInclude Include="Source\FallingRock.hpp">
       <Filter>03Scene\01Play\Obstacle</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\GuiButton.h" />
-    <ClInclude Include="Engine\Debug.h" />
-    <ClInclude Include="Engine\BillBoard.h" />
-    <ClInclude Include="Engine\Text.h" />
-    <ClInclude Include="Engine\VFX.h" />
-    <ClInclude Include="Engine\XMFLOAT3Operator.h">
-      <Filter>01Engine\ResourceManager</Filter>
+    <ClInclude Include="ImGui\imgui.h">
+      <Filter>01Engine\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Stage.hpp">
-      <Filter>03Scene\01Play</Filter>
+    <ClInclude Include="ImGui\imgui_impl_dx9.h">
+      <Filter>01Engine\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_dx11.h">
+      <Filter>01Engine\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_dxlib.hpp">
+      <Filter>01Engine\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_win32.h">
+      <Filter>01Engine\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_internal.h">
+      <Filter>01Engine\ImGui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -4,7 +4,7 @@
 #include "../Engine/Camera.h"
 
 Horse::Horse(GameObject* parent)
-	:GameObject(parent, "Horse"), hModel_(-1)
+	:GameObject(parent, "Horse"), hModel_(-1), speed_(0.0f)
 {
 }
 
@@ -13,32 +13,43 @@ void Horse::Initialize()
 	hModel_ = Model::Load("Model/Horse00.fbx");
 	assert(hModel_ >= 0);
 	transform_.position_ = XMFLOAT3(0, 0, 0);
+
+	speed_ = 0.5f;
 }
 
 void Horse::Update()
 {
+	transform_.position_.z += speed_;
+	
+	if (speed_ < 5.0f)
+	{
+		speed_ += 0.001f;
+	}
+
 	// ジャンプ
-	if (Input::IsPadButtonDown(0, XINPUT_GAMEPAD_A))
+	if (Input::IsPadButtonDown(0, XINPUT_GAMEPAD_A) || Input::IsKeyDown(DIK_SPACE))
 	{
 
 	}
 	// 左右移動
-	if (Input::IsPadButton(XINPUT_GAMEPAD_DPAD_LEFT))
+	if (Input::IsPadButton(XINPUT_GAMEPAD_DPAD_LEFT) || Input::IsKey(DIK_LEFT))
 	{
-		transform_.position_.x -= 0.1f;
+		transform_.position_.x -= 5.0f;
 	}
-	else if (Input::IsPadButton(XINPUT_GAMEPAD_DPAD_RIGHT))
+	else if (Input::IsPadButton(XINPUT_GAMEPAD_DPAD_RIGHT) || Input::IsKey(DIK_RIGHT))
 	{
-		transform_.position_.x += 0.1f;
+		transform_.position_.x += 5.0f;
 	}
 
 	constexpr float upPosition = 500.0f;
 	constexpr float backPosition = -500.0f;
-	Camera::SetPosition(XMFLOAT3(0, upPosition, backPosition));
+	Camera::SetPosition(XMFLOAT3(0, transform_.position_.y + upPosition, transform_.position_.z + backPosition));
 	
 
-	XMFLOAT3 targetPosition = transform_.position_ + XMFLOAT3(0, 200, 0);
-	Camera::SetTarget(targetPosition);
+	float targetPositionX = 0;
+	float targetPositionY = transform_.position_.y + 200.0f;
+	float targetPositionZ = transform_.position_.z + 100.0f;
+	Camera::SetTarget(XMFLOAT3(targetPositionX, targetPositionY, targetPositionZ));
 }
 
 

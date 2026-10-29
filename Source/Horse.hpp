@@ -11,4 +11,5 @@ public:
 	void Release() override;
 private:
 	int hModel_;
+	float speed_;
 };

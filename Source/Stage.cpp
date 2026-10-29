@@ -8,7 +8,7 @@ Stage::Stage(GameObject* parent)
 
 void Stage::Initialize()
 {
-	hModel_ = Model::Load("Model/Wall00.fbx");
+	hModel_ = Model::Load("Model/Wall01.fbx");
 	assert(hModel_ >= 0);
 	transform_.position_ = XMFLOAT3(0, 0, 0);
 }
