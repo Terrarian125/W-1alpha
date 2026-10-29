@@ -16,6 +16,8 @@ using namespace DirectX;
 //-----------------------------------------------------------
 namespace Input
 {
+	constexpr unsigned int ANASSIGNED{0xFFFFFFFF};
+
 	//初期化
 	//引数：hWnd	ウィンドウハンドル
 	void Initialize(HWND hWnd);
