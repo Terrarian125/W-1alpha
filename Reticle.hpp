@@ -6,6 +6,7 @@ class Reticle : public GameObject
 {
     // レティクルの座標
     XMFLOAT3 position_;
+    XMFLOAT3 rotate_;   // 回転
 
     // 画像読み込み
     int hImage_;

@@ -26,19 +26,16 @@ void Clay::Initialize()
     assert(hModel_[0] >= 0);
 
     // 一応あると楽だからここに
-    // transform_.position_ = { position_.x,position_.y,position_.z };  // 位置
-    transform_.rotate_ = { 0.0f,0.0f,0.0f };  // 回転
-    transform_.scale_ = { 0.2f, 0.2f,0.2f }; // 拡大率
-
-    //サイズ
-    transform_.scale_ = { 0.05f, 0.05f, 0.05f }; // 拡大率
-
-    //  (float)(rand() % 10 - 5)
-    //位置
+    // === 位置のメモ ===
+    // (float)(rand() % 10 - 5)
     // X - 1.2～1.2
     // Y 2.0～3.0
     // Z - 6.5～ - 8.0
-    transform_.position_ = { 0, 0.0f, 0};  // 位置
+    transform_.position_ = { 0.0f, 0.0f, 0.0f };  // 位置
+    // transform_.position_ = { position_.x,position_.y,position_.z };  // 位置
+    transform_.rotate_ = { 0.0f, 0.0f, 0.0f };  // 回転
+    transform_.scale_  = { 0.2f, 0.2f, 0.2f };  // 拡大率
+
 
     //当たり判定追加
     SphereCollider* collision = new SphereCollider(XMFLOAT3(0.0f, 0.0f, 0.0f), 0.8f);
@@ -54,16 +51,6 @@ void Clay::Update()
 
 void Clay::Move()
 {
-    //戦車が向いている方向に回転させる行列
-    XMMATRIX rotateMatrix = XMMatrixRotationY(transform_.rotate_.y / 180 * 3.14f);
-
-    //移動ベクトル
-    XMVECTOR  moveVector = XMVector3TransformCoord(XMVectorSet(0, 0, 0.2f, 0), rotateMatrix);
-
-    //コントローラー対応
-    //transform_.position_ += Input::GetPadStickL();
-    //transform_.position_ -= Input::GetPadStickL();
-
     //右旋回
     if (Input::IsKey(DIK_O))
     {

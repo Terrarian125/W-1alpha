@@ -145,6 +145,9 @@
     <ClCompile Include="Gun.cpp">
       <Filter>03Scene\01Play</Filter>
     </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>03Scene\01Play</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -254,6 +257,12 @@
       <Filter>03Scene\01Play</Filter>
     </ClInclude>
     <ClInclude Include="Gun.h">
+      <Filter>03Scene\01Play</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\XMFLOAT3Operator.h">
+      <Filter>01Engine\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
       <Filter>03Scene\01Play</Filter>
     </ClInclude>
   </ItemGroup>

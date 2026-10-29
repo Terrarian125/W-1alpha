@@ -6,8 +6,7 @@
 #include "SphereCollider.h"
 #include "BoxCollider.h"
 #include "Transform.h"
-
-
+#include "XMFLOAT3Operator.h"
 
 
 using namespace DirectX;

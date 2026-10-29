@@ -51,11 +51,12 @@ void Reticle::Update()
 
     // 画面を超えないように指定
     {
-        const float Limit_X = 0.9f, Limit_Y = 0.82f;
-        if (position_.x <= -Limit_X) position_.x = -Limit_X; // 左
-        if (position_.x >=  Limit_X) position_.x =  Limit_X; // 右
-        if (position_.y <= -Limit_Y) position_.y = -Limit_Y; // 上
-        if (position_.y >=  Limit_Y) position_.y =  Limit_Y; // 下
+        const float Limit_X_MAX =  -0.9f, Limit_X_MIN =  0.9f;
+        const float Limit_Y_MAX =  0.82f, Limit_Y_MIN = -0.5f;
+        if (position_.x <= Limit_X_MAX) position_.x = Limit_X_MAX; // 左
+        if (position_.x >= Limit_X_MIN) position_.x = Limit_X_MIN; // 右
+        if (position_.y >= Limit_Y_MAX) position_.y = Limit_Y_MAX; // 上
+        if (position_.y <= Limit_Y_MIN) position_.y = Limit_Y_MIN; // 下
     }
 }
 
@@ -75,7 +76,6 @@ void Reticle::Draw()
         ImGui::InputFloat("pos.Y", &position_.y);
         ImGui::InputFloat("pos.Z", &position_.z);
         ImGui::End();
-
         // ======= 発射の状況 =======
         // 右トリガーを一瞬だけ押したときに使う、メンバ変数
         bool triggerOld_ = false;
@@ -157,13 +157,18 @@ void Reticle::Shoot()
         GameObject* playScene = FindObject("PlayScene");
         Bullet* pBullet = Instantiate<Bullet>(FindObject("PlayScene"));
 
+
+        //発射方向 = 先端 - 根本
+        XMFLOAT3 dir;
+        XMStoreFloat3(&dir, XMLoadFloat3(&position_) - XMLoadFloat3(&rotate_));
+
         //砲台の先端と根本の位置を取得
         //XMMATRIX shotPos = Image::GetMatrix(hImage_);    //先端
         //XMMATRIX cannonRoot = Image::GetMatrix(hImage_); //根本
-        position_.x;
+        // position_.x;
 
         //撃つ
-        pBullet->Shot(transform_.position_, position_);
+        pBullet->Shot(position_, dir);
     }
 
     triggerOld_ = triggerNow;

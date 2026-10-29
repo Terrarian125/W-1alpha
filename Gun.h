@@ -4,8 +4,9 @@
 //銃を管理するクラス
 class Gun : public GameObject
 {
-    // 座標
-    XMFLOAT3 position_;
+    XMFLOAT3 position_; // 位置
+    XMFLOAT3 rotate_;   // 回転
+    XMFLOAT3 scale_;    // 拡大率
 
     int hModel_;        // モデル番号
     //int hImage_;      // 画像読み込み

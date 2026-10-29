@@ -1,6 +1,7 @@
 #include "PlayScene.h"
 #include "Reticle.hpp"
 #include "Clay.h"
+#include "UI.h"
 //#include "Tank.h"
 //#include "Ground.h"
 //#include "Enemy.h"
@@ -24,6 +25,8 @@ void PlayScene::Initialize()
 
     // 銃表示（銃はレティクルの子クラス）
     Instantiate<Gun>(this);
+
+    Instantiate<UI>(this);
 
     //for (int i = 0; i < ENEMY_NUM; i++) {
     //    Instantiate<Enemy>(this);

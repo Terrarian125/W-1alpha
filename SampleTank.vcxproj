@@ -179,6 +179,7 @@
     <ClCompile Include="Reticle.cpp" />
     <ClCompile Include="Clay.cpp" />
     <ClCompile Include="Tank.cpp" />
+    <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
@@ -206,6 +207,7 @@
     <ClInclude Include="Engine\Sprite.h" />
     <ClInclude Include="Engine\Texture.h" />
     <ClInclude Include="Engine\Transform.h" />
+    <ClInclude Include="Engine\XMFLOAT3Operator.h" />
     <ClInclude Include="GameoverScene.h" />
     <ClInclude Include="Gun.h" />
     <ClInclude Include="ImGui\imconfig.h" />
@@ -224,6 +226,7 @@
     <ClInclude Include="Reticle.hpp" />
     <ClInclude Include="Clay.h" />
     <ClInclude Include="Tank.h" />
+    <ClInclude Include="UI.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Debug3D.hlsl">

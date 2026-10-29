@@ -3,63 +3,82 @@
 
 #include <DirectXMath.h>
 #include "Engine/Model.h"
+#include "Engine/Input.h"
 
 using namespace DirectX;
 using namespace std;
 
-// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 Gun::Gun(GameObject* parent)
     :GameObject(parent, "Reticle"), position_{ 0.0f,0.0f,0.0f }, hModel_(-1)
 {
 }
 
-// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+// ƒfƒXƒgƒ‰ƒNƒ^
 Gun::~Gun()
 {
 }
 
-// åˆæœŸåŒ–
+// ‰Šú‰»
 void Gun::Initialize()
 {
-	//ãƒ¢ãƒ‡ãƒ«ãƒ‡ãƒ¼ã‚¿ã®ãƒ­ãƒ¼ãƒ‰
-	hModel_ = Model::Load("/Model/Gun00.fbx");
-	assert(hModel_ >= 0);
-
-    // ä¸€å¿œã‚ã‚‹ã¨æ¥½ã ã‹ã‚‰ã“ã“ã«
-    //transform_.position_ = { position_.x,position_.y,position_.z };  // ä½ç½®
-    transform_.rotate_ = { -10.0f, 10.0f, 0.0f };  // å›è»¢
-    transform_.scale_  = { 0.5f,  0.5f, 0.5f }; // æ‹¡å¤§ç‡
-
-
-    //  (float)(rand() % 10 - 5)
-    //ä½ç½®
-    // X - 1.2ï½1.2
-    // Y 2.0ï½3.0
-    // Z - 6.5ï½ - 8.0
-    transform_.position_ = { -6.0f, -6.0f, 0 };  // ä½ç½®
+    //ƒ‚ƒfƒ‹ƒf[ƒ^‚Ìƒ[ƒh
+    hModel_ = Model::Load("/Model/Gun00.fbx");
+    assert(hModel_ >= 0);
+    
+    // ˆê‰‚ ‚é‚ÆŠy‚¾‚©‚ç‚±‚±‚É
+    position_ = { -3.5f,  -7.0f,  -6.0f }; // ˆÊ’u
+    rotate_   = {  0.0f, -90.0f, -12.0f }; // ‰ñ“]
+    scale_    = {  0.5f,   0.5f,  0.5f };  // Šg‘å—¦
 }
 
-// æ›´æ–°
+// XV
 void Gun::Update()
 {
+    Move();
+
+    // e‚Ì‰ñ“]‚ÌãŒÀw’è
+    {
+        const float Limit_Y_MAX = -124.0f, Limit_Y_MIN = -60.0f;
+        const float Limit_Z_MAX =    8.0f, Limit_Z_MIN = -24.0f;
+        if (rotate_.y <= Limit_Y_MAX) rotate_.y = Limit_Y_MAX; // ¶
+        if (rotate_.y >= Limit_Y_MIN) rotate_.y = Limit_Y_MIN; // ‰E
+        if (rotate_.z >= Limit_Z_MAX) rotate_.z = Limit_Z_MAX; // ã
+        if (rotate_.z <= Limit_Z_MIN) rotate_.z = Limit_Z_MIN; // ‰º
+    }
 }
 
-// æç”»
+// •`‰æ
 void Gun::Draw()
 {
-    // ãƒ¬ãƒ†ã‚£ã‚¯ãƒ«è¡¨ç¤º
-    transform_.position_ = { position_.x,position_.y,position_.z };  // ä½ç½®
-	Model::SetTransform(hModel_, transform_);
-	Model::Draw(hModel_);
+    //position_ = { -3.5f,  -7.0f, -6.0f };
+    transform_.position_ = { position_.x, position_.y, position_.z }; // ˆÊ’u
+    transform_.rotate_   = { rotate_.x, rotate_.y, rotate_.z };       // ‰ñ“]
+    transform_.scale_    = { scale_.x, scale_.y, scale_.z };          // Šg‘å—¦
 
-    // ImGui (ãƒ‡ãƒãƒƒã‚¯ç”¨)
+    Model::SetTransform(hModel_, transform_);
+    Model::Draw(hModel_);
+
+    // ImGui (ƒfƒoƒbƒN—p)
     {
-        // ======= ãƒ¬ãƒ†ã‚£ã‚¯ãƒ«ã®ä½ç½®åº§æ¨™ =======
-        ImGui::Begin("Gun_position");
-        ImGui::InputFloat("pos.X", &position_.x);
-        ImGui::InputFloat("pos.Y", &position_.y);
-        ImGui::InputFloat("pos.Z", &position_.z);
-        ImGui::End();
+        //// ======= e‚ÌˆÊ’uÀ•W =======
+        //ImGui::Begin("Gun_position");
+        //ImGui::InputFloat("pos.X", &position_.x);
+        //ImGui::InputFloat("pos.Y", &position_.y);
+        //ImGui::InputFloat("pos.Z", &position_.z);
+        //ImGui::End();
+        //// ======= e‚Ì‰ñ“] =======
+        //ImGui::Begin("Gun_rotate");
+        //ImGui::InputFloat("rot.X", &rotate_.x);
+        //ImGui::InputFloat("rot.Y", &rotate_.y);
+        //ImGui::InputFloat("rot.Z", &rotate_.z);
+        //ImGui::End();
+        //// ======= e‚ÌŠg‘å—¦ =======
+        //ImGui::Begin("Gun_scale");
+        //ImGui::InputFloat("sca.X", &scale_.x);
+        //ImGui::InputFloat("sca.Y", &scale_.y);
+        //ImGui::InputFloat("sca.Z", &scale_.z);
+        //ImGui::End();
     }
 }
 
@@ -69,4 +88,39 @@ void Gun::Release()
 
 void Gun::Move()
 {
+    float f_z = 0.5f, f_y = 0.7f;
+
+    //ˆÚ“®ƒxƒNƒgƒ‹
+    XMFLOAT3 moveVector = Input::GetPadStickL();
+
+    // ƒRƒ“ƒgƒ[ƒ‰[‘Î‰
+    {
+        // XMFLOAT3 ‚©‚ç float ‚Ö‚Ì•ÏŠ·‚ª•K—v
+        //rotate_.x += moveVector.x * f;
+        //rotate_.y += moveVector.y * f;
+    }
+
+    //‘Oi
+    if (Input::IsKey(DIK_W))
+    {
+        rotate_.z += f_z;
+    }
+
+    //Œã‘Ş
+    if (Input::IsKey(DIK_S))
+    {
+        rotate_.z -= f_z;
+    }
+
+    //‰Eù‰ñ
+    if (Input::IsKey(DIK_D))
+    {
+        rotate_.y += f_y;
+    }
+
+    //¶ù‰ñ
+    if (Input::IsKey(DIK_A))
+    {
+        rotate_.y -= f_y;
+    }
 }
