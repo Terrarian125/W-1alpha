@@ -1,4 +1,4 @@
-#include "Bin.h"
+﻿#include "Bin.h"
 #include "./Engine/Model.h"
 #include "Engine/Input.h"
 #include "Engine/Global.h"
@@ -39,7 +39,7 @@ void Bin::Update()
 			}
 		}
 
-		// 元に戻る
+		// 允E��戻めE
 		if (transform_.rotate_.z <= -20.f and not(Input::IsKey(DIK_SPACE)))
 		{
 			keyPushTime = 0;
