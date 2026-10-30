@@ -5,13 +5,14 @@
 
 Beermug::Beermug(GameObject *_pParent) :
 	GameObject(_pParent, "Beermug"),
-	hModel_(-1)
+	hModels_()
 {
 }
 
 void Beermug::Initialize()
 {
-	hModel_ = Model::Load("Model/wood_beermug_mock.fbx");
+	hModels_[0] = Model::Load("Model/beermug_cross_section_L.fbx");
+	hModels_[1] = Model::Load("Model/beermug_cross_section_R.fbx");
 }
 
 void Beermug::Update()
@@ -37,8 +38,8 @@ void Beermug::Update()
 
 void Beermug::Draw()
 {
-	Model::SetTransform(hModel_, transform_);
-	Model::Draw(hModel_);
+	Model::SetTransform(hModels_[modelIdx_], transform_);
+	Model::Draw(hModels_[modelIdx_]);
 }
 
 void Beermug::Release()

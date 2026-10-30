@@ -1,6 +1,9 @@
-#pragma once
+﻿#pragma once
 
 #include "../Engine/GameObject.h"
+#include <array>
+
+class Beermug;
 
 class Table : public GameObject
 {
@@ -14,4 +17,5 @@ public:
 
 private:
 	int hModel_;
+	std::array<Beermug *, 2> pBeermugs_;
 };

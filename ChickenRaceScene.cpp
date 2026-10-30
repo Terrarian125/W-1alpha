@@ -18,20 +18,6 @@ void ChickenRaceScene::Initialize()
 
 	Instantiate<Table>(this);
 
-	Beermug *mug1{};
-	Beermug *mug2{};
-	mug1 = Instantiate<Beermug>(this);
-	mug2 = Instantiate<Beermug>(this);
-
-	mug1->SetObjectName("mug1");
-	mug1->SetPosition(XMFLOAT3(-1.5, 0, -3));
-	mug1->SetRotate(XMFLOAT3(10, 0, 0));
-	mug1->SetScale(0.75);
-
-	mug2->SetObjectName("mug2");
-	mug2->SetPosition(XMFLOAT3(1.5, 0, -3));
-	mug2->SetRotate(XMFLOAT3(-10, 180, 0));
-	mug2->SetScale(0.75);
 
 	Bin *bin1{};
 	Bin *bin2{};
