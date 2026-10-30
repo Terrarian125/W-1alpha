@@ -5,7 +5,7 @@
 #include <imgui.h>
 
 Horse::Horse(GameObject* parent)
-	:GameObject(parent, "Horse"), hModel_(-1), speed_(0.0f)
+	:GameObject(parent, "Horse"), hModel_(-1), speed_(0.0f), jumpHeight_(0.0f), jumpSpeed_(0.0f), velocity_(0.0f)
 {
 }
 
@@ -30,7 +30,7 @@ void Horse::Update()
 	// ジャンプ
 	if (Input::IsPadButtonDown(0, XINPUT_GAMEPAD_A) || Input::IsKeyDown(DIK_SPACE))
 	{
-
+		
 	}
 	// 左右移動
 	if (transform_.position_.x < -400.0f)
