@@ -12,4 +12,8 @@ public:
 private:
 	int hModel_;
 	float speed_;
+
+	float jumpHeight_;
+	float jumpSpeed_;
+	float velocity_;
 };

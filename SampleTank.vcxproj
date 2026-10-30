@@ -138,7 +138,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ClearScene.cpp" />
     <ClCompile Include="Engine\Audio.cpp" />
     <ClCompile Include="Engine\BillBoard.cpp" />
     <ClCompile Include="Engine\BoxCollider.cpp" />
@@ -166,7 +165,6 @@
     <ClCompile Include="Engine\Texture.cpp" />
     <ClCompile Include="Engine\Transform.cpp" />
     <ClCompile Include="Engine\VFX.cpp" />
-    <ClCompile Include="GameoverScene.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
     <ClCompile Include="ImGui\imgui_impl_dx11.cpp" />
@@ -177,8 +175,10 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Source\cactus1.cpp" />
     <ClCompile Include="Source\cactus2.cpp" />
+    <ClCompile Include="Source\ClearScene.cpp" />
     <ClCompile Include="Source\FallingRock.cpp" />
     <ClCompile Include="Source\Fence.cpp" />
+    <ClCompile Include="Source\GameoverScene.cpp" />
     <ClCompile Include="Source\Horse.cpp" />
     <ClCompile Include="Source\Obstacle.cpp" />
     <ClCompile Include="Source\RaceScene.cpp" />
@@ -187,7 +187,6 @@
     <ClCompile Include="Source\Stage.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ClearScene.h" />
     <ClInclude Include="Engine\Audio.h" />
     <ClInclude Include="Engine\BillBoard.h" />
     <ClInclude Include="Engine\BoxCollider.h" />
@@ -204,6 +203,7 @@
     <ClInclude Include="Engine\GuiButton.h" />
     <ClInclude Include="Engine\Image.h" />
     <ClInclude Include="Engine\Input.h" />
+    <ClInclude Include="Engine\InputBinding.h" />
     <ClInclude Include="Engine\Model.h" />
     <ClInclude Include="Engine\MyCursor.h" />
     <ClInclude Include="Engine\RootObject.h" />
@@ -216,7 +216,6 @@
     <ClInclude Include="Engine\Transform.h" />
     <ClInclude Include="Engine\VFX.h" />
     <ClInclude Include="Engine\XMFLOAT3Operator.h" />
-    <ClInclude Include="GameoverScene.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
     <ClInclude Include="ImGui\imgui_impl_dx11.h" />
@@ -229,8 +228,10 @@
     <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="Source\cactus1.hpp" />
     <ClInclude Include="Source\cactus2.hpp" />
+    <ClInclude Include="Source\ClearScene.h" />
     <ClInclude Include="Source\FallingRock.hpp" />
     <ClInclude Include="Source\Fence.hpp" />
+    <ClInclude Include="Source\GameoverScene.h" />
     <ClInclude Include="Source\Horse.hpp" />
     <ClInclude Include="Source\Obstacle.hpp" />
     <ClInclude Include="Source\RaceScene.hpp" />

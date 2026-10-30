@@ -11,6 +11,7 @@ void Stage::Initialize()
 	hModel_ = Model::Load("Model/Wall01.fbx");
 	assert(hModel_ >= 0);
 	transform_.position_ = XMFLOAT3(0, 0, 0);
+	transform_.scale_ = XMFLOAT3(1, 1, 10);
 }
 
 void Stage::Update()

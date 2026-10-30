@@ -1,8 +1,8 @@
 #include "sceneManager.h"
 
 #include "../Source/RaceScene.hpp"
-#include "../ClearScene.h"
-#include "../GameoverScene.h"
+#include "../Source/ClearScene.h"
+#include "../Source/GameoverScene.h"
 #include "Model.h"
 #include "Image.h"
 #include "Audio.h"
@@ -38,9 +38,10 @@ void SceneManager::Update()
 		Image::AllRelease();
 
 		//éüÇÃÉVÅ[ÉìÇçÏê¨
-		case SCENE_ID_TEST: Instantiate<RaceScene>(this); break;
+		switch (nextSceneID_)
 		{
-		case SCENE_ID_PLAY: Instantiate<PlayScene>(this); break;
+		case SCENE_ID_TEST: Instantiate<RaceScene>(this); break;
+		case SCENE_ID_PLAY: Instantiate<RaceScene>(this); break;
 		case SCENE_ID_CLEAR: Instantiate<ClearScene>(this); break;
 		case SCENE_ID_GAMEOVER: Instantiate<GameoverScene>(this); break;
 
