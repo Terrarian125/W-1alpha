@@ -89,6 +89,11 @@ namespace Input
 	//キーが押されているか調べる
 	bool IsKey(int keyCode)
 	{
+		if (keyCode == ANASSIGNED)
+		{
+			return false;
+		}
+
 		//押してる
 		if (keyState_[keyCode] & 0x80)
 		{
@@ -101,6 +106,11 @@ namespace Input
 	//キーを今押したか調べる（押しっぱなしは無効）
 	bool IsKeyDown(int keyCode)
 	{
+		if (keyCode == ANASSIGNED)
+		{
+			return false;
+		}
+
 		//今は押してて、前回は押してない
 		if (IsKey(keyCode) && !(prevKeyState_[keyCode] & 0x80))
 		{
@@ -113,6 +123,11 @@ namespace Input
 	//キーを今放したか調べる
 	bool IsKeyUp(int keyCode)
 	{
+		if (keyCode == ANASSIGNED)
+		{
+			return false;
+		}
+
 		//今押してなくて、前回は押してる
 		if (!IsKey(keyCode) && prevKeyState_[keyCode] & 0x80)
 		{
@@ -127,6 +142,11 @@ namespace Input
 	//マウスのボタンが押されているか調べる
 	bool IsMouseButton(int buttonCode)
 	{
+		if (buttonCode == ANASSIGNED)
+		{
+			return false;
+		}
+
 		//押してる
 		if (mouseState_.rgbButtons[buttonCode] & 0x80)
 		{
@@ -138,6 +158,11 @@ namespace Input
 	//マウスのボタンを今押したか調べる（押しっぱなしは無効）
 	bool IsMouseButtonDown(int buttonCode)
 	{
+		if (buttonCode == ANASSIGNED)
+		{
+			return false;
+		}
+
 		//今は押してて、前回は押してない
 		if (IsMouseButton(buttonCode) && !(prevMouseState_.rgbButtons[buttonCode] & 0x80))
 		{
@@ -149,6 +174,11 @@ namespace Input
 	//マウスのボタンを今放したか調べる
 	bool IsMouseButtonUp(int buttonCode)
 	{
+		if (buttonCode == ANASSIGNED)
+		{
+			return false;
+		}
+
 		//今押してなくて、前回は押してる
 		if (!IsMouseButton(buttonCode) && prevMouseState_.rgbButtons[buttonCode] & 0x80)
 		{
@@ -185,6 +215,11 @@ namespace Input
 	//コントローラーのボタンが押されているか調べる
 	bool IsPadButton(int buttonCode, int padID)
 	{
+		if (buttonCode == ANASSIGNED)
+		{
+			return false;
+		}
+
 		if (controllerState_[padID].Gamepad.wButtons & buttonCode)
 		{
 			return true; //押してる
@@ -195,6 +230,11 @@ namespace Input
 	//コントローラーのボタンを今押したか調べる（押しっぱなしは無効）
 	bool IsPadButtonDown(int buttonCode, int padID)
 	{
+		if (buttonCode == ANASSIGNED)
+		{
+			return false;
+		}
+
 		//今は押してて、前回は押してない
 		if (IsPadButton(buttonCode, padID) && !(prevControllerState_[padID].Gamepad.wButtons & buttonCode))
 		{
@@ -206,6 +246,11 @@ namespace Input
 	//コントローラーのボタンを今放したか調べる
 	bool IsPadButtonUp(int buttonCode, int padID)
 	{
+		if (buttonCode == ANASSIGNED)
+		{
+			return false;
+		}
+
 		//今押してなくて、前回は押してる
 		if (!IsPadButton(buttonCode, padID) && prevControllerState_[padID].Gamepad.wButtons & buttonCode)
 		{
