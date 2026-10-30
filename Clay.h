@@ -4,11 +4,18 @@
 // クレーを管理するクラス
 class Clay : public GameObject
 {
+    // クレーの座標
+    XMFLOAT3 position_[3]; // 位置
+    XMFLOAT3 rotate_[3];   // 回転
+    XMFLOAT3 scale_[3];    // 拡大率
+
     int hModel_[3];     //モデル番号
     //int hImage_;      // 画像読み込み
 
     //移動
     void Move();
+
+    bool On_down[3]; // 下がるか上がるかのフラグ　※ true：下がる / false：上がる
 
 public:
     //コンストラクタ

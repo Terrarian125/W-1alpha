@@ -24,15 +24,15 @@ UI::~UI()
 void UI::Initialize()
 {
     // UI‚Ì‰æ‘œ‚Ìƒ[ƒh
-    hImage_[0] = Image::Load("Image/Reticle.png"); // ’e
+    hImage_[0] = Image::Load("Image/Bullet.png"); // ’e
     assert(hImage_[0] >= 0);
     hImage_[1] = Image::Load("Image/Reticle.png"); // –³ŒÀƒ}[ƒN
     assert(hImage_[1] >= 0);
 
     // ˆê‰ž‚ ‚é‚ÆŠy‚¾‚©‚ç‚±‚±‚É
-    position_[0] = { -0.95f,-0.75f, 0.0f }; // ˆÊ’u
-    rotate_[0]   = { 0.0f, 0.0f, 0.0f}; // ‰ñ“]
-    scale_[0]    = { 0.05f, 0.2f, 0.0f}; // Šg‘å—¦
+    position_[0] = { -0.92f, -0.75f, 0.0f }; // ˆÊ’u
+    rotate_[0]   = {   0.0f,   0.0f, 0.0f }; // ‰ñ“]
+    scale_[0]    = {   0.3f,   0.3f, 0.0f }; // Šg‘å—¦
 
     position_[1] = { -0.5f,  -0.25f, 0.0f }; // ˆÊ’u
     rotate_[1]   = { 0.0f, 0.0f, 0.0f }; // ‰ñ“]
@@ -65,10 +65,10 @@ void UI::Draw()
         ImGui::Begin("UI_position");
         ImGui::InputFloat("pos.X1", &position_[0].x);
         ImGui::InputFloat("pos.Y1", &position_[0].y);
-        ImGui::InputFloat("pos.Z1", &position_[0].z);
+        //ImGui::InputFloat("pos.Z1", &position_[0].z);
         ImGui::InputFloat("pos.X2", &position_[1].x);
         ImGui::InputFloat("pos.Y2", &position_[1].y);
-        ImGui::InputFloat("pos.Z2", &position_[1].z);
+        //ImGui::InputFloat("pos.Z2", &position_[1].z);
         ImGui::End();
     }
 }

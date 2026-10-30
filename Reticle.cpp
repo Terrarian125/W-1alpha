@@ -74,7 +74,7 @@ void Reticle::Draw()
         ImGui::Begin("Reticle_position");
         ImGui::InputFloat("pos.X", &position_.x);
         ImGui::InputFloat("pos.Y", &position_.y);
-        ImGui::InputFloat("pos.Z", &position_.z);
+        //ImGui::InputFloat("pos.Z", &position_.z);
         ImGui::End();
         // ======= 発射の状況 =======
         // 右トリガーを一瞬だけ押したときに使う、メンバ変数
