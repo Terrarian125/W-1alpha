@@ -1,7 +1,7 @@
 #include "cactus1.hpp"
 
 cactus1::cactus1(GameObject* parent)
-	:Obstacle(parent)
+	:Obstacle(parent, "cactus1")
 {
 }
 

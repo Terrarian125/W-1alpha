@@ -6,7 +6,7 @@
 class Obstacle : public GameObject
 {
 public:
-	Obstacle(GameObject* parent);
+	Obstacle(GameObject* parent, const char* name);
 	void Initialize() override;
 	void Update() override;
 	void Draw() override;

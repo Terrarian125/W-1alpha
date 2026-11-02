@@ -1,7 +1,7 @@
 #include "Tumbleweed.hpp"
 
 Tumbleweed::Tumbleweed(GameObject* parent)
-	:Obstacle(parent)
+	:Obstacle(parent, "Tumbleweed")
 {
 }
 

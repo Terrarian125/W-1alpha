@@ -1,7 +1,7 @@
 #include "Rock.hpp"
 
 Rock::Rock(GameObject* parent)
-	:Obstacle(parent)
+	:Obstacle(parent, "Rock")
 {
 }
 
