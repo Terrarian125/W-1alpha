@@ -148,6 +148,22 @@ void PlaySceneButton::OnStopClicked(int side)
         else
             ++rightFalseStarts_;
 
+        const int falseStartCount = (side < 0) ? leftFalseStarts_ : rightFalseStarts_;
+        if (falseStartCount >= 3)
+        {
+            //3回目のフライングで、そのプレイヤーの負けとしてラウンド終了。
+            hasResult_ = true;
+            gameFinished_ = true;
+            winnerSide_ = (side < 0) ? 1 : -1;
+            resultText_ = (side < 0) ? "L LOSE - R WIN" : "R LOSE - L WIN";
+
+            timer_->Stop();
+            if (startButton_) startButton_->SetActive(true);
+            if (leftStopButton_) leftStopButton_->SetActive(false);
+            if (rightStopButton_) rightStopButton_->SetActive(false);
+            return;
+        }
+
         ResetRound(true);
         return;
     }
@@ -240,10 +256,16 @@ void PlaySceneButton::Draw()
     {
         font_->Draw(screenWidth_ * 0.5f - 45.0f, 20.0f, "00.00", 0xFFFFFFFF);
     }
-    else if (timer_->GetTargetSeconds() > 0)
+    else if (timer_->IsRunning() && timer_->GetTargetSeconds() > 0)
     {
-        std::snprintf(buffer, sizeof(buffer), "%05.2f", timer_->GetElapsedSeconds());
-        font_->Draw(screenWidth_ * 0.5f - 45.0f, 20.0f, buffer, 0xFFFFFFFF);
+        const double elapsed = timer_->GetElapsedSeconds();
+		constexpr double FADE_SECONDS = 3.9;//フェードアウトする秒数
+        const double opacity = (std::max)(0.0, 1.0 - elapsed / FADE_SECONDS);
+        const unsigned int alpha = static_cast<unsigned int>(opacity * 255.0);
+        const unsigned int timerColor = (alpha << 24) | 0x00FFFFFF;
+
+        std::snprintf(buffer, sizeof(buffer), "%05.2f", elapsed);
+        font_->Draw(screenWidth_ * 0.5f - 45.0f, 20.0f, buffer, timerColor);
     }
 
     //各ボタンの下にフライング回数をXで表示
