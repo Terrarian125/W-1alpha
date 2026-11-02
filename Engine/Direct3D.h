@@ -28,7 +28,7 @@ namespace Direct3D
 
 
 	//■シェーダー関連で必要なセット
-	enum SHADER_TYPE{SHADER_3D, SHADER_2D, SHADER_UNLIT, SHADER_MAX};	//3タイプ（3D用、2D用、当たり判定枠表示用）
+	enum SHADER_TYPE{SHADER_3D, SHADER_2D, SHADER_UNLIT, SHADER_BILLBOARD, SHADER_MAX};	//3タイプ（3D用、2D用、当たり判定枠表示用）
 	struct SHADER_BUNDLE
 	{
 		//【頂点入力レイアウト情報】
@@ -48,7 +48,12 @@ namespace Direct3D
 		//頂点の表示位置確定後、画面のどのピクセルを光らせればいいか求めるもの
 		ID3D11RasterizerState*	pRasterizerState;
 	};
-	extern SHADER_BUNDLE shaderBundle[SHADER_MAX];
+
+	//■ブレンドモード
+	enum BLEND_MODE
+	{
+		BLEND_DEFAULT, BLEND_ADD, BLEND_MAX
+	};
 
 
 
@@ -77,6 +82,11 @@ namespace Direct3D
 	//引数：type	SHADER_3D, SHADER_2D, SHADER_UNLITのどれか
 	void SetShader(SHADER_TYPE type);
 
+	//ブレンドモードの変更
+	//引数：blendMode	BLEND_DEFAULT	通常
+	//					BLEND_ADD		加算合成（パーティクル用）
+	void SetBlendMode(BLEND_MODE blendMode);
+
 	//描画開始
 	void BeginDraw();
 
@@ -87,13 +97,16 @@ namespace Direct3D
 	void Release();
 
 
-
 	//三角形と線分（レイ）の衝突判定（衝突判定に使用）
 	//引数：start　		レイのスタート位置
 	//引数：direction	レイの方向
 	//引数：v0,v1,v2	三角形の各頂点位置
 	//引数：distance	衝突点までの距離を返す
 	//戻値：衝突したかどうか
-	bool Intersect(XMVECTOR& start, XMVECTOR& direction, XMVECTOR &v0, XMVECTOR& v1, XMVECTOR& v2, float* distance);
+	bool Intersect(XMFLOAT3& start, XMFLOAT3& direction, XMFLOAT3 &v0, XMFLOAT3& v1, XMFLOAT3& v2, float* distance);
+
+	//Zバッファへの書き込みON/OFF
+	//引数：isWrite	  true=書き込みON／false=書き込みOFF
+	void SetDepthBafferWriteEnable(bool isWrite);
 };
 

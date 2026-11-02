@@ -5,10 +5,10 @@
 //コンストラクタ（当たり判定の作成）
 //引数：basePos	当たり判定の中心位置（ゲームオブジェクトの原点から見た位置）
 //引数：size	当たり判定のサイズ
-SphereCollider::SphereCollider(XMVECTOR center, float radius)
+SphereCollider::SphereCollider(XMFLOAT3 center, float radius)
 {
 	center_ = center;
-	size_ = XMVectorSet(radius, radius, radius, 0);
+	size_ = XMFLOAT3(radius, radius, radius);
 	type_ = COLLIDER_CIRCLE;
 
 	//リリース時は判定枠は表示しない

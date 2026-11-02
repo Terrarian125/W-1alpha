@@ -1,8 +1,8 @@
 #include "sceneManager.h"
 
 #include "../Source/RaceScene.hpp"
-#include "../ClearScene.h"
-#include "../GameoverScene.h"
+#include "../Source/ClearScene.h"
+#include "../Source/GameoverScene.h"
 #include "Model.h"
 #include "Image.h"
 #include "Audio.h"
@@ -18,7 +18,7 @@ SceneManager::SceneManager(GameObject * parent)
 void SceneManager::Initialize()
 {
 	//最初のシーンを準備
-	currentSceneID_ = SCENE_ID_PLAY;
+	currentSceneID_ = SCENE_ID_TEST;
 	nextSceneID_ = currentSceneID_;
 	Instantiate<RaceScene>(this);
 }
@@ -33,19 +33,20 @@ void SceneManager::Update()
 		KillAllChildren();
 
 		//ロードしたデータを全削除
-		Audio::AllRelease();
+		Audio::Release();
 		Model::AllRelease();
 		Image::AllRelease();
 
 		//次のシーンを作成
 		switch (nextSceneID_)
 		{
+		case SCENE_ID_TEST: Instantiate<RaceScene>(this); break;
 		case SCENE_ID_PLAY: Instantiate<RaceScene>(this); break;
 		case SCENE_ID_CLEAR: Instantiate<ClearScene>(this); break;
 		case SCENE_ID_GAMEOVER: Instantiate<GameoverScene>(this); break;
 
 		}
-
+		Audio::Initialize();
 		currentSceneID_ = nextSceneID_;
 	}
 }

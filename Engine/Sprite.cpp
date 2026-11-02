@@ -60,10 +60,10 @@ void Sprite::InitVertex()
 	// 頂点データ宣言
 	VERTEX vertices[] =
 	{
-		{ XMVectorSet(-1.0f,  1.0f, 0.0f, 0.0f),	XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f) },   // 四角形の頂点（左上）
-		{ XMVectorSet( 1.0f,  1.0f, 0.0f, 0.0f),	XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f) },   // 四角形の頂点（右上）
-		{ XMVectorSet(-1.0f, -1.0f, 0.0f, 0.0f),	XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f) },   // 四角形の頂点（左下）
-		{ XMVectorSet( 1.0f, -1.0f, 0.0f, 0.0f),	XMVectorSet(1.0f, 1.0f, 0.0f, 0.0f) },   // 四角形の頂点（右下）
+		{ XMFLOAT3(-1.0f,  1.0f, 0.0f),	XMFLOAT3(0.0f, 0.0f, 0.0f) },   // 四角形の頂点（左上）
+		{ XMFLOAT3( 1.0f,  1.0f, 0.0f),	XMFLOAT3(1.0f, 0.0f, 0.0f) },   // 四角形の頂点（右上）
+		{ XMFLOAT3(-1.0f, -1.0f, 0.0f),	XMFLOAT3(0.0f, 1.0f, 0.0f) },   // 四角形の頂点（左下）
+		{ XMFLOAT3( 1.0f, -1.0f, 0.0f),	XMFLOAT3(1.0f, 1.0f, 0.0f) },   // 四角形の頂点（右下）
 	};
 
 
@@ -101,7 +101,7 @@ void Sprite::InitIndex()
 
 
 
-void Sprite::Draw(Transform& transform, RECT rect)
+void Sprite::Draw(Transform& transform, RECT rect, float alpha)
 {
 	//いろいろ設定
 	Direct3D::SetShader(Direct3D::SHADER_2D);
@@ -110,6 +110,8 @@ void Sprite::Draw(Transform& transform, RECT rect)
 	Direct3D::pContext_->IASetVertexBuffers(0, 1, &pVertexBuffer_, &stride, &offset);
 	Direct3D::pContext_->VSSetConstantBuffers(0, 1, &pConstantBuffer_);
 	Direct3D::pContext_->PSSetConstantBuffers(0, 1, &pConstantBuffer_);
+	Direct3D::SetDepthBafferWriteEnable(false);
+
 
 	// インデックスバッファーをセット
 	stride = sizeof(int);
@@ -132,16 +134,16 @@ void Sprite::Draw(Transform& transform, RECT rect)
 	cb.world = XMMatrixTranspose(world);
 
 	// テクスチャ座標変換行列を渡す
-	XMMATRIX mTexTrans = XMMatrixTranslation((float)rect.left / (float)pTexture_->GetSize().vecX,
-		(float)rect.top / (float)pTexture_->GetSize().vecY, 0.0f);
-	XMMATRIX mTexScale = XMMatrixScaling((float)rect.right / (float)pTexture_->GetSize().vecX,
-		(float)rect.bottom / (float)pTexture_->GetSize().vecY, 1.0f);
+	XMMATRIX mTexTrans = XMMatrixTranslation((float)rect.left / (float)pTexture_->GetSize().x,
+		(float)rect.top / (float)pTexture_->GetSize().y, 0.0f);
+	XMMATRIX mTexScale = XMMatrixScaling((float)rect.right / (float)pTexture_->GetSize().x,
+		(float)rect.bottom / (float)pTexture_->GetSize().y, 1.0f);
 	XMMATRIX mTexel = mTexScale * mTexTrans;
 	cb.uvTrans = XMMatrixTranspose(mTexel);
 	
 
 	// テクスチャ合成色情報を渡す
-	cb.color = XMFLOAT4(1, 1, 1, (float)255 / 255);
+	cb.color = XMFLOAT4(1, 1, 1, alpha);
 
 	Direct3D::pContext_->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのリソースアクセスを一時止める
 	memcpy_s(pdata.pData, pdata.RowPitch, (void*)(&cb), sizeof(cb));		// リソースへ値を送る
@@ -159,5 +161,7 @@ void Sprite::Draw(Transform& transform, RECT rect)
 	Direct3D::pContext_->DrawIndexed(6, 0, 0);
 
 	Direct3D::SetShader(Direct3D::SHADER_3D);
+
+	Direct3D::SetDepthBafferWriteEnable(true);
 
 }

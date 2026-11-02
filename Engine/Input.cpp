@@ -18,6 +18,7 @@ namespace Input
 	LPDIRECTINPUTDEVICE8	pMouseDevice_;	//デバイスオブジェクト
 	DIMOUSESTATE mouseState_;				//マウスの状態
 	DIMOUSESTATE prevMouseState_;			//前フレームのマウスの状態
+	POINT mousePos_;							//マウスカーソルの位置
 
 	//コントローラー
 	const int MAX_PAD_NUM = 4;
@@ -88,6 +89,11 @@ namespace Input
 	//キーが押されているか調べる
 	bool IsKey(int keyCode)
 	{
+		if (keyCode == ANASSIGNED)
+		{
+			return false;
+		}
+
 		//押してる
 		if (keyState_[keyCode] & 0x80)
 		{
@@ -100,6 +106,11 @@ namespace Input
 	//キーを今押したか調べる（押しっぱなしは無効）
 	bool IsKeyDown(int keyCode)
 	{
+		if (keyCode == ANASSIGNED)
+		{
+			return false;
+		}
+
 		//今は押してて、前回は押してない
 		if (IsKey(keyCode) && !(prevKeyState_[keyCode] & 0x80))
 		{
@@ -112,6 +123,11 @@ namespace Input
 	//キーを今放したか調べる
 	bool IsKeyUp(int keyCode)
 	{
+		if (keyCode == ANASSIGNED)
+		{
+			return false;
+		}
+
 		//今押してなくて、前回は押してる
 		if (!IsKey(keyCode) && prevKeyState_[keyCode] & 0x80)
 		{
@@ -126,6 +142,11 @@ namespace Input
 	//マウスのボタンが押されているか調べる
 	bool IsMouseButton(int buttonCode)
 	{
+		if (buttonCode == ANASSIGNED)
+		{
+			return false;
+		}
+
 		//押してる
 		if (mouseState_.rgbButtons[buttonCode] & 0x80)
 		{
@@ -137,6 +158,11 @@ namespace Input
 	//マウスのボタンを今押したか調べる（押しっぱなしは無効）
 	bool IsMouseButtonDown(int buttonCode)
 	{
+		if (buttonCode == ANASSIGNED)
+		{
+			return false;
+		}
+
 		//今は押してて、前回は押してない
 		if (IsMouseButton(buttonCode) && !(prevMouseState_.rgbButtons[buttonCode] & 0x80))
 		{
@@ -148,6 +174,11 @@ namespace Input
 	//マウスのボタンを今放したか調べる
 	bool IsMouseButtonUp(int buttonCode)
 	{
+		if (buttonCode == ANASSIGNED)
+		{
+			return false;
+		}
+
 		//今押してなくて、前回は押してる
 		if (!IsMouseButton(buttonCode) && prevMouseState_.rgbButtons[buttonCode] & 0x80)
 		{
@@ -157,19 +188,24 @@ namespace Input
 	}
 
 	//マウスカーソルの位置を取得
-	XMVECTOR GetMousePosition()
+	XMFLOAT3 GetMousePosition()
 	{
-		POINT mousePos;
-		GetCursorPos(&mousePos);
-		XMVECTOR result = XMVectorSet((float)mousePos.x, (float)mousePos.y, 0, 0);
+		XMFLOAT3 result = XMFLOAT3((float)mousePos_.x, (float)mousePos_.y, 0);
 		return result;
+	}
+
+	//マウスカーソルの位置をセット
+	void SetMousePosition(int x, int y)
+	{
+		mousePos_.x = x;
+		mousePos_.y = y;
 	}
 
 
 	//そのフレームでのマウスの移動量を取得
-	XMVECTOR GetMouseMove()
+	XMFLOAT3 GetMouseMove()
 	{
-		XMVECTOR result = XMVectorSet((float)mouseState_.lX, (float)mouseState_.lY, (float)mouseState_.lZ, 0);
+		XMFLOAT3 result = XMFLOAT3((float)mouseState_.lX, (float)mouseState_.lY, (float)mouseState_.lZ);
 		return result;
 	}
 
@@ -179,6 +215,11 @@ namespace Input
 	//コントローラーのボタンが押されているか調べる
 	bool IsPadButton(int buttonCode, int padID)
 	{
+		if (buttonCode == ANASSIGNED)
+		{
+			return false;
+		}
+
 		if (controllerState_[padID].Gamepad.wButtons & buttonCode)
 		{
 			return true; //押してる
@@ -189,6 +230,11 @@ namespace Input
 	//コントローラーのボタンを今押したか調べる（押しっぱなしは無効）
 	bool IsPadButtonDown(int buttonCode, int padID)
 	{
+		if (buttonCode == ANASSIGNED)
+		{
+			return false;
+		}
+
 		//今は押してて、前回は押してない
 		if (IsPadButton(buttonCode, padID) && !(prevControllerState_[padID].Gamepad.wButtons & buttonCode))
 		{
@@ -200,6 +246,11 @@ namespace Input
 	//コントローラーのボタンを今放したか調べる
 	bool IsPadButtonUp(int buttonCode, int padID)
 	{
+		if (buttonCode == ANASSIGNED)
+		{
+			return false;
+		}
+
 		//今押してなくて、前回は押してる
 		if (!IsPadButton(buttonCode, padID) && prevControllerState_[padID].Gamepad.wButtons & buttonCode)
 		{
@@ -244,19 +295,19 @@ namespace Input
 
 
 	//左スティックの傾きを取得
-	XMVECTOR GetPadStickL(int padID)
+	XMFLOAT3 GetPadStickL(int padID)
 	{
 		float x = GetAnalogValue(controllerState_[padID].Gamepad.sThumbLX, 32767, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
 		float y = GetAnalogValue(controllerState_[padID].Gamepad.sThumbLY, 32767, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
-		return XMVectorSet(x, y, 0, 0);
+		return XMFLOAT3(x, y, 0);
 	}
 
 	//右スティックの傾きを取得
-	XMVECTOR GetPadStickR(int padID)
+	XMFLOAT3 GetPadStickR(int padID)
 	{
 		float x = GetAnalogValue(controllerState_[padID].Gamepad.sThumbRX, 32767, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE);
 		float y = GetAnalogValue(controllerState_[padID].Gamepad.sThumbRY, 32767, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE);
-		return XMVectorSet(x, y, 0, 0);
+		return XMFLOAT3(x, y, 0);
 	}
 
 	//左トリガーの押し込み具合を取得

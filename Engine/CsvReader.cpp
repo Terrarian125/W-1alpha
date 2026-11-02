@@ -46,7 +46,7 @@ bool CsvReader::Load(std::string fileName)
 
 	//ファイルの中身を配列に読み込む
 	DWORD dwBytes = 0;
-	ReadFile(hFile, temp, (DWORD)strlen(temp), &dwBytes, NULL);
+	ReadFile(hFile, temp, fileSize, &dwBytes, NULL);
 
 	//開いたファイルを閉じる
 	CloseHandle(hFile);

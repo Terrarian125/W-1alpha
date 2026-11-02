@@ -150,10 +150,12 @@ namespace Model
 
 
 	//任意のボーンの位置を取得
-	XMVECTOR GetBonePosition(int handle, std::string boneName)
+	XMFLOAT3 GetBonePosition(int handle, std::string boneName)
 	{
-		XMVECTOR pos = _datas[handle]->pFbx->GetBonePosition(boneName);
-		return  XMVector3TransformCoord(pos, _datas[handle]->transform.GetWorldMatrix());
+		XMFLOAT3 pos = _datas[handle]->pFbx->GetBonePosition(boneName);
+		XMVECTOR vec = XMVector3TransformCoord(XMLoadFloat3(&pos), _datas[handle]->transform.GetWorldMatrix());
+		XMStoreFloat3(&pos, vec);
+		return pos;
 	}
 
 
@@ -179,11 +181,14 @@ namespace Model
 	//レイキャスト（レイを飛ばして当たり判定）
 	void RayCast(int handle, RayCastData *data)
 	{
-			XMVECTOR target = data->start + data->dir;
+			XMFLOAT3 target = Transform::Float3Add(data->start, data->dir);
 			XMMATRIX matInv = XMMatrixInverse(nullptr, _datas[handle]->transform.GetWorldMatrix());
-			data->start = XMVector3TransformCoord(data->start, matInv);
-			target = XMVector3TransformCoord(target, matInv);
-			data->dir = target - data->start;
+			XMVECTOR vecStart = XMVector3TransformCoord(XMLoadFloat3(&data->start), matInv);
+			XMVECTOR vecTarget = XMVector3TransformCoord(XMLoadFloat3(&target), matInv);
+			XMVECTOR vecDir = vecTarget - vecStart;
+
+			XMStoreFloat3(&data->start, vecStart);
+			XMStoreFloat3(&data->dir, vecDir);
 
 			_datas[handle]->pFbx->RayCast(data); 
 	}

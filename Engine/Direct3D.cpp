@@ -23,11 +23,11 @@ namespace Direct3D
 	//【デプスステンシルビュー】
 	//デプスステンシルの情報をシェーダーに渡すためのもの
 	ID3D11DepthStencilView* pDepthStencilView;
+	ID3D11DepthStencilState* pDepthStencilState[BLEND_MAX];
 
 	//【ブレンドステート】
 	//半透明のものをどのように表現するか
-	ID3D11BlendState*		pBlendState;
-
+	ID3D11BlendState*	pBlendState[BLEND_MAX];
 
 	bool		isDrawCollision_ = true;	//コリジョンを表示するか
 	bool		_isLighting = false;		//ライティングするか
@@ -149,23 +149,49 @@ namespace Direct3D
 		pDevice_->CreateDepthStencilView(pDepthStencil, NULL, &pDepthStencilView);
 
 
-		//ブレンドステート
-		D3D11_BLEND_DESC BlendDesc;
-		ZeroMemory(&BlendDesc, sizeof(BlendDesc));
-		BlendDesc.AlphaToCoverageEnable = FALSE;
-		BlendDesc.IndependentBlendEnable = FALSE;
-		BlendDesc.RenderTarget[0].BlendEnable = TRUE;
-		BlendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-		BlendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-		BlendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-		BlendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-		BlendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-		BlendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-		BlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-		pDevice_->CreateBlendState(&BlendDesc, &pBlendState);
-		float blendFactor[4] = { D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO };
-		pContext_->OMSetBlendState(pBlendState, blendFactor, 0xffffffff);
+		//深度テストを行う深度ステンシルステートの作成
+		{
+			//デフォルト
+			D3D11_DEPTH_STENCIL_DESC desc = {};
+			desc.DepthEnable = true;
+			desc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+			desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+			desc.StencilEnable = true;
+			pDevice_->CreateDepthStencilState(&desc, &pDepthStencilState[BLEND_DEFAULT]);
+			pContext_->OMSetDepthStencilState(pDepthStencilState[BLEND_DEFAULT], 0);
 
+			//加算合成用（書き込みなし）
+			desc.StencilEnable = false;
+			pDevice_->CreateDepthStencilState(&desc, &pDepthStencilState[BLEND_ADD]);
+		}
+
+
+		//ブレンドステート
+		{
+			//通常
+			D3D11_BLEND_DESC BlendDesc;
+			ZeroMemory(&BlendDesc, sizeof(BlendDesc));
+			BlendDesc.AlphaToCoverageEnable = FALSE;
+			BlendDesc.IndependentBlendEnable = FALSE;
+			BlendDesc.RenderTarget[0].BlendEnable = TRUE;
+
+			BlendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+			BlendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+
+			BlendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+			BlendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+			BlendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+			BlendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+			BlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+			pDevice_->CreateBlendState(&BlendDesc, &pBlendState[BLEND_DEFAULT]);
+			float blendFactor[4] = { D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO };
+			pContext_->OMSetBlendState(pBlendState[BLEND_DEFAULT], blendFactor, 0xffffffff);
+
+			//加算合成（重なるほど光って見える効果）
+			BlendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+			BlendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
+			pDevice_->CreateBlendState(&BlendDesc, &pBlendState[BLEND_ADD]);
+		}
 
 		//パイプラインの構築
 		//データを画面に描画するための一通りの設定
@@ -192,7 +218,7 @@ namespace Direct3D
 	//シェーダー関連で必要なセット準備
 	void InitShaderBundle()
 	{
-		DWORD vectorSize = sizeof(XMVECTOR);
+		DWORD vectorSize = sizeof(XMFLOAT3);
 
 		//3D
 		{
@@ -225,7 +251,7 @@ namespace Direct3D
 			D3D11_RASTERIZER_DESC rdc = {};
 			rdc.CullMode = D3D11_CULL_BACK;
 			rdc.FillMode = D3D11_FILL_SOLID;
-			rdc.FrontCounterClockwise = TRUE;
+			rdc.FrontCounterClockwise = FALSE;	//反時計回りは表面じゃない
 			pDevice_->CreateRasterizerState(&rdc, &shaderBundle[SHADER_3D].pRasterizerState);
 		}
 
@@ -296,6 +322,41 @@ namespace Direct3D
 			rdc.FrontCounterClockwise = TRUE;
 			pDevice_->CreateRasterizerState(&rdc, &shaderBundle[SHADER_UNLIT].pRasterizerState);
 		}
+
+		//BillBoard
+		{
+			// 頂点シェーダの作成（コンパイル）
+			ID3DBlob* pCompileVS = NULL;
+			D3DCompileFromFile(L"Shader/BillBoard.hlsl", nullptr, nullptr, "VS", "vs_5_0", NULL, 0, &pCompileVS, NULL);
+			pDevice_->CreateVertexShader(pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), NULL, &shaderBundle[SHADER_BILLBOARD].pVertexShader);
+
+
+			// ピクセルシェーダの作成（コンパイル）
+			ID3DBlob* pCompilePS = NULL;
+			D3DCompileFromFile(L"Shader/BillBoard.hlsl", nullptr, nullptr, "PS", "ps_5_0", NULL, 0, &pCompilePS, NULL);
+			pDevice_->CreatePixelShader(pCompilePS->GetBufferPointer(), pCompilePS->GetBufferSize(), NULL, &shaderBundle[SHADER_BILLBOARD].pPixelShader);
+
+
+			// 頂点レイアウトの作成（1頂点の情報が何のデータをどんな順番で持っているか）
+			D3D11_INPUT_ELEMENT_DESC layout[] = {
+				{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, vectorSize * 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+				{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, vectorSize * 1, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			};
+			pDevice_->CreateInputLayout(layout, 2, pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), &shaderBundle[SHADER_BILLBOARD].pVertexLayout);
+
+
+			//シェーダーが無事作成できたので、コンパイルしたやつはいらない
+			pCompileVS->Release();
+			pCompilePS->Release();
+
+			//ラスタライザ作成
+			D3D11_RASTERIZER_DESC rdc = {};
+			rdc.CullMode = D3D11_CULL_NONE;
+			rdc.FillMode = D3D11_FILL_SOLID;
+			rdc.FrontCounterClockwise = TRUE;
+			pDevice_->CreateRasterizerState(&rdc, &shaderBundle[SHADER_BILLBOARD].pRasterizerState);
+		}
+
 	}
 
 
@@ -308,6 +369,16 @@ namespace Direct3D
 		pContext_->IASetInputLayout(shaderBundle[type].pVertexLayout);
 	}
 
+	//ブレンドモードの変更
+	void SetBlendMode(BLEND_MODE blendMode)
+	{
+		//加算合成
+		float blendFactor[4] = { D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO };
+		pContext_->OMSetBlendState(pBlendState[blendMode], blendFactor, 0xffffffff);
+		
+		//Zバッファへの書き込み
+		pContext_->OMSetDepthStencilState(pDepthStencilState[blendMode], 0);
+	}
 
 	//描画開始
 	void BeginDraw()
@@ -319,7 +390,7 @@ namespace Direct3D
 		if (NULL == pSwapChain_) return;
 
 		//背景の色
-		float clearColor[4] = { 0.1f, 0.5f, 0.5f, 1.0f };//R,G,B,A
+		float clearColor[4] = { 0.1f, 0.2f, 0.2f, 1.0f };//R,G,B,A
 
 		//画面をクリア
 		pContext_->ClearRenderTargetView(pRenderTargetView_, clearColor);
@@ -342,9 +413,14 @@ namespace Direct3D
 	{
 		SAFE_RELEASE(pDepthStencil);
 		SAFE_RELEASE(pDepthStencilView);
-		SAFE_RELEASE(pBlendState);
 		SAFE_RELEASE(pRenderTargetView_);
 		SAFE_RELEASE(pSwapChain_);
+
+		for (int i = 0; i < BLEND_MAX; i++)
+		{
+			SAFE_RELEASE(pBlendState[i]);
+			SAFE_RELEASE(pDepthStencilState[i]);
+		}
 
 		for (int i = 0; i < SHADER_MAX; i++)
 		{
@@ -368,16 +444,16 @@ namespace Direct3D
 
 	//三角形と線分の衝突判定（衝突判定に使用）
 	//https://pheema.hatenablog.jp/entry/ray-triangle-intersection
-	bool Intersect(XMVECTOR & start, XMVECTOR & direction, XMVECTOR & v0, XMVECTOR & v1, XMVECTOR & v2, float* distance)
+	bool Intersect(XMFLOAT3 & start, XMFLOAT3 & direction, XMFLOAT3 & v0, XMFLOAT3 & v1, XMFLOAT3 & v2, float* distance)
 	{
 		// 微小な定数([M?ller97] での値)
 		constexpr float kEpsilon = 1e-6f;
 
 		//三角形の２辺
-		XMVECTOR edge1 = XMVectorSet(v1.vecX - v0.vecX, v1.vecY - v0.vecY, v1.vecZ - v0.vecZ, 0.0f);
-		XMVECTOR edge2 = XMVectorSet(v2.vecX - v0.vecX, v2.vecY - v0.vecY, v2.vecZ - v0.vecZ, 0.0f);
+		XMVECTOR edge1 = XMVectorSet(v1.x - v0.x, v1.y - v0.y, v1.z - v0.z, 0.0f);
+		XMVECTOR edge2 = XMVectorSet(v2.x - v0.x, v2.y - v0.y, v2.z - v0.z, 0.0f);
 
-		XMVECTOR alpha = XMVector3Cross(direction, edge2);
+		XMVECTOR alpha = XMVector3Cross(XMLoadFloat3(&direction), edge2);
 		float det = XMVector3Dot(edge1, alpha).m128_f32[0];
 
 		// 三角形に対して、レイが平行に入射するような場合 det = 0 となる。
@@ -389,27 +465,27 @@ namespace Direct3D
 		}
 
 		float invDet = 1.0f / det;
-		XMVECTOR r = start - v0;
+		XMFLOAT3 r = XMFLOAT3(start.x - v0.x, start.y - v0.y, start.z - v0.z);
 
 		// u が 0 <= u <= 1 を満たしているかを調べる。
-		float u = XMVector3Dot(alpha, r).vecX * invDet;
+		float u = XMVector3Dot(alpha, XMLoadFloat3(&r)).m128_f32[0] * invDet;
 		if (u < 0.0f || u > 1.0f)
 		{
 			return false;
 		}
 
-		XMVECTOR beta = XMVector3Cross(r, edge1);
+		XMVECTOR beta = XMVector3Cross(XMLoadFloat3(&r), edge1);
 
 		// v が 0 <= v <= 1 かつ u + v <= 1 を満たすことを調べる。
 		// すなわち、v が 0 <= v <= 1 - u をみたしているかを調べればOK。
-		float v = XMVector3Dot(direction, beta).vecX * invDet;
+		float v = XMVector3Dot(XMLoadFloat3(&direction), beta).m128_f32[0] * invDet;
 		if (v < 0.0f || u + v > 1.0f) 
 		{
 			return false;
 		}
 
 		// t が 0 <= t を満たすことを調べる。
-		float t = XMVector3Dot(edge2, beta).vecX * invDet;
+		float t = XMVector3Dot(edge2, beta).m128_f32[0] * invDet;
 		if (t < 0.0f) 
 		{
 			return false;
@@ -417,6 +493,23 @@ namespace Direct3D
 
 		*distance = t;
 		return true;
+	}
+
+	//Zバッファへの書き込みON/OFF
+	void SetDepthBafferWriteEnable(bool isWrite)
+	{
+		//ON
+		if (isWrite)
+		{
+			//Zバッファ（デプスステンシルを指定する）
+			pContext_->OMSetRenderTargets(1, &pRenderTargetView_, pDepthStencilView);
+		}
+
+		//OFF
+		else
+		{
+			pContext_->OMSetRenderTargets(1, &pRenderTargetView_, nullptr);
+		}
 	}
 
 }

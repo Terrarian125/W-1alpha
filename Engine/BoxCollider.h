@@ -14,7 +14,7 @@ public:
 	//コンストラクタ（当たり判定の作成）
 	//引数：basePos	当たり判定の中心位置（ゲームオブジェクトの原点から見た位置）
 	//引数：size	当たり判定のサイズ（幅、高さ、奥行き）
-	BoxCollider(XMVECTOR basePos, XMVECTOR size);
+	BoxCollider(XMFLOAT3 basePos, XMFLOAT3 size);
 
 private:
 	//接触判定

@@ -1,5 +1,6 @@
 #pragma once
 #include "../Engine/GameObject.h"
+#include "../Engine/Model.h"
 
 // 障害物クラスを管理するクラス
 class Obstacle : public GameObject
@@ -10,5 +11,6 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Release() override;
-private:
+protected:
+	int hModel_; // モデルのハンドル
 };

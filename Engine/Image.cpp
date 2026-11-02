@@ -80,7 +80,7 @@ namespace Image
 			return;
 		}
 		_datas[handle]->transform.Calclation();
-		_datas[handle]->pSprite->Draw(_datas[handle]->transform, _datas[handle]->rect);
+		_datas[handle]->pSprite->Draw(_datas[handle]->transform, _datas[handle]->rect, _datas[handle]->alpha);
 	}
 
 
@@ -150,13 +150,23 @@ namespace Image
 			return;
 		}
 
-		XMVECTOR size = _datas[handle]->pSprite->GetTextureSize();
+		XMFLOAT3 size = _datas[handle]->pSprite->GetTextureSize();
 
 		_datas[handle]->rect.left = 0;
 		_datas[handle]->rect.top = 0;
-		_datas[handle]->rect.right = (long)size.vecX;
-		_datas[handle]->rect.bottom = (long)size.vecY;
+		_datas[handle]->rect.right = (long)size.x;
+		_datas[handle]->rect.bottom = (long)size.y;
 
+	}
+
+	//アルファ値設定
+	void SetAlpha(int handle, int alpha)
+	{
+		if (handle < 0 || handle >= _datas.size())
+		{
+			return;
+		}
+		_datas[handle]->alpha = (float)alpha / 255.0f;
 	}
 
 
