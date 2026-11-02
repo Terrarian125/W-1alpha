@@ -23,7 +23,7 @@ Tank::~Tank()
 void Tank::Initialize()
 {
 	//モデルデータのロード
-	hModel_ = Model::Load("/Model/Cowboy00.fbx");
+	hModel_ = Model::Load("/Model/Rock00.fbx");
 	transform_.scale_ = XMFLOAT3(0.01f, 0.01f, 0.01f);
 	assert(hModel_ >= 0);
 

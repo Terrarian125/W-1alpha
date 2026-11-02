@@ -1,5 +1,6 @@
 #include "PlayScene.h"
-#include "Tank.h"
+#include "Player_L.h"
+#include "Player_R.h"
 #include "Ground.h"
 //#include "Enemy.h"
 #include "Infomation.h"
@@ -16,7 +17,8 @@ PlayScene::PlayScene(GameObject * parent)
 //‰Šú‰»
 void PlayScene::Initialize()
 {
-    Instantiate<Tank>(this);
+    Instantiate<Player_L>(this);
+    Instantiate<Player_R>(this);
     Instantiate<Ground>(this);
 
  /*   for (int i = 0; i < ENEMY_NUM; ++i)

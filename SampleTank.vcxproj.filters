@@ -119,6 +119,12 @@
     <ClCompile Include="PlayScene.cpp">
       <Filter>03Scene\01Play</Filter>
     </ClCompile>
+    <ClCompile Include="Player_L.cpp">
+      <Filter>03Scene\01Play</Filter>
+    </ClCompile>
+    <ClCompile Include="Player_R.cpp">
+      <Filter>03Scene\01Play</Filter>
+    </ClCompile>
     <ClCompile Include="Tank.cpp">
       <Filter>03Scene\01Play</Filter>
     </ClCompile>
@@ -243,6 +249,12 @@
       <Filter>03Scene\01Play</Filter>
     </ClInclude>
     <ClInclude Include="PlayScene.h">
+      <Filter>03Scene\01Play</Filter>
+    </ClInclude>
+    <ClInclude Include="Player_L.h">
+      <Filter>03Scene\01Play</Filter>
+    </ClInclude>
+    <ClInclude Include="Player_R.h">
       <Filter>03Scene\01Play</Filter>
     </ClInclude>
     <ClInclude Include="Tank.h">
