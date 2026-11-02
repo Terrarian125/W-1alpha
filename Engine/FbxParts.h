@@ -15,7 +15,7 @@ struct RayCastData;
 //-----------------------------------------------------------
 class FbxParts
 {
-	// 一つの頂点情報を格納する構造体
+	//一つの頂点情報を格納する構造体
 	struct VERTEX
 	{
 		XMFLOAT3 position;
@@ -24,7 +24,7 @@ class FbxParts
 	};
 
 	//【コンスタントバッファー】
-	// GPU(シェーダ側)へ送る数値をまとめた構造体
+	//GPU(シェーダ側)へ送る数値をまとめた構造体
 	//Simple3D.hlslのグローバル変数と対応させる
 	struct CONSTANT_BUFFER
 	{
@@ -40,7 +40,7 @@ class FbxParts
 		BOOL	 isTexture;		//テクスチャの有無
 	};
 
-	// マテリアル情報（質感の情報）
+	//マテリアル情報（質感の情報）
 	struct  MATERIAL
 	{
 		DWORD		polygonCount;		//マテリアルのポリゴン数
@@ -51,21 +51,21 @@ class FbxParts
 		Texture*	pTexture;			//テクスチャ
 	}*pMaterial_;
 
-	// ボーン構造体（関節情報）
+	//ボーン構造体（関節情報）
 	struct  Bone
 	{
-		XMMATRIX  bindPose;      // 初期ポーズ時のボーン変換行列
-		XMMATRIX  newPose;       // アニメーションで変化したときのボーン変換行列
-		XMMATRIX  diffPose;      // mBindPose に対する mNowPose の変化量
+		XMMATRIX  bindPose;      //初期ポーズ時のボーン変換行列
+		XMMATRIX  newPose;       //アニメーションで変化したときのボーン変換行列
+		XMMATRIX  diffPose;      //mBindPose に対する mNowPose の変化量
 	};
 
-	// ウェイト構造体（ボーンと頂点の関連付け）
+	//ウェイト構造体（ボーンと頂点の関連付け）
 	struct Weight
 	{
-		XMFLOAT3	posOrigin;		// 元々の頂点座標
-		XMFLOAT3	normalOrigin;	// 元々の法線ベクトル
-		int*		pBoneIndex;		// 関連するボーンのID
-		float*		pBoneWeight;	// ボーンの重み
+		XMFLOAT3	posOrigin;		//元々の頂点座標
+		XMFLOAT3	normalOrigin;	//元々の法線ベクトル
+		int*		pBoneIndex;		//関連するボーンのID
+		float*		pBoneWeight;	//ボーンの重み
 	};
 
 
@@ -96,17 +96,17 @@ class FbxParts
 	ID3D11Buffer *pConstantBuffer_;
 
 
-	// ボーン制御情報
-	FbxSkin*		pSkinInfo_;		// スキンメッシュ情報（スキンメッシュアニメーションのデータ本体）
-	FbxCluster**	ppCluster_;		// クラスタ情報（関節ごとに関連付けられた頂点情報）
-	int				numBone_;		// FBXに含まれている関節の数
-	Bone*			pBoneArray_;	// 各関節の情報
-	Weight*			pWeightArray_;	// ウェイト情報（頂点の対する各関節の影響度合い）
+	//ボーン制御情報
+	FbxSkin*		pSkinInfo_;		//スキンメッシュ情報（スキンメッシュアニメーションのデータ本体）
+	FbxCluster**	ppCluster_;		//クラスタ情報（関節ごとに関連付けられた頂点情報）
+	int				numBone_;		//FBXに含まれている関節の数
+	Bone*			pBoneArray_;	//各関節の情報
+	Weight*			pWeightArray_;	//ウェイト情報（頂点の対する各関節の影響度合い）
 
 
 
 	/////////privateな関数（Init関数から呼ばれる）//////////////////////////
-	void InitVertex(fbxsdk::FbxMesh * mesh);	//頂点バッファ準備
+	void InitVertex(fbxsdk::FbxMesh * mesh, fbxsdk::FbxNode* node);	//頂点バッファ準備
 	void InitMaterial(fbxsdk::FbxNode * pNode);	//マテリアル準備
 	void InitTexture(fbxsdk::FbxSurfaceMaterial * pMaterial, const DWORD &i);	//テクスチャ準備
 	void InitIndex(fbxsdk::FbxMesh * mesh);		//インデックスバッファ準備
