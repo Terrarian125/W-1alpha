@@ -21,7 +21,7 @@ bool PlaySceneButton::Initialize(
     leftStopButton_.reset(new GuiButton(0, 0, 180, 56, "STOP"));
     rightStopButton_.reset(new GuiButton(0, 0, 180, 56, "STOP"));
 
-    startButton_->SetDescription("");
+    startButton_->SetDescription("CountStart");
     leftStopButton_->SetDescription("L Stop");
     rightStopButton_->SetDescription("R Stop");
 
@@ -224,19 +224,38 @@ void PlaySceneButton::OnStopClicked(int side)
 
 void PlaySceneButton::Draw()
 {
-    //コントローラー0：AボタンでL側のSTOP
-    if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A, 0))
+    controllerTest_.Draw();
+
+    if (!font_ || !timer_)
+        return;
+
+    //コントローラーのAボタン入力
+    const bool pad0A = Input::IsPadButtonDown(XINPUT_GAMEPAD_A, 0);
+    const bool pad1A = Input::IsPadButtonDown(XINPUT_GAMEPAD_A, 1);
+
+    //START可能な状態か確認
+    const bool canStart = !timer_->IsWaiting() && !timer_->IsRunning();
+
+    if (canStart && (pad0A || pad1A))
     {
-        OnStopClicked(-1);
+        //どちらかがAを押したらゲーム開始
+        OnStartClicked();
+    }
+    else
+    {
+        //ゲーム中は各プレイヤーのSTOPとして扱う
+        if (pad0A)
+        {
+            OnStopClicked(-1);
+        }
+
+        if (pad1A)
+        {
+            OnStopClicked(1);
+        }
     }
 
-    //コントローラー1：AボタンでR側のSTOP
-    if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A, 1))
-    {
-        OnStopClicked(1);
-    }
-
-    if (!font_ || !timer_ || !ImGui::GetCurrentContext())
+    if (!ImGui::GetCurrentContext())
         return;
 
     timer_->Update();

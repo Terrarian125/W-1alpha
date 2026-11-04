@@ -3,7 +3,7 @@
 #include "Engine/GuiButton.h"
 #include "Engine/FontText.hpp"
 #include "Engine/GameTimer.h"
-
+#include "ControllerTest.h"
 #include <memory>
 #include <string>
 
@@ -48,4 +48,6 @@ private:
     int rightFalseStarts_ = 0;
     int winnerSide_ = 0; // -1: 左、1: 右、0: 引き分け
     std::string resultText_;
+
+    ControllerTest controllerTest_; //コントローラーのテスト用
 };
