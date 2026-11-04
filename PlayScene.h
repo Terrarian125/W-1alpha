@@ -8,6 +8,8 @@ class PlayScene : public GameObject
     //const int ENEMY_NUM;  //敵の数
     FontText text_;       //テキスト描画用のオブジェクト
 
+    int hBackGround_; // 背景
+
 public:
     //コンストラクタ
     //引数：parent  親オブジェクト（SceneManager）

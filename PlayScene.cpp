@@ -8,17 +8,21 @@
 //#include "Infomation.h"
 #include "Engine\\FontText.hpp"
 #include "Gun.h"
-#include "UI.h"
+#include "Engine/Image.h"
 
 // コンストラクタ
 PlayScene::PlayScene(GameObject * parent)
-    : GameObject(parent, "PlayScene")//, ENEMY_NUM(5)
+    : GameObject(parent, "PlayScene"), hBackGround_(-1)//, ENEMY_NUM(5)
 {
 }
 
 // 初期化
 void PlayScene::Initialize()
 {
+    // レティクルの画像のロード
+    hBackGround_ = Image::Load("Image/pexels-jplenio-3131634.jpg");
+    assert(hBackGround_ >= 0);
+
     //Instantiate<Tank>(this);
     //Instantiate<Ground>(this);
     Instantiate<Clay>(this);
@@ -46,6 +50,9 @@ void PlayScene::Update()
 // 描画
 void PlayScene::Draw()
 {
+    Image::SetTransform(hBackGround_, transform_);
+    Image::Draw(hBackGround_);
+
     // text_.Draw(32, 32, "Yes!TakasuClinic");
     text_.Draw(32, 32, "Clay shooting");
 

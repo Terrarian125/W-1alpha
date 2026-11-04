@@ -11,7 +11,8 @@ using namespace std;
 
 // コンストラクタ
 UI::UI(GameObject* parent)
-    : GameObject(parent, "Reticle"), position_{ { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f } }, hImage_{ (-1), (-1) }, Bullet_num(6), Score(0),Game_Timer(30.0f)
+    : GameObject(parent, "Reticle"), position_{ { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f } }, hImage_{ (-1), (-1) },
+    Bullet_num(6), Score(0), Game_Timer(30.0f)
 {
 }
 
