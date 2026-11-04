@@ -15,7 +15,8 @@ namespace
 
 Bin::Bin(GameObject *_pParent) :
 	GameObject(_pParent, "Bin"),
-	hModel_(-1)
+	hModel_(-1),
+	isPouring_(false)
 {
 }
 
@@ -32,6 +33,7 @@ void Bin::Update()
 		if (Input::IsKey(DIK_SPACE))
 		{
 			keyPushTime++;
+			isPouring_ = true;
 			if (transform_.rotate_.z >= -40)
 			{
 				float t = std::clamp(keyPushTime / 60, 0.0f, 1.0f);
@@ -39,9 +41,9 @@ void Bin::Update()
 			}
 		}
 
-		// 允E��戻めE
 		if (transform_.rotate_.z <= -20.f and not(Input::IsKey(DIK_SPACE)))
 		{
+			isPouring_ = false;
 			keyPushTime = 0;
 			transform_.rotate_.z = std::lerp(transform_.rotate_.z,
 											 -20.f,

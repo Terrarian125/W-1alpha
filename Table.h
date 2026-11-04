@@ -3,6 +3,7 @@
 #include "../Engine/GameObject.h"
 #include <array>
 
+class Bin;
 class Beermug;
 
 class Table : public GameObject
@@ -17,5 +18,6 @@ public:
 
 private:
 	int hModel_;
+	std::array<Bin *, 2> pBins_;
 	std::array<Beermug *, 2> pBeermugs_;
 };

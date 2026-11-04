@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Beermug.cpp" />
+    <ClCompile Include="Beverage.cpp" />
     <ClCompile Include="Bin.cpp" />
     <ClCompile Include="ChickenRaceScene.cpp" />
     <ClCompile Include="Engine\Audio.cpp" />
@@ -179,9 +180,11 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Table.cpp" />
+    <ClCompile Include="WaterLevelHider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Beermug.h" />
+    <ClInclude Include="Beverage.h" />
     <ClInclude Include="Bin.h" />
     <ClInclude Include="ChickenRaceScene.h" />
     <ClInclude Include="Engine\Audio.h" />
@@ -225,6 +228,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerAction.h" />
     <ClInclude Include="Table.h" />
+    <ClInclude Include="WaterLevelHider.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Debug3D.hlsl">

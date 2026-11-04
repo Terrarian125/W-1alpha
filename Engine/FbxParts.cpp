@@ -145,21 +145,20 @@ void FbxParts::InitMaterial(fbxsdk::FbxNode * pNode)
 		FbxSurfacePhong* pPhong = (FbxSurfacePhong*)pMaterial;
 
 		// 環境光＆拡散反射光＆鏡面反射光の反射成分値を取得
-		FbxDouble3  ambient = FbxDouble3(0, 0, 0);
-		FbxDouble3  diffuse = FbxDouble3(0, 0, 0);
-		FbxDouble3  specular = FbxDouble3(0, 0, 0);
-		FbxDouble   transparency = 0;
+		FbxDouble3 ambient = FbxDouble3(0, 0, 0);
+		FbxDouble3 diffuse = FbxDouble3(0, 0, 0);
+		FbxDouble3 specular = FbxDouble3(0, 0, 0);
+		FbxDouble3 transparency = FbxDouble3(0, 0, 0);
 		ambient = pPhong->Ambient;
 		diffuse = pPhong->Diffuse;
-		transparency = pPhong->TransparencyFactor;
+		transparency = pPhong->TransparentColor;
 
 		// 環境光＆拡散反射光＆鏡面反射光の反射成分値をマテリアルバッファにコピー
 		pMaterial_[i].ambient = XMFLOAT4((float)ambient[0], (float)ambient[1], (float)ambient[2], 1.0f);
 		pMaterial_[i].diffuse = XMFLOAT4((float)diffuse[0], (float)diffuse[1], (float)diffuse[2], 1.0f);
 		pMaterial_[i].specular = XMFLOAT4(0, 0, 0, 0);
 		pMaterial_[i].shininess = 0;
-		pMaterial_[i].transparency = transparency;
-
+		pMaterial_[i].transparency = transparency[1];
 
 		if (pMaterial->GetClassId().Is(FbxSurfacePhong::ClassId))
 		{
@@ -168,11 +167,8 @@ void FbxParts::InitMaterial(fbxsdk::FbxNode * pNode)
 			pMaterial_[i].shininess = (float)pPhong->Shininess;
 		}
 
-
 		InitTexture(pMaterial, i);
-
 	}
-
 }
 
 //テクスチャ準備

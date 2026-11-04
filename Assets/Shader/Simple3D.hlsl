@@ -107,6 +107,12 @@ float4 PS(VS_OUT inData) : SV_Target
         speculer = pow(saturate(dot(R, inData.eye)), g_shuniness) * g_vecSpeculer; //ハイライトを求める
     }
 
+    if (g_transparency < 0.1)
+    {
+        return (diffuse * shade + diffuse * ambient + speculer);
+    }
+    
 	//最終的な色
-    return (diffuse * shade + diffuse * ambient + speculer) * g_transparency;
+        return (diffuse * shade + diffuse * ambient + speculer) * g_transparency;
+    
 }

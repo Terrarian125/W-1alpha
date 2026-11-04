@@ -2,6 +2,10 @@
 
 #include "../Engine/GameObject.h"
 
+class WaterLevelHider;
+class Beverage;
+class Bin;
+
 class Beermug : public GameObject
 {
 public:
@@ -21,7 +25,18 @@ public:
 		modelIdx_ = _index;
 	}
 
+	float GetWaterLevel()
+	{
+		return waterLevel_;
+	}
+
 private:
-	int hModels_[2];
+	int hModels_[3];
 	int modelIdx_ = 0;
+
+	WaterLevelHider *pWLH_;
+	Beverage *pBeverage_;
+	Bin *pBin_;
+
+	float waterLevel_;
 };
