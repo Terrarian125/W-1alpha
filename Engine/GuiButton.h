@@ -54,9 +54,9 @@ private:
     std::string description_;
     void* textureId_ = nullptr;
 
-    unsigned int normalColor_ = 0xFF3C3C3C;
-    unsigned int hoveredColor_ = 0xFF787878;
-    unsigned int activeColor_ = 0xFF969696;
-    unsigned int textColor_ = 0xFFFFFFFF;
-    unsigned int imageTint_ = 0xFFFFFFFF;
+    unsigned int normalColor_  = 0x181818FF;
+    unsigned int hoveredColor_ = 0x585858FF;
+    unsigned int activeColor_  = 0xFF969696;
+    unsigned int textColor_    = 0xFFFFFFFF;
+    unsigned int imageTint_    = 0xFFFFFFFF;
 };

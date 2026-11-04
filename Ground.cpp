@@ -17,8 +17,8 @@ Ground::~Ground()
 void Ground::Initialize()
 {
 	//モデルデータのロード
-	hModel_ = Model::Load("Model/Game04_StageFloor00.fbx");
-	transform_.scale_ = XMFLOAT3(1.0f, 0.01f, 1.0f);
+	hModel_ = Model::Load("Model/Game01_Bg00.fbx");
+	transform_.scale_ = XMFLOAT3(5.0f, 0.01f, 2.0f);
 	assert(hModel_ >= 0);
 }
 
