@@ -213,6 +213,7 @@
     <ClInclude Include="Engine\Input.h" />
     <ClInclude Include="Engine\Model.h" />
     <ClInclude Include="Engine\MyCursor.h" />
+    <ClInclude Include="Engine\resource.h" />
     <ClInclude Include="Engine\RootObject.h" />
     <ClInclude Include="Engine\SceneManager.h" />
     <ClInclude Include="Engine\Sound.h" />
@@ -240,6 +241,7 @@
     <ClInclude Include="Player_R.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="PlaySceneButton.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Tank.h" />
   </ItemGroup>
   <ItemGroup>
@@ -256,6 +258,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".github\copilot-instructions.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\Icon\teamlogo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Engine.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

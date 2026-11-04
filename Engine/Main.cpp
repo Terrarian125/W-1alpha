@@ -24,6 +24,8 @@
 #include "Audio.h"
 #include "VFX.h"
 
+#include "resource.h"
+
 #pragma comment(lib,"Winmm.lib")
 
 //定数宣言
@@ -241,8 +243,10 @@ HWND InitApp(HINSTANCE hInstance, int screenWidth, int screenHeight, int nCmdSho
 	wc.lpszClassName = WIN_CLASS_NAME;				//ウィンドウクラス名
 	wc.lpfnWndProc = WndProc;						//ウィンドウプロシージャ
 	wc.style = CS_VREDRAW | CS_HREDRAW;				//スタイル（デフォルト）
-	wc.hIcon = LoadIcon(nullptr, IDI_APPLICATION);	//アイコン
-	wc.hIconSm = LoadIcon(nullptr, IDI_WINLOGO);	//小さいアイコン
+	//wc.hIcon = LoadIcon(nullptr, IDI_APPLICATION);	//アイコン
+	//wc.hIconSm = LoadIcon(nullptr, IDI_WINLOGO);	//小さいアイコン
+	wc.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
+	wc.hIconSm = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
 	wc.hCursor = LoadCursor(nullptr, IDC_ARROW);	//マウスカーソル
 	wc.lpszMenuName = nullptr;						//メニュー（なし）
 	wc.cbClsExtra = 0;

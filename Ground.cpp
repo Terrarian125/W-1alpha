@@ -6,8 +6,6 @@
 Ground::Ground(GameObject * parent)
 	:GameObject(parent, "Ground"), hModel_(-1)
 {
-	transform_.scale_ = XMFLOAT3(40.0f, 40.0f, 40.0f);
-	transform_.rotate_ = XMFLOAT3(0.0f, 180.0f, 0.0f);
 }
 
 //デストラクタ
@@ -20,7 +18,7 @@ void Ground::Initialize()
 {
 	//モデルデータのロード
 	hModel_ = Model::Load("Model/Game04_StageFloor00.fbx");
-	transform_.scale_ = XMFLOAT3(0.01f, 0.01f, 0.01f);
+	transform_.scale_ = XMFLOAT3(1.0f, 0.01f, 1.0f);
 	assert(hModel_ >= 0);
 }
 

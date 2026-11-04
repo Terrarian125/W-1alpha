@@ -103,7 +103,7 @@ void ControllerTest::StartIdentifyStep()
             VIBRATION_POWER,
             1
         );
-
+        
         timer_ = VIBRATION_TIME;
     }
 }
