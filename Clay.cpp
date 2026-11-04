@@ -5,11 +5,13 @@
 #include "ImGui/imgui.h"
 
 #include <DirectXMath.h>
+#include "Engine/Camera.h"
 using namespace DirectX;
 
 //コンストラクタ
 Clay::Clay(GameObject* parent)
-    :GameObject(parent, "Clay"), position_{ { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f } }, hModel_{ (-1,-1,-1) }, On_down{ true, true, false }
+    :GameObject(parent, "Clay"), position_{ { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f } },
+    hModel_{ (-1,-1,-1) }, OnDown_{ true, true, false }, IsDead_{ false, false, false }
 {
 }
 
@@ -24,6 +26,12 @@ void Clay::Initialize()
     //モデルデータのロード
     hModel_[0] = Model::Load("/Model/Dish00.fbx");
     assert(hModel_[0] >= 0);
+    //モデルデータのロード
+    hModel_[1] = Model::Load("/Model/Dish00.fbx");
+    assert(hModel_[1] >= 0);
+    //モデルデータのロード
+    hModel_[2] = Model::Load("/Model/Dish00.fbx");
+    assert(hModel_[2] >= 0);
 
     // 一応あると楽だからここに
     // === 位置のメモ ===
@@ -45,8 +53,8 @@ void Clay::Initialize()
     scale_[2]    = { 0.2f, 0.2f, 0.2f }; // 拡大率
 
     //当たり判定追加
-    SphereCollider* collision = new SphereCollider(XMFLOAT3(0.0f, 0.1f, 0.0f), 0.8f);
-    AddCollider(collision);
+    //SphereCollider* collision = new SphereCollider(XMFLOAT3(0.0f, 0.1f, 0.0f), 0.8f);
+    //AddCollider(collision);
 
     textClay_.Initialize("Fonts/Rye-Regular.ttf", 28.0f);
 }
@@ -73,11 +81,11 @@ void Clay::Update()
             if (position_[1].x < Limit_X_MAX) position_[1].x = Limit_X_MIN; // 左から右
             if (position_[1].x > Limit_X_MIN) position_[1].x = Limit_X_MAX; // 右から左
             if (position_[1].y > Limit_Y_MAX) {
-                On_down[1] = true; // 降下中
+                OnDown_[1] = true; // 降下中
                 position_[1].y = Limit_Y_MAX; // 上から下
             }
             if (position_[1].y < Limit_Y_MIN) {
-                On_down[1] = false; // 上昇
+                OnDown_[1] = false; // 上昇
                 position_[1].y = Limit_Y_MIN; // 下から上
             }
         }
@@ -87,11 +95,11 @@ void Clay::Update()
             if (position_[2].x < Limit_X_MAX) position_[2].x = Limit_X_MIN; // 左から右
             if (position_[2].x > Limit_X_MIN) position_[2].x = Limit_X_MAX; // 右から左
             if (position_[2].y > Limit_Y_MAX) {
-                On_down[2] = true; // 降下中
+                OnDown_[2] = true; // 降下中
                 position_[2].y = Limit_Y_MAX; // 上から下
             }
             if (position_[2].y < Limit_Y_MIN) {
-                On_down[2] = false; // 上昇
+                OnDown_[2] = false; // 上昇
                 position_[2].y = Limit_Y_MIN; // 下から上
             }
         }
@@ -113,18 +121,20 @@ void Clay::Move()
        //position_[1].y -= 2.5f;
     }
 
+    /*
     position_[0].x += 0.15f;
     rotate_[0].x += 2.5f;
     rotate_[0].y += 5.0f;
 
     position_[1].x -= 0.15f;
     rotate_[1].x -= 1.0f;
-    if(On_down[1]) position_[1].y -= 0.02f;
+    if(OnDown_[1]) position_[1].y -= 0.02f;
     else position_[1].y += 0.02f;
 
     position_[2].x += 0.30f;
-    if (On_down[2]) position_[2].y -= 0.5f;
+    if (OnDown_[2]) position_[2].y -= 0.5f;
     else position_[2].y += 0.5f;
+    */
 }
 
 //描画
@@ -170,6 +180,7 @@ void Clay::Release()
 {
 }
 
+/*
 void Clay::OnCollision(GameObject* pTarget)
 {
     //弾に当たった
@@ -178,4 +189,68 @@ void Clay::OnCollision(GameObject* pTarget)
         //自分を消す
         KillMe();
     }
+}
+*/
+
+int Clay::FindOverlap(const XMFLOAT2& reticleNdc) const
+{
+    XMMATRIX view = Camera::GetViewMatrix();
+    XMMATRIX proj = Camera::GetProjectionMatrix();
+
+    //const float hitSize = 0.05f;
+    int   hit = -1;
+    float hitDepth = FLT_MAX;
+
+    for (int i = 0; i < 3; i++)
+    {
+        if (IsDead_[i]) continue;
+
+        // ワールド座標をビュー座標に変換
+        XMVECTOR world = XMVector3TransformCoord(XMLoadFloat3(&position_[i]), view);
+        float depth = XMVectorGetZ(world);
+        if (depth <= 0.01f) continue; // カメラの後ろは対象外
+
+        // ビュー座標から画面座標に変換
+        XMVECTOR center = XMVector3TransformCoord(world, proj);
+        XMVECTOR edgeX = XMVector3TransformCoord(XMVectorAdd(world, XMVectorSet(HitRange, 0.0f, 0.0f, 0.0f)), proj);
+        XMVECTOR edgeY = XMVector3TransformCoord(XMVectorAdd(world, XMVectorSet(0.0f, HitRange, 0.0f, 0.0f)), proj);
+
+        float cx = XMVectorGetX(center);
+        float cy = XMVectorGetY(center);
+        float rx = fabsf(XMVectorGetX(edgeX) - cx);
+        float ry = fabsf(XMVectorGetY(edgeY) - cy);
+
+        // レティクル中心の確認
+        float dx = (reticleNdc.x - cx) / rx;
+        float dy = (reticleNdc.y - cy) / ry;
+        if ((dx * dx + dy * dy) <= 1.0f) {
+            // 複数重なっていたら、カメラに近いものを優先的に破壊
+            if (depth < hitDepth) {
+                hitDepth = depth;
+                hit = i;
+            }
+        }
+    }
+    return hit;
+}
+
+bool Clay::TryBreak(const XMFLOAT2& reticleNdc)
+{
+    int hit = FindOverlap(reticleNdc);
+    if (hit < 0) return false;
+
+    // 命中したクレーを壊す
+    IsDead_[hit] = true;
+
+    // 全部壊れたら自分を消す
+    bool allBroken = true;
+    for (int i = 0; i < 3; i++)
+    {
+        if (!IsDead_[i]) allBroken = false;
+    }
+    if (allBroken) KillMe();
+
+    KillMe();
+
+    return true;
 }

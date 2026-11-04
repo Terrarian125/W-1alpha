@@ -18,7 +18,10 @@ class Clay : public GameObject
     //移動
     void Move();
 
-    bool On_down[3]; // 下がるか上がるかのフラグ　※ true：下がる / false：上がる
+    bool OnDown_[3]; // 下がるか上がるかのフラグ　    ※ true：下がる / false：上がる
+    bool IsDead_[3]; // クレーの死亡しているかフラグ　※ true：死亡 / false：生存
+
+    const float HitRange = 0.8f; // 当たり判定の大きさ
 
 public:
     //コンストラクタ
@@ -42,5 +45,11 @@ public:
 
     //何かに当たった
     //引数：pTarget　当たった相手
-    void OnCollision(GameObject* pTarget) override;
+    //void OnCollision(GameObject* pTarget) override;
+
+    // レティクルの中心がクレーに重なっているかの確認処理
+    int FindOverlap(const XMFLOAT2& reticleNdc) const;
+
+    // 発砲時、レティクルが重なっているクレーがあれば壊す
+    bool TryBreak(const XMFLOAT2& reticleNdc);
 };

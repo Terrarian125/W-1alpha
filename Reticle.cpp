@@ -5,10 +5,11 @@
 #include "ImGui/imgui.h"
 
 #include <DirectXMath.h>
-#include "Bullet.h"
+//#include "Bullet.h"
 #include "Engine/Model.h"
 #include "Gun.h"
 #include "UI.h"
+#include "Clay.h"
 
 using namespace DirectX;
 using namespace std;
@@ -153,13 +154,19 @@ void Reticle::Shoot()
         || Input::IsPadButtonDown(XINPUT_GAMEPAD_B)
         || triggerNow && !triggerOld_)
     {
+        // クレーとの当たり判定
+        Clay* pClay = static_cast<Clay*>(FindObject("Clay"));
+        if (pClay != nullptr) {
+            pClay->TryBreak(XMFLOAT2(position_.x, position_.y));
+        }
+
         //弾をシーンに追加
-        GameObject* playScene = FindObject("PlayScene");
-        Bullet* pBullet = Instantiate<Bullet>(FindObject("PlayScene"));
+        //GameObject* playScene = FindObject("PlayScene");
+        //Bullet* pBullet = Instantiate<Bullet>(FindObject("PlayScene"));
 
         //発射方向 = 先端 - 根本
-        XMFLOAT3 dir;
-        XMStoreFloat3(&dir, XMLoadFloat3(&position_) - XMLoadFloat3(&rotate_));
+        //XMFLOAT3 dir;
+        //XMStoreFloat3(&dir, XMLoadFloat3(&position_) - XMLoadFloat3(&rotate_));
 
         //砲台の先端と根本の位置を取得
         //XMMATRIX shotPos = Image::GetMatrix(hImage_);    //先端
@@ -167,7 +174,7 @@ void Reticle::Shoot()
         // position_.x;
 
         //撃つ
-        pBullet->Shot(position_, dir);
+        //pBullet->Shot(position_, dir);
     }
 
     triggerOld_ = triggerNow;
