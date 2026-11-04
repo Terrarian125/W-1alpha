@@ -173,7 +173,6 @@
     <ClCompile Include="ImGui\imgui_ja_gryph_ranges.cpp" />
     <ClCompile Include="ImGui\imgui_tables.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
-    <ClCompile Include="Infomation.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="Reticle.cpp" />
@@ -220,7 +219,6 @@
     <ClInclude Include="ImGui\imstb_rectpack.h" />
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
-    <ClInclude Include="Infomation.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="Reticle.hpp" />

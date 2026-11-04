@@ -1,9 +1,12 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include "Engine/FontText.hpp"
 
 // クレーを管理するクラス
 class Clay : public GameObject
 {
+    FontText textClay_;       //テキスト描画用のオブジェクト
+
     // クレーの座標
     XMFLOAT3 position_[3]; // 位置
     XMFLOAT3 rotate_[3];   // 回転

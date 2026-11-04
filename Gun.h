@@ -1,9 +1,12 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include "Engine/FontText.hpp"
 
 //銃を管理するクラス
 class Gun : public GameObject
 {
+    FontText textGun_;       //テキスト描画用のオブジェクト
+
     XMFLOAT3 position_; // 位置
     XMFLOAT3 rotate_;   // 回転
     XMFLOAT3 scale_;    // 拡大率

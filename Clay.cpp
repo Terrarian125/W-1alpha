@@ -48,6 +48,7 @@ void Clay::Initialize()
     SphereCollider* collision = new SphereCollider(XMFLOAT3(0.0f, 0.1f, 0.0f), 0.8f);
     AddCollider(collision);
 
+    textClay_.Initialize("Fonts/Rye-Regular.ttf", 28.0f);
 }
 
 //çXêV

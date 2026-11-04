@@ -1,9 +1,12 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include "Engine/FontText.hpp"
 
 // 銃のレティクルを管理するクラス
 class Reticle : public GameObject
 {
+    FontText textReticle_;       //テキスト描画用のオブジェクト
+
     // レティクルの座標
     XMFLOAT3 position_;
     XMFLOAT3 rotate_;   // 回転
@@ -16,6 +19,8 @@ class Reticle : public GameObject
 
     // 発射
     void Shoot();
+
+    bool triggerOld_ = false;
 
 public:
     // コンストラクタ

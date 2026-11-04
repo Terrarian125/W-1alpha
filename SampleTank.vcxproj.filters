@@ -110,9 +110,6 @@
     <ClCompile Include="Ground.cpp">
       <Filter>03Scene\01Play</Filter>
     </ClCompile>
-    <ClCompile Include="Infomation.cpp">
-      <Filter>03Scene\01Play</Filter>
-    </ClCompile>
     <ClCompile Include="PlayScene.cpp">
       <Filter>03Scene\01Play</Filter>
     </ClCompile>
@@ -220,9 +217,6 @@
       <Filter>03Scene\01Play</Filter>
     </ClInclude>
     <ClInclude Include="Ground.h">
-      <Filter>03Scene\01Play</Filter>
-    </ClInclude>
-    <ClInclude Include="Infomation.h">
       <Filter>03Scene\01Play</Filter>
     </ClInclude>
     <ClInclude Include="PlayScene.h">

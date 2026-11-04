@@ -4,10 +4,9 @@
 //弾を管理するクラス
 class Bullet : public GameObject
 {
-
-	int hModel_;		//モデル番号
-	XMFLOAT3 move_;		//移動ベクトル
-	float dy_;			//Ｙ方向の加速度
+	int hModel_;		    //モデル番号
+	XMFLOAT3 move_;		    //移動ベクトル
+	float dy_;			    //Ｙ方向の加速度
 
 	const float SPEED;		//速度
 	const float GRAVITY;	//重力

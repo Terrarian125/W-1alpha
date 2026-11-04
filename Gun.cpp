@@ -30,6 +30,8 @@ void Gun::Initialize()
     position_ = { -3.5f,  -7.0f,  -6.0f }; // ˆÊ’u
     rotate_   = {  0.0f, -90.0f, -12.0f }; // ‰ñ“]
     scale_    = {  0.5f,   0.5f,  0.5f };  // Šg‘å—¦
+
+    textGun_.Initialize("Fonts/Rye-Regular.ttf", 28.0f);
 }
 
 // XV

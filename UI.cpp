@@ -11,7 +11,7 @@ using namespace std;
 
 // コンストラクタ
 UI::UI(GameObject* parent)
-    : GameObject(parent, "Reticle"), position_{ { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f } }, hImage_{ (-1), (-1) }
+    : GameObject(parent, "Reticle"), position_{ { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f } }, hImage_{ (-1), (-1) }, Bullet_num(6), Score(0),Game_Timer(30.0f)
 {
 }
 
@@ -26,38 +26,83 @@ void UI::Initialize()
     // UIの画像のロード
     hImage_[0] = Image::Load("Image/Bullet.png"); // 弾
     assert(hImage_[0] >= 0);
-    hImage_[1] = Image::Load("Image/Reticle.png"); // 無限マーク
-    assert(hImage_[1] >= 0);
+    //hImage_[1] = Image::Load("Image/Reticle.png"); // 無限マーク
+    //assert(hImage_[1] >= 0);
 
     // 一応あると楽だからここに
     position_[0] = { -0.92f, -0.75f, 0.0f }; // 位置
     rotate_[0]   = {   0.0f,   0.0f, 0.0f }; // 回転
     scale_[0]    = {   0.3f,   0.3f, 0.0f }; // 拡大率
 
-    position_[1] = { -0.5f,  -0.25f, 0.0f }; // 位置
-    rotate_[1]   = { 0.0f, 0.0f, 0.0f }; // 回転
-    scale_[1]    = { 0.05f, 0.05f, 0.00f }; // 拡大率
+    position_[1] = { -0.5f, -0.25f,  0.0f }; // 位置
+    rotate_[1]   = {  0.0f,   0.0f,  0.0f }; // 回転
+    scale_[1]    = { 0.05f,  0.05f, 0.00f }; // 拡大率
+
+    textB_num_.Initialize("Fonts/Rye-Regular.ttf", 64.0f);
+    textTimer_.Initialize("Fonts/Rye-Regular.ttf", 86.0f);
+    textScore_.Initialize("Fonts/Rye-Regular.ttf", 64.0f);
 }
 
 // 更新
 void UI::Update()
 {
+    // 時間仮置き
+    if (Game_Timer >= 0.0f)
+    {
+        Game_Timer -= 0.02f;
+    }
+
+    // 発砲ごとに残弾数消費
+    {
+        bool triggerNow = Input::GetPadTrrigerR(0) > 0.5f;
+
+        if ((Input::IsMouseButtonDown(0)
+            || Input::IsPadButtonDown(XINPUT_GAMEPAD_B)
+            || triggerNow && !triggerOld_))
+        {
+            Bullet_num--;
+            Score += 10;
+        }
+
+        triggerOld_ = triggerNow;
+    }
 }
 
 // 描画
 void UI::Draw()
 {
     // UI表示（弾）
-    transform_.position_ = {position_[0].x,position_[0].y,position_[0].z};  // 位置
-    transform_.scale_ = { scale_[0].x,scale_[0].y,scale_[0].z };  // 拡大率
-    Image::SetTransform(hImage_[0], transform_);
-    Image::Draw(hImage_[0]);
+    {
+        transform_.position_ = { position_[0].x,position_[0].y,position_[0].z };  // 位置
+        transform_.scale_ = { scale_[0].x,scale_[0].y,scale_[0].z };  // 拡大率
+        Image::SetTransform(hImage_[0], transform_);
+        Image::Draw(hImage_[0]);
+
+        // 弾の残数
+        char str[64];
+        sprintf_s(str, "x %d", Bullet_num);
+        textB_num_.Draw(90, 600, str);
+    }
+
+    // タイマー表示
+    {
+        char str[64];
+        sprintf_s(str, "%d", (int)Game_Timer);
+        textTimer_.Draw(600, 10, str);
+    }
+
+    // スコア表示
+    {
+        char str[64];
+        sprintf_s(str, "%.5d", Score);
+        textScore_.Draw(100, 20, str);
+    }
 
     // レティクル表示
-    transform_.position_ = { position_[1].x,position_[1].y,position_[1].z };  // 位置
-    transform_.scale_ = { scale_[1].x,scale_[1].y,scale_[1].z };  // 拡大率
-    Image::SetTransform(hImage_[1], transform_);
-    Image::Draw(hImage_[1]);
+    //transform_.position_ = { position_[1].x,position_[1].y,position_[1].z };  // 位置
+    //transform_.scale_ = { scale_[1].x,scale_[1].y,scale_[1].z };  // 拡大率
+    //Image::SetTransform(hImage_[1], transform_);
+    //Image::Draw(hImage_[1]);
 
     // ImGui (デバック用)
     {

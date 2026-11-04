@@ -8,6 +8,7 @@
 #include "Bullet.h"
 #include "Engine/Model.h"
 #include "Gun.h"
+#include "UI.h"
 
 using namespace DirectX;
 using namespace std;
@@ -38,6 +39,7 @@ void Reticle::Initialize()
     transform_.rotate_   = { 0.0f,0.0f,0.0f };  // 回転
     transform_.scale_    = { 0.2f, 0.2f,0.2f }; // 拡大率
 
+    textReticle_.Initialize("Fonts/Rye-Regular.ttf", 28.0f);
 }
 
 // 更新
@@ -78,7 +80,6 @@ void Reticle::Draw()
         ImGui::End();
         // ======= 発射の状況 =======
         // 右トリガーを一瞬だけ押したときに使う、メンバ変数
-        bool triggerOld_ = false;
         bool triggerNow = Input::GetPadTrrigerR(0) > 0.5f;
 
         ImGui::Begin("Shoot_status");
@@ -146,7 +147,6 @@ void Reticle::Move()
 void Reticle::Shoot()
 {
     // 右トリガーを一瞬だけ押したときに使う、メンバ変数
-    bool triggerOld_ = false;
     bool triggerNow = Input::GetPadTrrigerR(0) > 0.5f;
 
     if (Input::IsMouseButtonDown(0)
@@ -156,7 +156,6 @@ void Reticle::Shoot()
         //弾をシーンに追加
         GameObject* playScene = FindObject("PlayScene");
         Bullet* pBullet = Instantiate<Bullet>(FindObject("PlayScene"));
-
 
         //発射方向 = 先端 - 根本
         XMFLOAT3 dir;
