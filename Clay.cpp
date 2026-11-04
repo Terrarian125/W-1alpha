@@ -141,23 +141,16 @@ void Clay::Move()
 void Clay::Draw()
 {
     // ÉNÉåÅ[ï\é¶
-    transform_.position_ = { position_[0].x, position_[0].y, position_[0].z};   // à íu
-    transform_.rotate_   = { rotate_[0].x, rotate_[0].y, rotate_[0].z };        // âÒì]
-    transform_.scale_    = { scale_[0].x, scale_[0].y, scale_[0].z };           // ägëÂó¶
-    Model::SetTransform(hModel_[0], transform_);
-    Model::Draw(hModel_[0]);
+    for (int i = 0; i < 3; i++)
+    {
+        if (IsDead_[i]) continue;
 
-    transform_.position_ = { position_[1].x, position_[1].y, position_[1].z };   // à íu
-    transform_.rotate_ = { rotate_[1].x, rotate_[1].y, rotate_[1].z };           // âÒì]
-    transform_.scale_ = { scale_[1].x, scale_[1].y, scale_[1].z };               // ägëÂó¶
-    Model::SetTransform(hModel_[1], transform_);
-    Model::Draw(hModel_[1]);
-
-    transform_.position_ = { position_[2].x, position_[2].y, position_[2].z };   // à íu
-    transform_.rotate_ = { rotate_[2].x, rotate_[2].y, rotate_[2].z };           // âÒì]
-    transform_.scale_ = { scale_[2].x, scale_[2].y, scale_[2].z };               // ägëÂó¶
-    Model::SetTransform(hModel_[2], transform_);
-    Model::Draw(hModel_[2]);
+        transform_.position_ = { position_[i].x, position_[i].y, position_[i].z };  // à íu
+        transform_.rotate_   = { rotate_[i].x, rotate_[i].y, rotate_[i].z };        // âÒì]
+        transform_.scale_    = { scale_[i].x, scale_[i].y, scale_[0].z };           // ägëÂó¶
+        Model::SetTransform(hModel_[i], transform_);
+        Model::Draw(hModel_[i]);
+    }
 
     // ImGui (ÉfÉoÉbÉNóp)
     {
@@ -249,8 +242,6 @@ bool Clay::TryBreak(const XMFLOAT2& reticleNdc)
         if (!IsDead_[i]) allBroken = false;
     }
     if (allBroken) KillMe();
-
-    KillMe();
 
     return true;
 }

@@ -3,6 +3,7 @@
 #include "Engine/Image.h"
 #include "Engine/SceneManager.h"
 #include "ImGui/imgui.h"
+#include "Clay.h"
 
 #include <DirectXMath.h>
 
@@ -62,7 +63,7 @@ void UI::Update()
             || triggerNow && !triggerOld_))
         {
             Bullet_num--;
-            Score += 10;
+            Score += 20;
         }
 
         triggerOld_ = triggerNow;
