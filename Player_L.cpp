@@ -7,6 +7,7 @@ Player_L::Player_L(GameObject* parent)
 {
 	transform_.position_ = XMFLOAT3(-2.0f, 0.0f, 0.0f);
 	transform_.scale_ = XMFLOAT3(0.01f, 0.01f, 0.01f);
+	transform_.rotate_ = XMFLOAT3(0.0f, 90.0f, 0.0f);
 }
 
 void Player_L::Initialize()
