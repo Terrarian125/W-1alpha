@@ -17,6 +17,9 @@ public:
 		return isPouring_;
 	}
 
+	void Pouring();
+	void Conform();
+
 private:
 	int hModel_;
 	bool isPouring_;

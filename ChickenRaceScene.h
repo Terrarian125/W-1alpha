@@ -15,5 +15,4 @@ public:
 	void Release()    override;
 
 private:
-	int hBackGround_;
 };

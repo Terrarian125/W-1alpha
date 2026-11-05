@@ -2,6 +2,15 @@
 
 #include "../Engine/GameObject.h"
 
+#include <map>
+
+#include "PlayerAction.h"
+
+struct InputBinding;
+
+class Bin;
+class Beermug;
+
 class Player : public GameObject
 {
 public:
@@ -12,6 +21,23 @@ public:
 	void Draw()       override;
 	void Release()    override;
 
+	std::map<PlayerAction, InputBinding>& InputSet()
+	{
+		return inputSet_;
+	}
+
+	int GetPlayerID()
+	{
+		return playerID_;
+	}
+
 private:
-	int hModel_;
+	// Zero origin
+	inline static int playerCount_{0};
+
+	int playerID_;
+	std::map<PlayerAction, InputBinding> inputSet_;
+	
+	Bin* pBin_;
+	Beermug* pBeermug_;
 };

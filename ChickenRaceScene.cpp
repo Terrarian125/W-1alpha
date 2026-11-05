@@ -3,19 +3,22 @@
 #include "Table.h"
 #include "Beermug.h"
 #include "Bin.h"
-#include "./Engine/Image.h"
+#include "BackGround.h"
+
+#include "./Engine/Camera.h"
 
 ChickenRaceScene::ChickenRaceScene(GameObject *_pParent) :
-	GameObject(_pParent, "ChickenRaceScene"),
-	hBackGround_(-1)
+	GameObject(_pParent, "ChickenRaceScene")
 {
 }
 
 void ChickenRaceScene::Initialize()
 {
-	hBackGround_ = Image::Load("Picture/back_ground.png");
-	transform_.scale_ = XMFLOAT3(1.25f, 1.25f, 1.0f);
+	XMFLOAT3 camPos{0.f, 0.f, -10.f};
+	Camera::SetPosition(camPos);
 
+
+	Instantiate<BackGround>(this);
 	Instantiate<Table>(this);
 }
 
@@ -25,8 +28,6 @@ void ChickenRaceScene::Update()
 
 void ChickenRaceScene::Draw()
 {
-	Image::SetTransform(hBackGround_, transform_);
-	Image::Draw(hBackGround_);
 }
 
 void ChickenRaceScene::Release()

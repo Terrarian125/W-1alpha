@@ -30,7 +30,16 @@ public:
 		return waterLevel_;
 	}
 
+	enum BeermugVariation
+	{
+		BEERMUG_CROSS_SECTION_L = 0,
+		BEERMUG_CROSS_SECTION_R,
+		BEERMUG,
+	};
 private:
+
+	inline static int beerMugID_{0};
+
 	int hModels_[3];
 	int modelIdx_ = 0;
 

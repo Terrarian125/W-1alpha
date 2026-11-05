@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Beermug.cpp" />
     <ClCompile Include="Beverage.cpp" />
     <ClCompile Include="Bin.cpp" />
@@ -183,6 +184,7 @@
     <ClCompile Include="WaterLevelHider.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BackGround.h" />
     <ClInclude Include="Beermug.h" />
     <ClInclude Include="Beverage.h" />
     <ClInclude Include="Bin.h" />

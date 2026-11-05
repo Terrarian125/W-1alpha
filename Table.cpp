@@ -1,11 +1,17 @@
 #include "Table.h"
-#include "../Engine/Model.h"
+
+#include "Engine/Model.h"
+#include "Engine/InputBinding.h"
+
 #include "Bin.h"
 #include "Beermug.h"
+#include "Player.h"
+#include "PlayerAction.h"
 
 Table::Table(GameObject *_pParent) :
 	GameObject(_pParent, "Table"),
-	hModel_(-1)
+	hModel_(-1),
+	pPlayers_()
 {
 }
 
@@ -16,36 +22,40 @@ void Table::Initialize()
 	transform_.scale_ = XMFLOAT3(7, 7, 7);
 	transform_.position_.y = -3;
 
-	for (auto &pBin : pBins_)
+	for (auto& pPlayer : pPlayers_)
 	{
-		pBin = Instantiate<Bin>(this);
+		pPlayer = Instantiate<Player>(this);
 	}
-	pBins_[0]->SetObjectName("bin1");
-	pBins_[0]->SetPosition(XMFLOAT3(-0.75, 0.1, 0));
-	pBins_[0]->SetRotate(XMFLOAT3(0, 0, -20));
-	pBins_[0]->SetScale(0.1);
+	std::map<PlayerAction, InputBinding> pIS1;
+	std::map<PlayerAction, InputBinding> pIS2;
+	auto& p1 = pPlayers_[0];
+	auto& p2 = pPlayers_[1];
 
-	pBins_[1]->SetObjectName("bin2");
-	pBins_[1]->SetPosition(XMFLOAT3(0.75, 0.1, 0));
-	pBins_[1]->SetRotate(XMFLOAT3(0, 180, -20));
-	pBins_[1]->SetScale(0.1);
+	pIS1.insert(std::make_pair(PlayerAction::POUR,
+							   InputBinding(DIK_SPACE,
+										  Input::ANASSIGNED,
+										  Pad(p1->GetPlayerID(), Input::ANASSIGNED))));
+	pIS1.insert(std::make_pair(PlayerAction::CONFIRMED,
+							   InputBinding(DIK_RETURN,
+										  Input::ANASSIGNED,
+										  Pad(p1->GetPlayerID(), Input::ANASSIGNED))));
 
-	for (auto &pBeermug : pBeermugs_)
-	{
-		pBeermug = Instantiate<Beermug>(this);
-	}
-	float scale = 0.15f;
-	pBeermugs_[0]->SetObjectName("mug1");
-	pBeermugs_[0]->SetPosition(XMFLOAT3(-0.3, 0.13, 0));
-	pBeermugs_[0]->SetRotate(XMFLOAT3(0, 0, 0));
-	pBeermugs_[0]->SetScale(scale);
+	pIS2.insert(std::make_pair(PlayerAction::POUR,
+							   InputBinding(DIK_LSHIFT,
+											Input::ANASSIGNED,
+											Pad(p2->GetPlayerID(), Input::ANASSIGNED))));
+	pIS2.insert(std::make_pair(PlayerAction::CONFIRMED,
+							   InputBinding(DIK_RSHIFT,
+											Input::ANASSIGNED,
+											Pad(p2->GetPlayerID(), Input::ANASSIGNED))));
 
-	pBeermugs_[1]->SetObjectName("mug2");
-	pBeermugs_[1]->SetModelIndex(1);
-	pBeermugs_[1]->SetPosition(XMFLOAT3(0.3, 0.13, 0));
-	pBeermugs_[1]->SetRotate(XMFLOAT3(0, 0, 0));
-	pBeermugs_[1]->SetScale(scale);
+	p1->SetPosition(XMFLOAT3(-0.75, 0.1, 0));
+	p1->SetRotate(XMFLOAT3(0, 0, 0));
+	p1->InputSet() = pIS1;
 
+	p2->SetPosition(XMFLOAT3(0.75, 0.1, 0));
+	p2->SetRotate(XMFLOAT3(0, 180, 0));
+	p2->InputSet() = pIS2;
 }
 
 void Table::Update()

@@ -10,7 +10,8 @@
 
 namespace
 {
-	bool isConfirmed = false;
+	bool isConfirmed{false};
+	int  pouringTime{0};
 }
 
 Bin::Bin(GameObject *_pParent) :
@@ -27,43 +28,26 @@ void Bin::Initialize()
 
 void Bin::Update()
 {
+	// 初期状態に戻す
+	if (transform_.rotate_.z <= -20.f and isPouring_)
+	{
+		isPouring_  = false;
+		pouringTime = 0;
+		transform_.rotate_.z = std::lerp(transform_.rotate_.z,
+										 -20.f,
+										 0.1f);
+	}
+
 	if (not(isConfirmed))
 	{
-		static float keyPushTime = 0;
-		if (Input::IsKey(DIK_SPACE))
-		{
-			keyPushTime++;
-			isPouring_ = true;
-			if (transform_.rotate_.z >= -40)
-			{
-				float t = std::clamp(keyPushTime / 60, 0.0f, 1.0f);
-				transform_.rotate_.z = -20.f - 20.f * sinf(t * XM_PIDIV2);
-			}
-		}
-
-		if (transform_.rotate_.z <= -20.f and not(Input::IsKey(DIK_SPACE)))
-		{
-			isPouring_ = false;
-			keyPushTime = 0;
-			transform_.rotate_.z = std::lerp(transform_.rotate_.z,
-											 -20.f,
-											 0.1f);
-		}
-		
-		if (Input::IsKeyDown(DIK_RETURN))
-		{
-			isConfirmed = true;
-		}
-	}
-	else
-	{
-		if (transform_.rotate_.z < -4.0f)
+		// オーバ時の修正
+		if (transform_.rotate_.z < -20.0f)
 		{
 			transform_.rotate_.z += 3;
 		}
 		else
 		{
-			transform_.rotate_.z = -4.0f;
+			transform_.rotate_.z = -20.0f;
 		}
 	}
 
@@ -95,3 +79,23 @@ void Bin::Draw()
 
 void Bin::Release()
 {}
+
+void Bin::Pouring()
+{
+	if (not(isConfirmed))
+	{
+		pouringTime++;
+		isPouring_ = true;
+		if (transform_.rotate_.z >= -40)
+		{
+			float t = std::clamp(pouringTime / 60.f, 0.0f, 1.0f);
+			transform_.rotate_.z = -20.f - 20.f * sinf(t * XM_PIDIV2);
+		}
+	}
+}
+
+void Bin::Conform()
+{
+	isConfirmed = true;
+	transform_.rotate_.z = 0;
+}

@@ -27,11 +27,12 @@ void Beermug::Initialize()
 {
 	pBeverage_ = Instantiate<Beverage>(this);
 
-	hModels_[0] = Model::Load("Model/beermug_L.fbx");
-	hModels_[1] = Model::Load("Model/beermug_R.fbx");
-	hModels_[2] = Model::Load("Model/wood_beermug_mock.fbx");
+	hModels_[BEERMUG_CROSS_SECTION_L] = Model::Load("Model/beermug_L.fbx");
+	hModels_[BEERMUG_CROSS_SECTION_R] = Model::Load("Model/beermug_R.fbx");
+	hModels_[BEERMUG]                 = Model::Load("Model/wood_beermug_mock.fbx");
 
-	pBin_ = static_cast<Bin*>(FindObject("bin1"));
+	pBin_ = static_cast<Bin*>(FindObject("Bin" + std::to_string(beerMugID_)));
+	beerMugID_ += 1;
 }
 
 void Beermug::Update()
