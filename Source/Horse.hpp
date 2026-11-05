@@ -1,5 +1,6 @@
 #pragma once
 #include "../Engine/GameObject.h"
+#include "../Engine/BoxCollider.h"
 
 class Horse : public GameObject
 {
@@ -16,4 +17,6 @@ private:
 	float jumpHeight_;
 	float jumpSpeed_;
 	float velocity_;
+
+	BoxCollider* boxCollider_;
 };
