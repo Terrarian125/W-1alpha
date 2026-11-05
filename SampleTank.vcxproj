@@ -138,11 +138,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Bullet.cpp" />
-    <ClCompile Include="Cannon.cpp" />
     <ClCompile Include="ClearScene.cpp" />
     <ClCompile Include="ControllerTest.cpp" />
-    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Engine\Audio.cpp" />
     <ClCompile Include="Engine\BillBoard.cpp" />
     <ClCompile Include="Engine\BoxCollider.cpp" />
@@ -185,14 +182,10 @@
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="PlaySceneButton.cpp" />
-    <ClCompile Include="Tank.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bullet.h" />
-    <ClInclude Include="Cannon.h" />
     <ClInclude Include="ClearScene.h" />
     <ClInclude Include="ControllerTest.h" />
-    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Engine\Audio.h" />
     <ClInclude Include="Engine\BillBoard.h" />
     <ClInclude Include="Engine\BoxCollider.h" />
@@ -240,7 +233,6 @@
     <ClInclude Include="Ground.h" />
     <ClInclude Include="PlaySceneButton.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Tank.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Debug3D.hlsl">
