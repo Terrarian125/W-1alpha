@@ -22,6 +22,16 @@ public:
     void SetScreenSize(float screenWidth, float screenHeight);
     void Reset();
 
+    bool IsGameFinished() const
+    {
+        return gameFinished_;
+    }
+
+    int GetWinnerSide() const
+    {
+        return winnerSide_;
+    }
+
 private:
     void OnStartClicked();
     void OnStopClicked(int side);
@@ -46,7 +56,7 @@ private:
     double rightTime_ = 0.0;
     int leftFalseStarts_ = 0;
     int rightFalseStarts_ = 0;
-    int winnerSide_ = 0; // -1: 左、1: 右、0: 引き分け
+    int winnerSide_ = 0; //-1: 左、1: 右、0: 引き分け
     std::string resultText_;
 
     ControllerTest controllerTest_; //コントローラーのテスト用

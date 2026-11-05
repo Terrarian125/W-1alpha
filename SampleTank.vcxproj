@@ -171,6 +171,7 @@
     <ClCompile Include="Engine\Texture.cpp" />
     <ClCompile Include="Engine\Transform.cpp" />
     <ClCompile Include="Engine\VFX.cpp" />
+    <ClCompile Include="Game01Player.cpp" />
     <ClCompile Include="GameoverScene.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
@@ -182,8 +183,6 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Infomation.cpp" />
     <ClCompile Include="PlayScene.cpp" />
-    <ClCompile Include="Player_L.cpp" />
-    <ClCompile Include="Player_R.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="PlaySceneButton.cpp" />
     <ClCompile Include="Tank.cpp" />
@@ -223,6 +222,7 @@
     <ClInclude Include="Engine\Texture.h" />
     <ClInclude Include="Engine\Transform.h" />
     <ClInclude Include="Engine\VFX.h" />
+    <ClInclude Include="Game01Player.h" />
     <ClInclude Include="GameoverScene.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
@@ -237,8 +237,6 @@
     <ClInclude Include="Infomation.h" />
     <ClInclude Include="PlayerAction.h" />
     <ClInclude Include="PlayScene.h" />
-    <ClInclude Include="Player_L.h" />
-    <ClInclude Include="Player_R.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="PlaySceneButton.h" />
     <ClInclude Include="resource.h" />

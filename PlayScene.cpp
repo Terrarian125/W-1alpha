@@ -1,6 +1,7 @@
 #include "PlayScene.h"
-#include "Player_L.h"
-#include "Player_R.h"
+//#include "Player_L.h"
+//#include "Player_R.h"
+#include "Game01Player.h"
 #include "Ground.h"
 //#include "Enemy.h"
 #include "Infomation.h"
@@ -17,15 +18,35 @@ PlayScene::PlayScene(GameObject * parent)
 //初期化
 void PlayScene::Initialize()
 {
-    Instantiate<Player_L>(this);
-    Instantiate<Player_R>(this);
+    //左プレイヤー
+    leftPlayer_ = new Game01Player(
+        this,
+        "Model/Cowboy01.fbx",
+        -4.0f,
+        90.0f
+    );
+
+    PushBackChild(leftPlayer_);
+    leftPlayer_->Initialize();
+
+    //右プレイヤー
+    rightPlayer_ = new Game01Player(
+        this,
+        "Model/Cowboy02.fbx",
+        4.0f,
+        270.0f
+    );
+
+    PushBackChild(rightPlayer_);
+    rightPlayer_->Initialize();
+
+    //地面
     Instantiate<Ground>(this);
 
- /*   for (int i = 0; i < ENEMY_NUM; ++i)
-        Instantiate<Enemy>(this);*/
-
+    //UI情報
     Instantiate<Infomation>(this);
 
+    //フォント
     text_.Initialize("Fonts/Rye-Regular.ttf", 32.0f);
 
     const ImVec2 size = ImGui::GetIO().DisplaySize;
@@ -40,18 +61,40 @@ void PlayScene::Update()
 //描画
 void PlayScene::Draw()
 {
-    //text_.Draw(32, 32, "Yes!TakasuClinic");
-
-    //ImGui::Begin("PlayScene Debug");
-    //ImGui::Text("PlayScene::Draw called");
-
-    //if (startButton != nullptr)
-    //{
-    //    startButton->Draw();
-    //}
     const ImVec2 size = ImGui::GetIO().DisplaySize;
     playSceneButton_.SetScreenSize(size.x, size.y);
     playSceneButton_.Draw();
+
+    //試合終了時の処理
+    if (playSceneButton_.IsGameFinished())
+    {
+        const int winner = playSceneButton_.GetWinnerSide();
+
+        //左が勝利 → 右が倒れる
+        if (winner == -1)
+        {
+            leftPlayer_->SetFallen(false);
+            rightPlayer_->SetFallen(true);
+        }
+        //右が勝利 → 左が倒れる
+        else if (winner == 1)
+        {
+            leftPlayer_->SetFallen(true);
+            rightPlayer_->SetFallen(false);
+        }
+        //引き分け
+        else
+        {
+            leftPlayer_->SetFallen(false);
+            rightPlayer_->SetFallen(false);
+        }
+    }
+    else
+    {
+        //試合中は両者起立
+        leftPlayer_->SetFallen(false);
+        rightPlayer_->SetFallen(false);
+    }
 }
 
 //開放

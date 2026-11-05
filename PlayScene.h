@@ -4,6 +4,7 @@
 #include "Engine/GuiButton.h"
 #include "Engine/GameTimer.h"
 #include "PlaySceneButton.h"
+#include "Game01Player.h"
 
 //プレイシーンを管理するクラス
 class PlayScene : public GameObject
@@ -32,4 +33,6 @@ public:
 
 private:
 	GuiButton* startButton = nullptr;
+	Game01Player* leftPlayer_ = nullptr;
+	Game01Player* rightPlayer_ = nullptr;
 };
