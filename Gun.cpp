@@ -98,8 +98,8 @@ void Gun::Move()
     // コントローラー対応
     {
         // XMFLOAT3 から float への変換が必要
-        rotate_.z += moveVector.z * f_z;
-        rotate_.y += moveVector.y * f_y;
+        rotate_.z += moveVector.y * f_z;
+        rotate_.y += moveVector.x * f_y;
     }
 
     //前進

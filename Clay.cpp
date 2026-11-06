@@ -130,20 +130,18 @@ void Clay::Move()
        //position_[1].y -= 2.5f;
     }
 
-    /*
-    position_[0].x += 0.15f;
+    position_[0].x += 0.08f;
     rotate_[0].x += 2.5f;
     rotate_[0].y += 5.0f;
 
-    position_[1].x -= 0.15f;
+    position_[1].x -= 0.10f;
     rotate_[1].x -= 1.0f;
     if(OnDown_[1]) position_[1].y -= 0.02f;
     else position_[1].y += 0.02f;
 
-    position_[2].x += 0.30f;
-    if (OnDown_[2]) position_[2].y -= 0.5f;
-    else position_[2].y += 0.5f;
-    */
+    position_[2].x += 0.15f;
+    if (OnDown_[2]) position_[2].y -= 0.08f;
+    else position_[2].y += 0.08f;
 }
 
 //•`‰æ

@@ -13,7 +13,7 @@ using namespace std;
 // コンストラクタ
 UI::UI(GameObject* parent)
     : GameObject(parent, "Reticle"), position_{ { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f } }, hImage_{ (-1), (-1) },
-    Bullet_num(6), /*Score(0),*/ Game_Timer(30.0f)
+    Bullet_num(999), /*Score(0),*/ Game_Timer(30.0f)
 {
 }
 
@@ -83,6 +83,7 @@ void UI::Draw()
         // 弾の残数
         char str[64];
         sprintf_s(str, "x %d", Bullet_num);
+        // sprintf_s(str, "x ---");
         textB_num_.Draw(90, 600, str);
     }
 
