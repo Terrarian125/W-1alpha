@@ -2,37 +2,37 @@
 #include "Engine/GameObject.h"
 #include "Engine/FontText.hpp"
 
-//éŠƒã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹
+//e‚ğŠÇ—‚·‚éƒNƒ‰ƒX
 class Gun : public GameObject
 {
-    FontText textGun_;       //ãƒ†ã‚­ã‚¹ãƒˆæç”»ç”¨ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+    FontText textGun_;       //ƒeƒLƒXƒg•`‰æ—p‚ÌƒIƒuƒWƒFƒNƒg
 
-    XMFLOAT3 position_; // ä½ç½®
-    XMFLOAT3 rotate_;   // å›è»¢
-    XMFLOAT3 scale_;    // æ‹¡å¤§ç‡
+    XMFLOAT3 position_; // ˆÊ’u
+    XMFLOAT3 rotate_;   // ‰ñ“]
+    XMFLOAT3 scale_;    // Šg‘å—¦
 
-    int hModel_;        // ãƒ¢ãƒ‡ãƒ«ç•ªå·
-    //int hImage_;      // ç”»åƒèª­ã¿è¾¼ã¿
+    int hModel_;        // ƒ‚ƒfƒ‹”Ô†
+    //int hImage_;      // ‰æ‘œ“Ç‚İ‚İ
 
-    //ç§»å‹•
+    //ˆÚ“®
     void Move();
 
 public:
-    //ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+    //ƒRƒ“ƒXƒgƒ‰ƒNƒ^
     Gun(GameObject* parent);
 
-    //ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+    //ƒfƒXƒgƒ‰ƒNƒ^
     ~Gun();
 
-    //åˆæœŸåŒ–
+    //‰Šú‰»
     void Initialize() override;
 
-    //æ›´æ–°
+    //XV
     void Update() override;
 
-    //æç”»
+    //•`‰æ
     void Draw() override;
 
-    //é–‹æ”¾
+    //ŠJ•ú
     void Release() override;
 };

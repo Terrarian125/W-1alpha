@@ -2,6 +2,8 @@
 #include "Engine/GameObject.h"
 #include "Engine/FontText.hpp"
 
+class Clay;
+
 // UIを管理するクラス
 class UI : public GameObject
 {
@@ -18,10 +20,13 @@ class UI : public GameObject
     int hImage_[2];
 
     int Bullet_num;   // 残弾数
-    int Score;        // スコア
+    //int Score;        // スコア
     float Game_Timer; // 試合時間
 
     bool triggerOld_ = false;
+    
+    // クレーのポインタを参照
+    Clay* sc = nullptr;
 
 public:
     // コンストラクタ

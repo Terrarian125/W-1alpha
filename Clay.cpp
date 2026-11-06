@@ -8,10 +8,14 @@
 #include "Engine/Camera.h"
 using namespace DirectX;
 
+// staticメンバの実体 ※これ書かないとスコア加算されない
+int Clay::TotalScore_ = 0;
+
 //コンストラクタ
 Clay::Clay(GameObject* parent)
     :GameObject(parent, "Clay"), position_{ { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f } },
-    hModel_{ (-1,-1,-1) }, OnDown_{ true, true, false }, IsDead_{ false, false, false }
+    hModel_{ (-1,-1,-1) }, OnDown_{ true, true, false }, IsDead_{ false, false, false },
+    Score_{ (0, 0, 0) }
 {
 }
 
@@ -23,6 +27,9 @@ Clay::~Clay()
 //初期化
 void Clay::Initialize()
 {
+    // ここで合計スコアをリセット
+    ScoreReset();
+
     //モデルデータのロード
     hModel_[0] = Model::Load("/Model/Dish00.fbx");
     assert(hModel_[0] >= 0);
@@ -40,17 +47,20 @@ void Clay::Initialize()
     // Y 2.0～3.0
     // Z - 6.5～ - 8.0
 
-    position_[0] = { 0.0f, 3.0f, 0.0f }; // 位置
+    position_[0] = { 0.0f, 3.0f, 1.0f }; // 位置
     rotate_[0]   = { 0.0f, 0.0f, 0.0f }; // 回転
     scale_[0]    = { 0.2f, 0.2f, 0.2f }; // 拡大率
+    Score_[0] = 10; // スコア
 
     position_[1] = { 0.8f, 1.0f, 0.0f }; // 位置
     rotate_[1]   = { 0.0f, 0.0f, 0.0f }; // 回転
     scale_[1]    = { 0.2f, 0.2f, 0.2f }; // 拡大率
+    Score_[1] = 50; // スコア
 
     position_[2] = { -0.4f, 0.0f, 0.2f }; // 位置
     rotate_[2]   = { 0.0f, 0.0f, 0.0f }; // 回転
     scale_[2]    = { 0.2f, 0.2f, 0.2f }; // 拡大率
+    Score_[2] = 15; // スコア
 
     //当たり判定追加
     //SphereCollider* collision = new SphereCollider(XMFLOAT3(0.0f, 0.1f, 0.0f), 0.8f);
@@ -63,7 +73,6 @@ void Clay::Initialize()
 void Clay::Update()
 {
     Move();
-
 
     // 銃の回転の上限指定
     {
@@ -234,6 +243,9 @@ bool Clay::TryBreak(const XMFLOAT2& reticleNdc)
 
     // 命中したクレーを壊す
     IsDead_[hit] = true;
+
+    // 合計スコアに加算
+    TotalScore_ += Score_[hit];
 
     // 全部壊れたら自分を消す
     bool allBroken = true;

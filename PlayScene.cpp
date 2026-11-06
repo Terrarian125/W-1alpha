@@ -20,7 +20,7 @@ PlayScene::PlayScene(GameObject * parent)
 void PlayScene::Initialize()
 {
     // レティクルの画像のロード
-    hBackGround_ = Image::Load("Image/pexels-jplenio-3131634.jpg");
+    hBackGround_ = Image::Load("Image/BG.jpg");
     assert(hBackGround_ >= 0);
 
     //Instantiate<Tank>(this);

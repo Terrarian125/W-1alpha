@@ -21,9 +21,13 @@ class Clay : public GameObject
     bool OnDown_[3]; // 下がるか上がるかのフラグ　    ※ true：下がる / false：上がる
     bool IsDead_[3]; // クレーの死亡しているかフラグ　※ true：死亡 / false：生存
 
-    const float HitRange = 0.8f; // 当たり判定の大きさ
+    const float HitRange = 0.5f; // 当たり判定の大きさ
+
+    int Score_[3];          // 各クレーごとにスコア
+    static int TotalScore_; // 合計のスコア
 
 public:
+
     //コンストラクタ
     Clay(GameObject* parent);
 
@@ -35,7 +39,6 @@ public:
 
     //更新
     void Update() override;
-
 
     //描画
     void Draw() override;
@@ -52,4 +55,11 @@ public:
 
     // 発砲時、レティクルが重なっているクレーがあれば壊す
     bool TryBreak(const XMFLOAT2& reticleNdc);
+
+    // 合計スコアを取得
+    static int GetTotalScore() { return TotalScore_; }
+
+    // 合計スコアをリセット
+    static void ScoreReset() { TotalScore_ = 0; }
+
 };

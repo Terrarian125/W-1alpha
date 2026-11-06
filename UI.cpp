@@ -13,7 +13,7 @@ using namespace std;
 // コンストラクタ
 UI::UI(GameObject* parent)
     : GameObject(parent, "Reticle"), position_{ { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f } }, hImage_{ (-1), (-1) },
-    Bullet_num(6), Score(0), Game_Timer(30.0f)
+    Bullet_num(6), /*Score(0),*/ Game_Timer(30.0f)
 {
 }
 
@@ -63,7 +63,7 @@ void UI::Update()
             || triggerNow && !triggerOld_))
         {
             Bullet_num--;
-            Score += 20;
+            //Score += 20;
         }
 
         triggerOld_ = triggerNow;
@@ -96,7 +96,7 @@ void UI::Draw()
     // スコア表示
     {
         char str[64];
-        sprintf_s(str, "%.5d", Score);
+        sprintf_s(str, "%.5d", sc->GetTotalScore());
         textScore_.Draw(100, 20, str);
     }
 

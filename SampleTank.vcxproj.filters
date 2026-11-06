@@ -98,22 +98,7 @@
     <ClCompile Include="Engine\Transform.cpp">
       <Filter>01Engine\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet.cpp">
-      <Filter>03Scene\01Play</Filter>
-    </ClCompile>
-    <ClCompile Include="Cannon.cpp">
-      <Filter>03Scene\01Play</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>03Scene\01Play</Filter>
-    </ClCompile>
-    <ClCompile Include="Ground.cpp">
-      <Filter>03Scene\01Play</Filter>
-    </ClCompile>
     <ClCompile Include="PlayScene.cpp">
-      <Filter>03Scene\01Play</Filter>
-    </ClCompile>
-    <ClCompile Include="Tank.cpp">
       <Filter>03Scene\01Play</Filter>
     </ClCompile>
     <ClCompile Include="ClearScene.cpp">
@@ -207,22 +192,7 @@
     <ClInclude Include="Engine\Transform.h">
       <Filter>01Engine\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Bullet.h">
-      <Filter>03Scene\01Play</Filter>
-    </ClInclude>
-    <ClInclude Include="Cannon.h">
-      <Filter>03Scene\01Play</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>03Scene\01Play</Filter>
-    </ClInclude>
-    <ClInclude Include="Ground.h">
-      <Filter>03Scene\01Play</Filter>
-    </ClInclude>
     <ClInclude Include="PlayScene.h">
-      <Filter>03Scene\01Play</Filter>
-    </ClInclude>
-    <ClInclude Include="Tank.h">
       <Filter>03Scene\01Play</Filter>
     </ClInclude>
     <ClInclude Include="ClearScene.h">
