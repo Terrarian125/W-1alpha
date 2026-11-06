@@ -30,4 +30,6 @@ public:
 
 	//モデル番号のゲッター
 	int GetModelHandle() { return hModel_; }
+	//int hBuilding_[1];              //建物モデル番号
+	//Transform buildingTransform_[1]; //建物のTransform
 };
