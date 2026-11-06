@@ -80,6 +80,7 @@ class FbxParts
 		
 	VERTEX *pVertexData_;
 	DWORD** ppIndexData_;
+	//DWORD* pControlPointIndices_;//分割後の頂点が元々どのControl Pointだったか
 
 
 	//【頂点バッファ】

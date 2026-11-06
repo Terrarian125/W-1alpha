@@ -19,23 +19,13 @@ PlayScene::PlayScene(GameObject * parent)
 void PlayScene::Initialize()
 {
     //左プレイヤー
-    leftPlayer_ = new Game01Player(
-        this,
-        "Model/Cowboy01.fbx",
-        -4.0f,
-        90.0f
-    );
+    leftPlayer_ = new Game01Player(this,"Model/Cowboy01.fbx",-4.0f,90.0f);
 
     PushBackChild(leftPlayer_);
     leftPlayer_->Initialize();
 
     //右プレイヤー
-    rightPlayer_ = new Game01Player(
-        this,
-        "Model/Cowboy02.fbx",
-        4.0f,
-        270.0f
-    );
+    rightPlayer_ = new Game01Player(this,"Model/Cowboy02.fbx",4.0f,270.0f);
 
     PushBackChild(rightPlayer_);
     rightPlayer_->Initialize();
