@@ -19,17 +19,23 @@ public:
 		return isPouring_;
 	}
 
+	// 注ぐ
 	void Pouring();
+
+	// 液量確定
 	void Conform();
 
 private:
 	int  hModel_;
 
+	// 注ぎ操作を行った時間（フレーム単位）
 	int  pouringTime_;
 	bool isPouring_;
 	bool isConfirmed_;
 
 	Beermug* pBeermug_;
+
+	// Beermugのインスタンスを取得できたか？
 	bool  beermugInstanceRetrieved_;
 
 };

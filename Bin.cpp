@@ -9,12 +9,19 @@
 
 #include <imgui.h>
 
+namespace
+{
+	const float IDLE_ANGLE_Z{ -20.0f };
+	const float POURING_ANGLE_Z{ -40.f };
+}
+
 Bin::Bin(GameObject *_pParent) :
 	GameObject(_pParent, "Bin"),
 	hModel_(-1),
 	pouringTime_(),
 	isPouring_(false),
 	isConfirmed_(false),
+	pBeermug_(nullptr),
 	beermugInstanceRetrieved_(false)
 {
 }
@@ -40,14 +47,14 @@ void Bin::Update()
 			pouringTime_++;
 			
 			isPouring_ = true;
-			if (transform_.rotate_.z >= -40)
+			if (transform_.rotate_.z >= POURING_ANGLE_Z)
 			{
 				// 正規化された注ぎ時の最大角度まで倒れる時間
 				float normalizedTime = std::clamp(pouringTime_ / 50.f, 0.0f, 1.f);
 
 				// 注ぎ時の最大角度に掛ける係数
 				float c = sinf((normalizedTime * XM_PI) / 2);
-				transform_.rotate_.z = -20.f - 20.f * c;
+				transform_.rotate_.z = IDLE_ANGLE_Z - 20.f * c;
 			}
 
 			 pBeermug_->Fill();
@@ -55,11 +62,13 @@ void Bin::Update()
 		else
 		{
 			// 注ぎコマンドが入力されていない場合、待機時の角度に戻る
-			if (transform_.rotate_.z < -20.f)
+			if (transform_.rotate_.z < IDLE_ANGLE_Z)
 			{
 				pouringTime_ = 0;
+
+				static float bias = 0.5f;
 				transform_.rotate_.z = std::lerp(transform_.rotate_.z,
-												 -19.f,
+												 IDLE_ANGLE_Z + bias,
 												 0.1f);
 			}
 		}
