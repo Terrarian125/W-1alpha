@@ -21,6 +21,9 @@ public:
 	void Conform();
 
 private:
-	int hModel_;
+	int  hModel_;
+
+	int  pouringTime_;
 	bool isPouring_;
+	bool isConfirmed_;
 };

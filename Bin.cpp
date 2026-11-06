@@ -8,16 +8,12 @@
 
 #include <imgui.h>
 
-namespace
-{
-	bool isConfirmed{false};
-	int  pouringTime{0};
-}
-
 Bin::Bin(GameObject *_pParent) :
 	GameObject(_pParent, "Bin"),
 	hModel_(-1),
-	isPouring_(false)
+	pouringTime_(),
+	isPouring_(false),
+	isConfirmed_(false)
 {
 }
 
@@ -28,29 +24,39 @@ void Bin::Initialize()
 
 void Bin::Update()
 {
-	// 初期状態に戻す
-	if (transform_.rotate_.z <= -20.f and isPouring_)
+	if (not(isConfirmed_))
 	{
-		isPouring_  = false;
-		pouringTime = 0;
-		transform_.rotate_.z = std::lerp(transform_.rotate_.z,
-										 -20.f,
-										 0.1f);
-	}
-
-	if (not(isConfirmed))
-	{
-		// オーバ時の修正
-		if (transform_.rotate_.z < -20.0f)
+		if (isPouring_)
 		{
-			transform_.rotate_.z += 3;
+			ImGui::Begin("BinRotComp");
+			pouringTime_++;
+			ImGui::InputInt("pT", &pouringTime_);
+			
+			isPouring_ = true;
+			if (transform_.rotate_.z >= -40)
+			{
+				float t = std::clamp(pouringTime_ / 50.f, 0.0f, 1.f);
+				float c = sinf((t * XM_PI) / 2);
+				transform_.rotate_.z = -20.f - 20.f * c;
+			
+				ImGui::InputFloat("t", &t);
+				ImGui::InputFloat("c", &c);
+				ImGui::End();
+			}
 		}
 		else
 		{
-			transform_.rotate_.z = -20.0f;
+			if (transform_.rotate_.z < -20.f)
+			{
+				pouringTime_ = 0;
+				transform_.rotate_.z = std::lerp(transform_.rotate_.z,
+												 -19.f,
+												 0.1f);
+			}
 		}
 	}
 
+	isPouring_ = false;
 
 #ifdef _DEBUG
 	std::string panelName{ "ObjectTS" + objectName_ };
@@ -82,20 +88,14 @@ void Bin::Release()
 
 void Bin::Pouring()
 {
-	if (not(isConfirmed))
+	if (not(isConfirmed_))
 	{
-		pouringTime++;
 		isPouring_ = true;
-		if (transform_.rotate_.z >= -40)
-		{
-			float t = std::clamp(pouringTime / 60.f, 0.0f, 1.0f);
-			transform_.rotate_.z = -20.f - 20.f * sinf(t * XM_PIDIV2);
-		}
 	}
 }
 
 void Bin::Conform()
 {
-	isConfirmed = true;
+	isConfirmed_ = true;
 	transform_.rotate_.z = 0;
 }

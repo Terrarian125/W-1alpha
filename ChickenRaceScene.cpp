@@ -17,7 +17,6 @@ void ChickenRaceScene::Initialize()
 	XMFLOAT3 camPos{0.f, 0.f, -10.f};
 	Camera::SetPosition(camPos);
 
-
 	Instantiate<BackGround>(this);
 	Instantiate<Table>(this);
 }

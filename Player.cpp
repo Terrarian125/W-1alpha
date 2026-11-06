@@ -26,8 +26,10 @@ void Player::Initialize()
     // Transform parent is Table
     pBeermug_ = Instantiate<Beermug>(GetParent());
     pBeermug_->SetObjectName("Beermug" + std::to_string(playerID_));
+    pBeermug_->SetPosition(-0.25, 0, 0);
     if (playerID_ == 1)
     {
+        pBeermug_->SetPosition(0.25, 0, 0);
         pBeermug_->SetModelIndex(Beermug::BeermugVariation::BEERMUG_CROSS_SECTION_R);
     }
     pBeermug_->SetScale(0.15f);
