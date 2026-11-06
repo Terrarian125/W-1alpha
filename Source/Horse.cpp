@@ -21,7 +21,8 @@ void Horse::Initialize()
 void Horse::Update()
 {
 	transform_.position_.z += speed_;
-	
+	transform_.rotate_.y = 0.0f;
+
 	if (speed_ < 5.0f)
 	{
 		speed_ += 0.01f;
@@ -44,10 +45,12 @@ void Horse::Update()
 	if (Input::IsPadButton(XINPUT_GAMEPAD_DPAD_LEFT) || Input::IsKey(DIK_LEFT))
 	{
 		transform_.position_.x -= 5.0f;
+		transform_.rotate_.y = -15.0f;
 	}
 	else if (Input::IsPadButton(XINPUT_GAMEPAD_DPAD_RIGHT) || Input::IsKey(DIK_RIGHT))
 	{
 		transform_.position_.x += 5.0f;
+		transform_.rotate_.y = 15.0f;
 	}
 	else
 	{
@@ -56,7 +59,7 @@ void Horse::Update()
 
 	constexpr float upPosition = 500.0f;
 	constexpr float backPosition = -500.0f;
-	Camera::SetPosition(XMFLOAT3(0, transform_.position_.y + upPosition, transform_.position_.z + backPosition));
+	Camera::SetPosition(XMFLOAT3(0, upPosition, transform_.position_.z + backPosition));
 	
 
 	float targetPositionX = 0;
