@@ -144,16 +144,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				}
 			}
 
+			
 
 			//指定した時間（FPSを60に設定した場合は60分の1秒）経過していたら更新処理
 			if ((nowTime - lastUpdateTime) * fpsLimit > 1000.0f)
 			{
+				deltaTime = (nowTime - lastUpdateTime) / 1000.0f;
+
 				//時間計測関連
 				lastUpdateTime = nowTime;	//現在の時間（最後に画面を更新した時間）を覚えておく
 				FPS++;						//画面更新回数をカウントする
-
-
-
 
 				//入力（キーボード、マウス、コントローラー）情報を更新
 				Input::Update();

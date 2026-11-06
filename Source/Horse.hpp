@@ -14,9 +14,11 @@ private:
 	int hModel_;
 	float speed_;
 
-	float jumpHeight_;
-	float jumpSpeed_;
 	float velocity_;
+	float gravity_;
+	float jumpPower_;
+
+	bool isGround_;
 
 	BoxCollider* boxCollider_;
 };

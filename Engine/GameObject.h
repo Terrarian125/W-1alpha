@@ -7,6 +7,7 @@
 #include "BoxCollider.h"
 #include "Transform.h"
 #include "XMFLOAT3Operator.h"
+#include "Global.h"
 
 
 

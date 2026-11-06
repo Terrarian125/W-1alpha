@@ -10,4 +10,5 @@ public:
 	void Draw() override;
 	void Release() override;
 private:
+	int hImage_;
 };
