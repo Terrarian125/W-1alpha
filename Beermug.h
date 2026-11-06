@@ -4,7 +4,6 @@
 
 class WaterLevelHider;
 class Beverage;
-class Bin;
 
 class Beermug : public GameObject
 {
@@ -36,16 +35,21 @@ public:
 		BEERMUG_CROSS_SECTION_R,
 		BEERMUG,
 	};
+
+	// 液量を増加させる
+	void Fill();
 private:
 
-	inline static int beerMugID_{0};
+	inline static int beerMugCount_{0};
+	int beerMugID_;
 
 	int hModels_[3];
 	int modelIdx_ = 0;
 
 	WaterLevelHider *pWLH_;
 	Beverage *pBeverage_;
-	Bin *pBin_;
 
 	float waterLevel_;
+	bool  isFilling_;
+	bool  isWLHInstanced_;
 };

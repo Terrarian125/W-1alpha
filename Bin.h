@@ -2,6 +2,8 @@
 
 #include "../Engine/GameObject.h"
 
+class Beermug;
+
 class Bin : public GameObject
 {
 public:
@@ -26,4 +28,8 @@ private:
 	int  pouringTime_;
 	bool isPouring_;
 	bool isConfirmed_;
+
+	Beermug* pBeermug_;
+	bool  beermugInstanceRetrieved_;
+
 };

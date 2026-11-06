@@ -2,6 +2,7 @@
 #include "./Engine/Model.h"
 #include "Engine/Input.h"
 #include "Engine/Global.h"
+#include "Beermug.h"
 
 #include <algorithm>
 #include <cmath>
@@ -13,7 +14,8 @@ Bin::Bin(GameObject *_pParent) :
 	hModel_(-1),
 	pouringTime_(),
 	isPouring_(false),
-	isConfirmed_(false)
+	isConfirmed_(false),
+	beermugInstanceRetrieved_(false)
 {
 }
 
@@ -24,28 +26,35 @@ void Bin::Initialize()
 
 void Bin::Update()
 {
+	if (not(beermugInstanceRetrieved_))
+	{
+		size_t pos = objectName_.size() - 1;
+		pBeermug_ = static_cast<Beermug*>(FindObject("Beermug" + objectName_.substr(pos)));
+		beermugInstanceRetrieved_ = true;
+	}
+
 	if (not(isConfirmed_))
 	{
 		if (isPouring_)
 		{
-			ImGui::Begin("BinRotComp");
 			pouringTime_++;
-			ImGui::InputInt("pT", &pouringTime_);
 			
 			isPouring_ = true;
 			if (transform_.rotate_.z >= -40)
 			{
-				float t = std::clamp(pouringTime_ / 50.f, 0.0f, 1.f);
-				float c = sinf((t * XM_PI) / 2);
+				// 正規化された注ぎ時の最大角度まで倒れる時間
+				float normalizedTime = std::clamp(pouringTime_ / 50.f, 0.0f, 1.f);
+
+				// 注ぎ時の最大角度に掛ける係数
+				float c = sinf((normalizedTime * XM_PI) / 2);
 				transform_.rotate_.z = -20.f - 20.f * c;
-			
-				ImGui::InputFloat("t", &t);
-				ImGui::InputFloat("c", &c);
-				ImGui::End();
 			}
+
+			 pBeermug_->Fill();
 		}
 		else
 		{
+			// 注ぎコマンドが入力されていない場合、待機時の角度に戻る
 			if (transform_.rotate_.z < -20.f)
 			{
 				pouringTime_ = 0;
