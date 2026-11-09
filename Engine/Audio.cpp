@@ -1,202 +1,326 @@
+#include <Windows.h>
 #include <xaudio2.h>
+#include <mfapi.h>
+#include <mfobjects.h>
+#include <mfidl.h>
+#include <mfreadwrite.h>
+#include <wrl/client.h>
+#include <cstdint>
+#include <cstring>
+#include <string>
+#include <utility>
 #include <vector>
 #include "Audio.h"
 
-#define SAFE_DELETE_ARRAY(p) if(p){delete[] p; p = nullptr;}
+#pragma comment(lib, "mfplat.lib")
+#pragma comment(lib, "mfreadwrite.lib")
+#pragma comment(lib, "mfuuid.lib")
+#pragma comment(lib, "ole32.lib")
+
+using Microsoft::WRL::ComPtr;
 
 namespace Audio
 {
-	//XAudio本体
-	IXAudio2* pXAudio = nullptr;
+    namespace
+    {
+        //XAudio本体
+        IXAudio2* pXAudio = nullptr;
 
-	//マスターボイス
-	IXAudio2MasteringVoice* pMasteringVoice = nullptr;
+        //マスターボイス
+        IXAudio2MasteringVoice* pMasteringVoice = nullptr;
 
-	//ファイル毎に必要な情報
-	struct AudioData
-	{
-		//サウンド情報
-		XAUDIO2_BUFFER buf = {};
+        //ファイル毎に必要な情報
+        struct AudioData
+        {
+            //サウンド情報
+            XAUDIO2_BUFFER buf = {};
 
-		//ソースボイス
-		IXAudio2SourceVoice** pSourceVoice = nullptr;
+            //デコードしたPCMデータ
+            std::vector<BYTE> pcmData;
 
-		//同時再生最大数
-		int svNum;
+            //PCMデータのフォーマット
+            std::vector<BYTE> waveFormat;
 
-		//ファイル名
-		std::string fileName;
-	};
-	std::vector<AudioData>	audioDatas;
-}
+            //ソースボイス
+            std::vector<IXAudio2SourceVoice*> sourceVoices;
 
-//初期化
-void Audio::Initialize()
-{
-	CoInitializeEx(0, COINIT_MULTITHREADED);
+            //ファイル名
+            std::string fileName;
+        };
+        std::vector<AudioData> audioDatas;
 
-	XAudio2Create(&pXAudio);
-	pXAudio->CreateMasteringVoice(&pMasteringVoice);
+        bool comReady = false;
+        bool ownsComInitialization = false;
+        bool mediaFoundationStarted = false;
 
-}
+        //Media FoundationでWAV/MP3をPCMへデコードする。
+        HRESULT DecodeToPcm(const std::string& fileName, AudioData& audio)
+        {
+            //Media Foundationへ渡すため、ファイル名をワイド文字列へ変換する。
+            const int wideLength = MultiByteToWideChar(
+                CP_ACP, 0, fileName.c_str(), -1, nullptr, 0);
+            if (wideLength <= 1)
+                return E_INVALIDARG;
 
-//サウンドファイル(.wav）をロード
-int Audio::Load(std::string fileName, bool isLoop, int svNum)
-{
-	//すでに同じファイルを使ってないかチェック
-	for (int i = 0; i < audioDatas.size(); i++)
-	{
-		if (audioDatas[i].fileName == fileName)
-		{
-			return i;
-		}
-	}
+            std::wstring path(static_cast<size_t>(wideLength), L'\0');
+            if (MultiByteToWideChar(
+                CP_ACP, 0, fileName.c_str(), -1, path.data(), wideLength) == 0)
+            {
+                return HRESULT_FROM_WIN32(GetLastError());
+            }
+            path.resize(static_cast<size_t>(wideLength - 1));
 
-	//チャンク構造体
-	struct Chunk
-	{
-		char	id[5] =""; 			// ID
-		unsigned int	size = 0;	// サイズ
-	};
+            //相対パスでもSource Readerが開けるよう、絶対パスにする。
+            const DWORD fullPathLength = GetFullPathNameW(path.c_str(), 0, nullptr, nullptr);
+            if (fullPathLength == 0)
+                return HRESULT_FROM_WIN32(GetLastError());
 
-	//ファイルを開く
-	HANDLE hFile;
-	hFile = CreateFile(fileName.c_str(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+            std::wstring fullPath(static_cast<size_t>(fullPathLength), L'\0');
+            const DWORD written = GetFullPathNameW(
+                path.c_str(), fullPathLength, fullPath.data(), nullptr);
+            if (written == 0 || written >= fullPathLength)
+                return HRESULT_FROM_WIN32(GetLastError());
+            fullPath.resize(written);
 
-	DWORD dwBytes = 0;
+            //ファイルの音声ストリームを読むSource Readerを作成する。
+            ComPtr<IMFSourceReader> reader;
+            HRESULT hr = MFCreateSourceReaderFromURL(
+                fullPath.c_str(), nullptr, reader.GetAddressOf());
+            if (FAILED(hr))
+                return hr;
 
-	Chunk riffChunk = { 0 };
-	ReadFile(hFile, &riffChunk.id, 4, &dwBytes, NULL);
-	ReadFile(hFile, &riffChunk.size, 4, &dwBytes, NULL);
+            //XAudio2で扱える16-bit PCMを出力形式に指定する。
+            ComPtr<IMFMediaType> outputType;
+            hr = MFCreateMediaType(outputType.GetAddressOf());
+            if (FAILED(hr))
+                return hr;
 
-	char wave[4] = "";
-	ReadFile(hFile, &wave, 4, &dwBytes, NULL);
+            hr = outputType->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Audio);
+            if (SUCCEEDED(hr))
+                hr = outputType->SetGUID(MF_MT_SUBTYPE, MFAudioFormat_PCM);
+            if (SUCCEEDED(hr))
+                hr = outputType->SetUINT32(MF_MT_AUDIO_BITS_PER_SAMPLE, 16);
+            if (FAILED(hr))
+                return hr;
 
-	Chunk formatChunk = { 0 };
-	while (formatChunk.id[0] != 'f') {
-		ReadFile(hFile, &formatChunk.id, 4, &dwBytes, NULL);
-	}
-	ReadFile(hFile, &formatChunk.size, 4, &dwBytes, NULL);
+            hr = reader->SetCurrentMediaType(
+                MF_SOURCE_READER_FIRST_AUDIO_STREAM, nullptr, outputType.Get());
+            if (FAILED(hr))
+                return hr;
 
+            //実際に設定されたPCM形式を取得する。
+            ComPtr<IMFMediaType> currentType;
+            hr = reader->GetCurrentMediaType(
+                MF_SOURCE_READER_FIRST_AUDIO_STREAM, currentType.GetAddressOf());
+            if (FAILED(hr))
+                return hr;
 
-	//フォーマットを読み取る
-	//https://learn.microsoft.com/ja-jp/windows/win32/api/mmeapi/ns-mmeapi-waveformatex
-	WAVEFORMATEX fmt;
-	ReadFile(hFile, &fmt.wFormatTag, 2, &dwBytes, NULL);		//形式
-	ReadFile(hFile, &fmt.nChannels, 2, &dwBytes, NULL);			//チャンネル（モノラル/ステレオ）
-	ReadFile(hFile, &fmt.nSamplesPerSec, 4, &dwBytes, NULL);	//サンプリング数
-	ReadFile(hFile, &fmt.nAvgBytesPerSec, 4, &dwBytes, NULL);	//1秒あたりのバイト数
-	ReadFile(hFile, &fmt.nBlockAlign, 2, &dwBytes, NULL);		//ブロック配置
-	ReadFile(hFile, &fmt.wBitsPerSample, 2, &dwBytes, NULL);	//サンプル当たりのビット数
+            //XAudio2用のWAVEFORMATEXを作り、AudioData内で保持する。
+            WAVEFORMATEX* waveFormat = nullptr;
+            UINT32 waveFormatSize = 0;
+            hr = MFCreateWaveFormatExFromMFMediaType(
+                currentType.Get(), &waveFormat, &waveFormatSize,
+                MFWaveFormatExConvertFlag_Normal);
+            if (FAILED(hr))
+                return hr;
 
+            if (waveFormatSize < sizeof(WAVEFORMATEX))
+            {
+                CoTaskMemFree(waveFormat);
+                return E_FAIL;
+            }
+            audio.waveFormat.resize(waveFormatSize);
+            std::memcpy(audio.waveFormat.data(), waveFormat, waveFormatSize);
+            CoTaskMemFree(waveFormat);
 
+            //サンプルを最後まで読み、PCMデータを連結する。
+            for (;;)
+            {
+                DWORD actualStream = 0;
+                DWORD streamFlags = 0;
+                LONGLONG timestamp = 0;
+                ComPtr<IMFSample> sample;
+                hr = reader->ReadSample(
+                    MF_SOURCE_READER_FIRST_AUDIO_STREAM, 0, &actualStream,
+                    &streamFlags, &timestamp, sample.GetAddressOf());
+                if (FAILED(hr))
+                    return hr;
 
-	//波形データの読み込み
-	Chunk data = { 0 };
-	while (true)
-	{
-		//次のデータのIDを調べる
-		ReadFile(hFile, &data.id, 4, &dwBytes, NULL);
+                if (sample)
+                {
+                    ComPtr<IMFMediaBuffer> mediaBuffer;
+                    hr = sample->ConvertToContiguousBuffer(mediaBuffer.GetAddressOf());
+                    if (FAILED(hr))
+                        return hr;
 
-		//「data」だったらループを抜けて次に進む
-		if (strcmp(data.id, "data") == 0)
-			break;
+                    BYTE* data = nullptr;
+                    DWORD currentLength = 0;
+                    hr = mediaBuffer->Lock(&data, nullptr, &currentLength);
+                    if (FAILED(hr))
+                        return hr;
 
-		//それ以外の情報ならサイズ調べて読み込む→使わない
-		else
-		{
-			//サイズ調べて
-			ReadFile(hFile, &data.size, 4, &dwBytes, NULL);
-			char* pBuffer = new char[data.size];
+                    if (currentLength > 0)
+                        audio.pcmData.insert(audio.pcmData.end(), data, data + currentLength);
+                    mediaBuffer->Unlock();
+                }
 
-			//無駄に読み込む
-			ReadFile(hFile, pBuffer, data.size, &dwBytes, NULL);
-		}
-	}
+                if ((streamFlags & MF_SOURCE_READERF_ENDOFSTREAM) != 0)
+                    break;
+            }
 
-	//データチャンクのサイズを取得
-	ReadFile(hFile, &data.size, 4, &dwBytes, NULL);
+            if (audio.pcmData.empty() || audio.pcmData.size() > UINT32_MAX)
+                return E_FAIL;
 
-	//波形データを読み込む
-	char* pBuffer = new char[data.size];
-	ReadFile(hFile, pBuffer, data.size, &dwBytes, NULL);
-	CloseHandle(hFile);
+            return S_OK;
+        }
+    }
 
+    //初期化
+    void Initialize()
+    {
+        //COMは一度だけ初期化する。シーン切り替え時の再呼び出しにも対応する。
+        if (!comReady)
+        {
+            const HRESULT comResult = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+            if (SUCCEEDED(comResult))
+            {
+                comReady = true;
+                ownsComInitialization = true;
+            }
+            else if (comResult == RPC_E_CHANGED_MODE)
+            {
+                comReady = true;
+            }
+        }
 
-	AudioData ad;
+        //Media Foundationを開始する。
+        if (comReady && !mediaFoundationStarted)
+            mediaFoundationStarted = SUCCEEDED(MFStartup(MF_VERSION, MFSTARTUP_FULL));
 
-	ad.fileName = fileName;
+        //XAudio本体とマスターボイスを作成する。
+        if (!pXAudio && SUCCEEDED(XAudio2Create(&pXAudio)))
+            pXAudio->CreateMasteringVoice(&pMasteringVoice);
+        else if (pXAudio && !pMasteringVoice)
+            pXAudio->CreateMasteringVoice(&pMasteringVoice);
+    }
 
-	ad.buf.pAudioData = (BYTE*)pBuffer;
-	ad.buf.Flags = XAUDIO2_END_OF_STREAM;
+    //サウンドファイル（WAV/MP3）をロード
+    int Load(std::string fileName, bool isLoop, int svNum)
+    {
+        //すでに同じファイルを使っていないかチェックする。
+        for (size_t i = 0; i < audioDatas.size(); ++i)
+        {
+            if (audioDatas[i].fileName == fileName)
+                return static_cast<int>(i);
+        }
 
-	if (isLoop)	ad.buf.LoopCount = XAUDIO2_LOOP_INFINITE;
+        if (!mediaFoundationStarted || !pXAudio || !pMasteringVoice || svNum <= 0)
+            return -1;
 
-	ad.buf.AudioBytes = data.size;
+        AudioData audio;
+        audio.fileName = fileName;
+        if (FAILED(DecodeToPcm(fileName, audio)))
+            return -1;
 
+        //PCM形式をXAudio2に渡してソースボイスを作成する。
+        const auto* format = reinterpret_cast<const WAVEFORMATEX*>(audio.waveFormat.data());
+        audio.sourceVoices.resize(static_cast<size_t>(svNum), nullptr);
+        for (IXAudio2SourceVoice*& sourceVoice : audio.sourceVoices)
+        {
+            if (FAILED(pXAudio->CreateSourceVoice(&sourceVoice, format)))
+            {
+                for (IXAudio2SourceVoice* createdVoice : audio.sourceVoices)
+                {
+                    if (createdVoice)
+                        createdVoice->DestroyVoice();
+                }
+                return -1;
+            }
+        }
 
-	ad.pSourceVoice = new IXAudio2SourceVoice * [svNum];
+        audio.buf.Flags = XAUDIO2_END_OF_STREAM;
+        audio.buf.AudioBytes = static_cast<UINT32>(audio.pcmData.size());
+        audio.buf.LoopCount = isLoop ? XAUDIO2_LOOP_INFINITE : 0;
 
-	for (int i = 0; i < svNum; i++)
-	{
-		pXAudio->CreateSourceVoice(&ad.pSourceVoice[i], &fmt);
-	}
-	ad.svNum = svNum;
-	audioDatas.push_back(ad);
+        audioDatas.push_back(std::move(audio));
+        AudioData& storedAudio = audioDatas.back();
+        storedAudio.buf.pAudioData = storedAudio.pcmData.data();
+        return static_cast<int>(audioDatas.size() - 1);
+    }
 
-	//SAFE_DELETE_ARRAY(pBuffer);
+    //再生
+    void Play(int ID)
+    {
+        if (ID < 0 || static_cast<size_t>(ID) >= audioDatas.size())
+            return;
 
-	return (int)audioDatas.size() - 1;
-}
+        AudioData& audio = audioDatas[static_cast<size_t>(ID)];
+        for (IXAudio2SourceVoice* sourceVoice : audio.sourceVoices)
+        {
+            XAUDIO2_VOICE_STATE state = {};
+            sourceVoice->GetState(&state);
 
-//再生
-void Audio::Play(int ID)
-{
-	for (int i = 0; i < audioDatas[ID].svNum; i++)
-	{
-		XAUDIO2_VOICE_STATE state;
-		audioDatas[ID].pSourceVoice[i]->GetState(&state);
+            if (state.BuffersQueued == 0)
+            {
+                if (SUCCEEDED(sourceVoice->SubmitSourceBuffer(&audio.buf)))
+                    sourceVoice->Start();
+                break;
+            }
+        }
+    }
 
-		if (state.BuffersQueued == 0)
-		{
-			audioDatas[ID].pSourceVoice[i]->SubmitSourceBuffer(&audioDatas[ID].buf);
-			audioDatas[ID].pSourceVoice[i]->Start();
-			break;
-		}
-	}
-}
+    //停止
+    void Stop(int ID)
+    {
+        if (ID < 0 || static_cast<size_t>(ID) >= audioDatas.size())
+            return;
 
+        for (IXAudio2SourceVoice* sourceVoice : audioDatas[static_cast<size_t>(ID)].sourceVoices)
+        {
+            sourceVoice->Stop();
+            sourceVoice->FlushSourceBuffers();
+        }
+    }
 
-void Audio::Stop(int ID)
-{
-	for (int i = 0; i < audioDatas[ID].svNum; i++)
-	{
-		audioDatas[ID].pSourceVoice[i]->Stop();
-		audioDatas[ID].pSourceVoice[i]->FlushSourceBuffers();
-	}
-}
+    //シーンごとの解放
+    void Release()
+    {
+        for (AudioData& audio : audioDatas)
+        {
+            for (IXAudio2SourceVoice* sourceVoice : audio.sourceVoices)
+            {
+                if (sourceVoice)
+                    sourceVoice->DestroyVoice();
+            }
+        }
+        audioDatas.clear();
+    }
 
-//シーンごとの解放
-void Audio::Release()
-{
-	for (int i = 0; i < audioDatas.size(); i++)
-	{
-		for (int j = 0; j < audioDatas[i].svNum; j++)
-		{
-			audioDatas[i].pSourceVoice[j]->DestroyVoice();
-		}
-		SAFE_DELETE_ARRAY(audioDatas[i].buf.pAudioData);
-	}
-	audioDatas.clear();
-}
+    //本体の解放
+    void AllRelease()
+    {
+        Release();
 
-//本体の解放
-void Audio::AllRelease()
-{
-	CoUninitialize();
-	if (pMasteringVoice)
-	{
-		pMasteringVoice->DestroyVoice();
-	}
-	pXAudio->Release();
+        if (pMasteringVoice)
+        {
+            pMasteringVoice->DestroyVoice();
+            pMasteringVoice = nullptr;
+        }
+        if (pXAudio)
+        {
+            pXAudio->Release();
+            pXAudio = nullptr;
+        }
+        if (mediaFoundationStarted)
+        {
+            MFShutdown();
+            mediaFoundationStarted = false;
+        }
+        if (ownsComInitialization)
+        {
+            CoUninitialize();
+            ownsComInitialization = false;
+        }
+        comReady = false;
+    }
 }
