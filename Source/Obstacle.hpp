@@ -1,7 +1,8 @@
 #pragma once
 #include "../Engine/GameObject.h"
 #include "../Engine/Model.h"
-#include "../Engine/Collider.h"
+#include "../Engine/BoxCollider.h"
+#include  "../Engine/SphereCollider.h"
 
 // 障害物クラスを管理するクラス
 class Obstacle : public GameObject
