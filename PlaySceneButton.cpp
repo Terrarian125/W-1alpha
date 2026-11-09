@@ -1,4 +1,5 @@
 #include "PlaySceneButton.h"
+#include "Engine/Audio.h"
 #include "Engine/Input.h"
 #include <imgui.h>
 #include <algorithm>
@@ -15,6 +16,7 @@ bool PlaySceneButton::Initialize(
 
     font_ = font;
     timer_ = timer;
+    buttonSeHandle_ = Audio::Load("Audio/Game01Se04.mp3", false, 3);
     SetScreenSize(screenWidth, screenHeight);
 
     startButton_.reset(new GuiButton(0, 0, 180, 56, "START"));
@@ -92,6 +94,9 @@ void PlaySceneButton::OnStartClicked()
     if (!timer_ || timer_->IsWaiting() || timer_->IsRunning())
         return;
 
+    if (startButton_ && startButton_->IsActive())
+        Audio::Play(buttonSeHandle_);
+
     //新しいゲーム開始時はフライング回数をリセット
     leftFalseStarts_ = 0;
     rightFalseStarts_ = 0;
@@ -134,6 +139,12 @@ void PlaySceneButton::ResetRound(bool restartTimer)
 
 void PlaySceneButton::OnStopClicked(int side)
 {
+    GuiButton* pressedButton = (side < 0) ? leftStopButton_.get() : rightStopButton_.get();
+    if (!pressedButton || !pressedButton->IsActive())
+        return;
+
+    Audio::Play(buttonSeHandle_);
+
     if (!timer_ || !timer_->IsRunning() || gameFinished_)
         return;
 

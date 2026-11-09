@@ -42,6 +42,7 @@ private:
     float screenHeight_ = 600.0f;
     FontText* font_ = nullptr;
     GameTimer* timer_ = nullptr;
+    int buttonSeHandle_ = -1;
 
     std::unique_ptr<GuiButton> startButton_;
     std::unique_ptr<GuiButton> leftStopButton_;

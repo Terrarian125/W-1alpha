@@ -9,7 +9,7 @@ namespace Audio
 	//初期化
 	void Initialize();
 
-	//サウンドファイル(.wav）をロード
+	// WAVとMP3をロード
 	//すでに同じ名前のファイルをロード済みの場合は、既存のデータの番号を返す
 	//引数：fileName	ファイル名
 	//引数：isLoop		ループ再生させたいならtrue
