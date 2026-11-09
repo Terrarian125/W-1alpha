@@ -1,4 +1,5 @@
 #include "PlayScene.h"
+#include "Engine/Audio.h"
 //#include "Player_L.h"
 //#include "Player_R.h"
 #include "Game01Player.h"
@@ -18,6 +19,8 @@ PlayScene::PlayScene(GameObject * parent)
 //初期化
 void PlayScene::Initialize()
 {
+    bgmHandle_ = Audio::Load("Audio/Game01Bgm00.mp3", true);
+    Audio::Play(bgmHandle_);
     //左プレイヤー
     leftPlayer_ = new Game01Player(this,"Model/Cowboy01.fbx",-4.0f,90.0f);
 
@@ -90,6 +93,8 @@ void PlayScene::Draw()
 //開放
 void PlayScene::Release()
 {
+    if (bgmHandle_ >= 0)
+        Audio::Stop(bgmHandle_);
     playSceneButton_.Reset();
     text_.Release();
 }

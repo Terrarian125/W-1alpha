@@ -17,6 +17,10 @@ bool PlaySceneButton::Initialize(
     font_ = font;
     timer_ = timer;
     buttonSeHandle_ = Audio::Load("Audio/Game01Se04.mp3", false, 3);
+    winnerSeHandle_ = Audio::Load("Audio/Game01Se00.mp3");
+    winnerFollowupSeHandle_ = Audio::Load("Audio/Game01Se02.mp3");
+    falseStartSeHandle_ = Audio::Load("Audio/Game01Se06.mp3");
+    countdownSeHandle_ = Audio::Load("Audio/Game01Se07.mp3");
     SetScreenSize(screenWidth, screenHeight);
 
     startButton_.reset(new GuiButton(0, 0, 180, 56, "START"));
@@ -83,6 +87,7 @@ void PlaySceneButton::Reset()
     rightFalseStarts_ = 0;
     winnerSide_ = 0;
     resultText_.clear();
+    winnerFollowupPending_ = false;
 
     if (startButton_) startButton_->SetActive(true);
     if (leftStopButton_) leftStopButton_->SetActive(false);
@@ -154,6 +159,8 @@ void PlaySceneButton::OnStopClicked(int side)
     //ターゲット時間より前ならフライング。Xを加算して両者とも再挑戦。
     if (elapsed < target)
     {
+        Audio::Play(falseStartSeHandle_);
+
         if (side < 0)
             ++leftFalseStarts_;
         else
@@ -224,6 +231,14 @@ void PlaySceneButton::OnStopClicked(int side)
             resultText_ = "DRAW";
         }
 
+        if (winnerSide_ != 0)
+        {
+            Audio::Play(winnerSeHandle_);
+            winnerFollowupPending_ = true;
+            winnerFollowupTime_ = std::chrono::steady_clock::now()
+                + std::chrono::milliseconds(500);
+        }
+
         //2人とも押したのでタイマーを止める（押下時刻は個別に記録済み）。
         timer_->Stop();
 
@@ -269,7 +284,17 @@ void PlaySceneButton::Draw()
     if (!ImGui::GetCurrentContext())
         return;
 
+    if (winnerFollowupPending_
+        && std::chrono::steady_clock::now() >= winnerFollowupTime_)
+    {
+        Audio::Play(winnerFollowupSeHandle_);
+        winnerFollowupPending_ = false;
+    }
+
+    const bool wasWaitingForCountdown = timer_->IsWaiting();
     timer_->Update();
+    if (wasWaitingForCountdown && timer_->IsRunning())
+        Audio::Play(countdownSeHandle_);
 
     if (startButton_) startButton_->Draw();
     if (leftStopButton_) leftStopButton_->Draw();

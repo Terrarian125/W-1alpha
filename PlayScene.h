@@ -12,6 +12,7 @@ class PlayScene : public GameObject
 	//const int ENEMY_NUM;	//敵の数
 	FontText text_;		//テキスト描画用のオブジェクト
 	GameTimer timer_;
+	int bgmHandle_ = -1;
 	PlaySceneButton playSceneButton_;
 
 public:

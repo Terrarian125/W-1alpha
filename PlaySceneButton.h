@@ -4,6 +4,7 @@
 #include "Engine/FontText.hpp"
 #include "Engine/GameTimer.h"
 #include "ControllerTest.h"
+#include <chrono>
 #include <memory>
 #include <string>
 
@@ -43,6 +44,12 @@ private:
     FontText* font_ = nullptr;
     GameTimer* timer_ = nullptr;
     int buttonSeHandle_ = -1;
+    int winnerSeHandle_ = -1;
+    int winnerFollowupSeHandle_ = -1;
+    int falseStartSeHandle_ = -1;
+    int countdownSeHandle_ = -1;
+    bool winnerFollowupPending_ = false;
+    std::chrono::steady_clock::time_point winnerFollowupTime_{};
 
     std::unique_ptr<GuiButton> startButton_;
     std::unique_ptr<GuiButton> leftStopButton_;
