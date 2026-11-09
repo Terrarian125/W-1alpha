@@ -122,12 +122,6 @@
     <ClCompile Include="Engine\Debug.cpp">
       <Filter>01Engine</Filter>
     </ClCompile>
-    <ClCompile Include="ClearScene.cpp">
-      <Filter>03Scene\02Clear</Filter>
-    </ClCompile>
-    <ClCompile Include="GameoverScene.cpp">
-      <Filter>03Scene\03Gameover</Filter>
-    </ClCompile>
     <ClCompile Include="Source\RaceScene.cpp">
       <Filter>03Scene\01Play</Filter>
     </ClCompile>
@@ -182,6 +176,9 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp">
       <Filter>01Engine\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\MyCursor.cpp" />
+    <ClCompile Include="Source\ClearScene.cpp" />
+    <ClCompile Include="Source\GameoverScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -265,12 +262,6 @@
     <ClInclude Include="Engine\Debug.h">
       <Filter>01Engine</Filter>
     </ClInclude>
-    <ClInclude Include="ClearScene.h">
-      <Filter>03Scene\02Clear</Filter>
-    </ClInclude>
-    <ClInclude Include="GameoverScene.h">
-      <Filter>03Scene\03Gameover</Filter>
-    </ClInclude>
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imstb_rectpack.h" />
     <ClInclude Include="ImGui\imstb_textedit.h" />
@@ -323,8 +314,26 @@
     <ClInclude Include="ImGui\imgui_internal.h">
       <Filter>01Engine\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\InputBinding.h" />
+    <ClInclude Include="Engine\MyCursor.h" />
+    <ClInclude Include="Source\ClearScene.h" />
+    <ClInclude Include="Source\GameoverScene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".github\copilot-instructions.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Assets\Shader\BillBoard.hlsl">
+      <Filter>02Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Debug3D.hlsl">
+      <Filter>02Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Simple2D.hlsl">
+      <Filter>02Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Simple3D.hlsl">
+      <Filter>02Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
