@@ -13,6 +13,17 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Release() override;
+
 protected:
-	int hModel_; // モデルのハンドル
+	void SetBoxCollider(XMFLOAT3 center, XMFLOAT3 size);
+
+	int hModel_;
+
+	BoxCollider* bCollider_;
+	SphereCollider* sCollider_;
+
+	bool isColl_;
+
+	XMFLOAT3 basePos_;
+	XMFLOAT3 size_;
 };

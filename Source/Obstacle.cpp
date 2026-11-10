@@ -12,15 +12,21 @@ void Obstacle::Initialize()
 
 void Obstacle::Update()
 {
-
 }
 
 void Obstacle::Draw()
 {
 	Model::SetTransform(hModel_, transform_);
 	Model::Draw(hModel_);
+
+	CollisionDraw();
 }
 
 void Obstacle::Release()
 {
+}
+
+void Obstacle::SetBoxCollider(XMFLOAT3 center, XMFLOAT3 size)
+{
+	AddCollider(new BoxCollider(center, size));
 }

@@ -17,6 +17,10 @@ void Horse::Initialize()
 	transform_.position_ = XMFLOAT3(0, 0, 0);
 
 	speed_ = 0.5f;
+
+	{
+		AddCollider(new BoxCollider(transform_.position_, { 100, 100, 100 }));
+	}
 }
 
 void Horse::Update()
@@ -97,6 +101,8 @@ void Horse::Draw()
 {
 	Model::SetTransform(hModel_, transform_);
 	Model::Draw(hModel_);
+
+	CollisionDraw();
 }
 
 void Horse::Release()

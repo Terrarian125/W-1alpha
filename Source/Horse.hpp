@@ -19,6 +19,4 @@ private:
 	float jumpPower_;
 
 	bool isGround_;
-
-	BoxCollider* boxCollider_;
 };
