@@ -13,7 +13,7 @@ using namespace std;
 // コンストラクタ
 UI::UI(GameObject* parent)
     : GameObject(parent, "Reticle"), position_{ { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f } }, hImage_{ (-1), (-1) },
-    Bullet_num(999), /*Score(0),*/ Game_Timer(30.0f)
+    Bullet_num{ 999, 999 }, /*Score(0),*/ Game_Timer(30.0f)
 {
 }
 
@@ -28,7 +28,7 @@ void UI::Initialize()
     // UIの画像のロード
     hImage_[0] = Image::Load("Image/Bullet.png"); // 弾
     assert(hImage_[0] >= 0);
-    //hImage_[1] = Image::Load("Image/Reticle.png"); // 無限マーク
+    //hImage_[1] = Image::Load("Image/Bullet.png"); // 無限マーク
     //assert(hImage_[1] >= 0);
 
     // 一応あると楽だからここに
@@ -36,13 +36,13 @@ void UI::Initialize()
     rotate_[0]   = {   0.0f,   0.0f, 0.0f }; // 回転
     scale_[0]    = {   0.3f,   0.3f, 0.0f }; // 拡大率
 
-    position_[1] = { -0.5f, -0.25f,  0.0f }; // 位置
-    rotate_[1]   = {  0.0f,   0.0f,  0.0f }; // 回転
-    scale_[1]    = { 0.05f,  0.05f, 0.00f }; // 拡大率
+    position_[1] = {  0.63f, -0.75f,  0.0f }; // 位置
+    rotate_[1]   = {  0.0f,    0.0f,  0.0f }; // 回転
+    scale_[1]    = {  0.3f,    0.3f, 0.00f }; // 拡大率
 
     textB_num_.Initialize("Fonts/Rye-Regular.ttf", 64.0f);
-    textTimer_.Initialize("Fonts/Rye-Regular.ttf", 86.0f);
     textScore_.Initialize("Fonts/Rye-Regular.ttf", 64.0f);
+    textTimer_.Initialize("Fonts/Rye-Regular.ttf", 86.0f);
 }
 
 // 更新
@@ -56,17 +56,23 @@ void UI::Update()
 
     // 発砲ごとに残弾数消費
     {
-        bool triggerNow = Input::GetPadTrrigerR(0) > 0.5f;
+        bool triggerNow[2] = { Input::GetPadTrrigerR(0) > 0.5f, Input::GetPadTrrigerR(1) > 0.5f };
 
         if ((Input::IsMouseButtonDown(0)
-            || Input::IsPadButtonDown(XINPUT_GAMEPAD_B)
-            || triggerNow && !triggerOld_))
+            || Input::IsPadButtonDown(XINPUT_GAMEPAD_B, 0)
+            || triggerNow[0] && !triggerOld_[0]))
         {
-            Bullet_num--;
+            Bullet_num[0]--;
             //Score += 20;
         }
+        if ((Input::IsMouseButtonDown(1)
+            || Input::IsPadButtonDown(XINPUT_GAMEPAD_B, 1)
+            || triggerNow[1] && !triggerOld_[1])) {
+            Bullet_num[1]--;
+        }
 
-        triggerOld_ = triggerNow;
+        triggerOld_[0] = triggerNow[0];
+        triggerOld_[1] = triggerNow[1];
     }
 }
 
@@ -75,16 +81,28 @@ void UI::Draw()
 {
     // UI表示（弾）
     {
+        // 1P
         transform_.position_ = { position_[0].x,position_[0].y,position_[0].z };  // 位置
         transform_.scale_ = { scale_[0].x,scale_[0].y,scale_[0].z };  // 拡大率
         Image::SetTransform(hImage_[0], transform_);
         Image::Draw(hImage_[0]);
 
+        // 2P
+        transform_.position_ = { position_[1].x,position_[1].y,position_[1].z };  // 位置
+        transform_.scale_ = { scale_[1].x,scale_[1].y,scale_[1].z };  // 拡大率
+        Image::SetTransform(hImage_[0], transform_);
+        Image::Draw(hImage_[0]);
+
         // 弾の残数
         char str[64];
-        sprintf_s(str, "x %d", Bullet_num);
+        sprintf_s(str, "x %d", Bullet_num[0]);
         // sprintf_s(str, "x ---");
         textB_num_.Draw(90, 600, str);
+
+        // 弾の残数
+        sprintf_s(str, "x %d", Bullet_num[1]);
+        // sprintf_s(str, "x ---");
+        textB_num_.Draw(1080, 600, str);
     }
 
     // タイマー表示
@@ -97,8 +115,12 @@ void UI::Draw()
     // スコア表示
     {
         char str[64];
-        sprintf_s(str, "%.5d", sc->GetTotalScore());
+        sprintf_s(str, "%.5d", sc->GetTotalScore_1P());
         textScore_.Draw(100, 20, str);
+
+        //char str[64];
+        sprintf_s(str, "%.5d", sc->GetTotalScore_2P());
+        textScore_.Draw(980, 20, str);
     }
 
     // レティクル表示
@@ -109,6 +131,7 @@ void UI::Draw()
 
     // ImGui (デバック用)
     {
+        /*
         // ======= UIの位置座標 =======
         ImGui::Begin("UI_position");
         ImGui::InputFloat("pos.X1", &position_[0].x);
@@ -118,6 +141,7 @@ void UI::Draw()
         ImGui::InputFloat("pos.Y2", &position_[1].y);
         //ImGui::InputFloat("pos.Z2", &position_[1].z);
         ImGui::End();
+        */
     }
 }
 

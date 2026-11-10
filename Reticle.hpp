@@ -8,8 +8,9 @@ class Reticle : public GameObject
     FontText textReticle_;       //テキスト描画用のオブジェクト
 
     // レティクルの座標
-    XMFLOAT3 position_;
+    XMFLOAT3 position_[2];
     XMFLOAT3 rotate_;   // 回転
+    XMFLOAT3 scale_;
 
     // 画像読み込み
     int hImage_;
@@ -18,9 +19,10 @@ class Reticle : public GameObject
     void Move();
 
     // 発射
-    void Shoot();
+    void Shoot_1P();
+    void Shoot_2P();
 
-    bool triggerOld_ = false;
+    bool triggerOld_[2] = { false, false };
 
 public:
     // コンストラクタ
