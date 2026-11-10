@@ -55,7 +55,7 @@ void PlayScene::Draw()
     Image::Draw(hBackGround_);
 
     // text_.Draw(32, 32, "Yes!TakasuClinic");
-    textPlay_.Draw(32, 32, "Clay shooting");
+    // textPlay_.Draw(32, 32, "Clay shooting");
 
     // íeÇÃécêî
     //text_.Draw(80, 80, "x %.f",UI::Bullet);

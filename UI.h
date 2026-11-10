@@ -12,9 +12,9 @@ class UI : public GameObject
     FontText textTimer_;    //テキスト描画用のオブジェクト
 
     // UIの座標
-    XMFLOAT3 position_[2]; // 位置
-    XMFLOAT3 rotate_[2];   // 回転
-    XMFLOAT3 scale_[2];    // 拡大率
+    XMFLOAT3 position_[4]; // 位置
+    XMFLOAT3 rotate_[4];   // 回転
+    XMFLOAT3 scale_[4];    // 拡大率
 
     // 画像読み込み
     int hImage_[2];

@@ -32,7 +32,7 @@ void Reticle::Initialize()
     //Instantiate<Gun>(this);
 
     // レティクルの画像のロード
-    hImage_[0] = Image::Load("Image/Reticle.png");
+    hImage_[0] = Image::Load("Image/Reticle_1P.png");
     assert(hImage_[0] >= 0);
     hImage_[1] = Image::Load("Image/Reticle_2P.png");
     assert(hImage_[1] >= 0);

@@ -18,17 +18,17 @@ void ClearScene::Initialize()
 	assert(hPict_[0] >= 0);
 	Image::SetRect(hPict_[0], 0, 0, 1280, 720);
 
-	hPict_[1] = Image::Load("Image/Reticle.png");
+	hPict_[1] = Image::Load("Image/Reticle_1P.png");
 	assert(hPict_[1] >= 0);
-	hPict_[2] = Image::Load("Image/Bullet.png");
+	hPict_[2] = Image::Load("Image/Reticle_2P.png");
 	assert(hPict_[2] >= 0);
 
 	// ˆê‰ž‚ ‚é‚ÆŠy‚¾‚©‚ç‚±‚±‚É
 	position_[1] = { -0.5f, 0.3f, 0.0f }; // ˆÊ’u
-	scale_[1]    = {  0.3f, 0.3f, 0.0f }; // Šg‘å—¦
+	scale_[1]    = {  0.5f, 0.5f, 0.0f }; // Šg‘å—¦
 
 	position_[2] = {  0.5f, 0.3f,  0.0f }; // ˆÊ’u
-	scale_[2]    = {  0.3f, 0.3f,  0.0f }; // Šg‘å—¦
+	scale_[2]    = {  0.5f, 0.5f,  0.0f }; // Šg‘å—¦
 
 	//textWin_.Initialize("Fonts/Rye-Regular.ttf", 28.0f);
 }

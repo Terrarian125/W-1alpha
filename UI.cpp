@@ -28,8 +28,8 @@ void UI::Initialize()
     // UIの画像のロード
     hImage_[0] = Image::Load("Image/Bullet.png"); // 弾
     assert(hImage_[0] >= 0);
-    //hImage_[1] = Image::Load("Image/Bullet.png"); // 無限マーク
-    //assert(hImage_[1] >= 0);
+    hImage_[1] = Image::Load("Image/UI_1.png");   // 木材
+    assert(hImage_[1] >= 0);
 
     // 一応あると楽だからここに
     position_[0] = { -0.92f, -0.75f, 0.0f }; // 位置
@@ -39,6 +39,14 @@ void UI::Initialize()
     position_[1] = {  0.63f, -0.75f,  0.0f }; // 位置
     rotate_[1]   = {  0.0f,    0.0f,  0.0f }; // 回転
     scale_[1]    = {  0.3f,    0.3f, 0.00f }; // 拡大率
+
+    position_[2] = { -0.6f,  0.85f,  0.0f }; // 位置
+    rotate_[2]   = {  0.0f,   0.0f,  0.0f }; // 回転
+    scale_[2]    = {  0.7f,   0.4f, 0.00f }; // 拡大率
+
+    position_[3] = { 0.6f,   0.85f,  0.0f }; // 位置
+    rotate_[3]   = { 0.0f,    0.0f,  0.0f }; // 回転
+    scale_[3]    = { 0.7f,    0.4f, 0.00f }; // 拡大率
 
     textB_num_.Initialize("Fonts/Rye-Regular.ttf", 64.0f);
     textScore_.Initialize("Fonts/Rye-Regular.ttf", 64.0f);
@@ -93,11 +101,21 @@ void UI::Draw()
         Image::SetTransform(hImage_[0], transform_);
         Image::Draw(hImage_[0]);
 
+        transform_.position_ = { position_[2].x,position_[2].y,position_[2].z };  // 位置
+        transform_.scale_ = { scale_[2].x,scale_[2].y,scale_[2].z };  // 拡大率
+        Image::SetTransform(hImage_[1], transform_);
+        Image::Draw(hImage_[1]);
+
         // 2P
         transform_.position_ = { position_[1].x,position_[1].y,position_[1].z };  // 位置
         transform_.scale_ = { scale_[1].x,scale_[1].y,scale_[1].z };  // 拡大率
         Image::SetTransform(hImage_[0], transform_);
         Image::Draw(hImage_[0]);
+
+        transform_.position_ = { position_[3].x,position_[3].y,position_[3].z };  // 位置
+        transform_.scale_ = { scale_[3].x,scale_[3].y,scale_[3].z };  // 拡大率
+        Image::SetTransform(hImage_[1], transform_);
+        Image::Draw(hImage_[1]);
 
         // 弾の残数
         char str[64];
@@ -114,19 +132,26 @@ void UI::Draw()
     // タイマー表示
     {
         char str[64];
-        sprintf_s(str, "%d", (int)Game_Timer);
-        textTimer_.Draw(600, 10, str);
+        sprintf_s(str, "%.1f", Game_Timer);
+        if (Game_Timer > 10.0f) {
+            textTimer_.Draw(540, 10, str);
+        }
+        else {
+            textTimer_.Draw(570, 10, str);
+        }
+        sprintf_s(str, "s");
+        textTimer_.Draw(720, 10, str);
     }
 
     // スコア表示
     {
         char str[64];
-        sprintf_s(str, "%.5d", sc->GetTotalScore_1P());
-        textScore_.Draw(100, 20, str);
+        sprintf_s(str, "1P :%.5d", sc->GetTotalScore_1P());
+        textScore_.Draw(120, 20, str);
 
         //char str[64];
-        sprintf_s(str, "%.5d", sc->GetTotalScore_2P());
-        textScore_.Draw(980, 20, str);
+        sprintf_s(str, "2P :%.5d", sc->GetTotalScore_2P());
+        textScore_.Draw(880, 20, str);
     }
 
     // レティクル表示
