@@ -2,7 +2,7 @@
 
 #include <chrono>
 
-//3秒の待機後に経過時間を計測するタイマー
+//n秒の待機後に経過時間を計測するタイマー
 class GameTimer
 {
 public:
@@ -19,7 +19,7 @@ public:
 
 private:
     using Clock = std::chrono::steady_clock;
-    static constexpr double WAIT_SECONDS = 3.0;
+	static constexpr double WAIT_SECONDS = 3.0;//ここで待機時間を設定（秒）
 
     Clock::time_point startTime_{};
     double elapsedSeconds_ = 0.0;

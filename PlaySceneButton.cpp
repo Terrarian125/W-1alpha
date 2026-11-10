@@ -16,11 +16,11 @@ bool PlaySceneButton::Initialize(
 
     font_ = font;
     timer_ = timer;
-    buttonSeHandle_ = Audio::Load("Audio/Game01Se04.mp3", false, 3);
-    winnerSeHandle_ = Audio::Load("Audio/Game01Se00.mp3");
-    winnerFollowupSeHandle_ = Audio::Load("Audio/Game01Se02.mp3");
-    falseStartSeHandle_ = Audio::Load("Audio/Game01Se06.mp3");
-    countdownSeHandle_ = Audio::Load("Audio/Game01Se07.mp3");
+    buttonSeHandle_ = Audio::Load("Audio/Game01Se04.wav", false, 3);
+    winnerSeHandle_ = Audio::Load("Audio/Game01Se00.wav");
+    winnerFollowupSeHandle_ = Audio::Load("Audio/Game01Se02.wav");
+    falseStartSeHandle_ = Audio::Load("Audio/Game01Se06.wav");
+    countdownSeHandle_ = Audio::Load("Audio/Game01Se07.wav");
     SetScreenSize(screenWidth, screenHeight);
 
     startButton_.reset(new GuiButton(0, 0, 180, 56, "START"));
@@ -314,7 +314,7 @@ void PlaySceneButton::Draw()
     else if (timer_->IsRunning() && timer_->GetTargetSeconds() > 0)
     {
         const double elapsed = timer_->GetElapsedSeconds();
-		constexpr double FADE_SECONDS = 3.9;//フェードアウトする秒数
+		constexpr double FADE_SECONDS = 5.0;//この秒数まで徐々に透明化していく
         const double opacity = (std::max)(0.0, 1.0 - elapsed / FADE_SECONDS);
         const unsigned int alpha = static_cast<unsigned int>(opacity * 255.0);
         const unsigned int timerColor = (alpha << 24) | 0x00FFFFFF;

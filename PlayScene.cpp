@@ -19,7 +19,7 @@ PlayScene::PlayScene(GameObject * parent)
 //‰Šú‰»
 void PlayScene::Initialize()
 {
-    bgmHandle_ = Audio::Load("Audio/Game01Bgm00.mp3", true);
+    bgmHandle_ = Audio::Load("Audio/Game01Bgm00.wav", true);
     Audio::Play(bgmHandle_);
     //¶ƒvƒŒƒCƒ„[
     leftPlayer_ = new Game01Player(this,"Model/Cowboy01.fbx",-4.0f,90.0f);
