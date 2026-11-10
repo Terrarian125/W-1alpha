@@ -52,6 +52,12 @@ void UI::Update()
     if (Game_Timer >= 0.0f)
     {
         Game_Timer -= 0.02f;
+
+        //“G‚ª‚à‚¤‚¢‚È‚©‚Á‚½‚çƒNƒŠƒA‰æ–Ê‚Ö
+        if (Game_Timer <= 0.0f) {
+            SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+            pSceneManager->ChangeScene(SCENE_ID_CLEAR);
+        }
     }
 
     // ”­–C‚²‚Æ‚Éc’e”Á”ï

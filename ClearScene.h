@@ -1,11 +1,22 @@
 #pragma once
 #include "Engine/GameObject.h"
+//#include "Engine/FontText.hpp"
 
+//class Clay;
 
 //プレイシーンを管理するクラス
 class ClearScene : public GameObject
 {
-	int hPict_;    //画像番号
+	//FontText textWin_;       //テキスト描画用のオブジェクト
+
+	int hPict_[3];    //画像番号
+
+	// UIの座標
+	XMFLOAT3 position_[3]; // 位置
+	XMFLOAT3 scale_[3];    // 拡大率
+
+	//Clay* sc = nullptr;
+
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）

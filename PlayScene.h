@@ -6,7 +6,7 @@
 class PlayScene : public GameObject
 {
     //const int ENEMY_NUM;  //敵の数
-    FontText text_;       //テキスト描画用のオブジェクト
+    FontText textPlay_;       //テキスト描画用のオブジェクト
 
     int hBackGround_; // 背景
 

@@ -13,7 +13,7 @@ class Reticle : public GameObject
     XMFLOAT3 scale_;
 
     // ‰æ‘œ“Ç‚İ‚İ
-    int hImage_;
+    int hImage_[2];
 
     // •W€ˆÚ“®
     void Move();

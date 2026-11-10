@@ -22,6 +22,7 @@ void PlayScene::Initialize()
     // レティクルの画像のロード
     hBackGround_ = Image::Load("Image/BG.jpg");
     assert(hBackGround_ >= 0);
+    Image::SetRect(hBackGround_, 0, 0, 1280, 720);
 
     //Instantiate<Tank>(this);
     //Instantiate<Ground>(this);
@@ -39,7 +40,7 @@ void PlayScene::Initialize()
 
     // Instantiate<Infomation>(this);
 
-    text_.Initialize("Fonts/Rye-Regular.ttf", 28.0f);
+    textPlay_.Initialize("Fonts/Rye-Regular.ttf", 28.0f);
 }
 
 // 更新
@@ -54,7 +55,7 @@ void PlayScene::Draw()
     Image::Draw(hBackGround_);
 
     // text_.Draw(32, 32, "Yes!TakasuClinic");
-    text_.Draw(32, 32, "Clay shooting");
+    textPlay_.Draw(32, 32, "Clay shooting");
 
     // 弾の残数
     //text_.Draw(80, 80, "x %.f",UI::Bullet);

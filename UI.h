@@ -9,7 +9,7 @@ class UI : public GameObject
 {
     FontText textB_num_;    //テキスト描画用のオブジェクト
     FontText textScore_;    //テキスト描画用のオブジェクト
-    FontText textTimer_;       //テキスト描画用のオブジェクト
+    FontText textTimer_;    //テキスト描画用のオブジェクト
 
     // UIの座標
     XMFLOAT3 position_[2]; // 位置
@@ -19,9 +19,9 @@ class UI : public GameObject
     // 画像読み込み
     int hImage_[2];
 
-    int Bullet_num[2];   // 残弾数
+    int Bullet_num[2];  // 残弾数
     //int Score;        // スコア
-    float Game_Timer; // 試合時間
+    float Game_Timer;   // 試合時間
 
     bool triggerOld_[2] = { false,false };
     

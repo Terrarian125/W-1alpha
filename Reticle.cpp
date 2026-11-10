@@ -16,7 +16,7 @@ using namespace std;
 
 // コンストラクタ
 Reticle::Reticle(GameObject* parent)
-    :GameObject(parent, "Reticle"), position_{ {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} }, hImage_(-1)
+    :GameObject(parent, "Reticle"), position_{ {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} }, hImage_{ -1,-1 }
 {
 }
 
@@ -32,8 +32,10 @@ void Reticle::Initialize()
     //Instantiate<Gun>(this);
 
     // レティクルの画像のロード
-    hImage_ = Image::Load("Image/Reticle.png");
-    assert(hImage_ >= 0);
+    hImage_[0] = Image::Load("Image/Reticle.png");
+    assert(hImage_[0] >= 0);
+    hImage_[1] = Image::Load("Image/Reticle_2P.png");
+    assert(hImage_[1] >= 0);
 
     // 一応あると楽だからここに
     position_[0] = { -0.3f, 0.0f, 0.0f };  // 位置
@@ -75,12 +77,12 @@ void Reticle::Draw()
 
     // レティクル表示
     transform_.position_ = { position_[0].x,position_[0].y,position_[0].z};  // 位置
-    Image::SetTransform(hImage_, transform_);
-    Image::Draw(hImage_);
+    Image::SetTransform(hImage_[0], transform_);
+    Image::Draw(hImage_[0]);
 
     transform_.position_ = { position_[1].x,position_[1].y,position_[1].z };  // 位置
-    Image::SetTransform(hImage_, transform_);
-    Image::Draw(hImage_);
+    Image::SetTransform(hImage_[1], transform_);
+    Image::Draw(hImage_[1]);
 
     // ImGui (デバック用)
     {
