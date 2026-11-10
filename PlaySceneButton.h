@@ -15,12 +15,13 @@ public:
     ~PlaySceneButton() = default;
 
     PlaySceneButton(const PlaySceneButton&) = delete;
+
     PlaySceneButton& operator=(const PlaySceneButton&) = delete;
 
-    bool Initialize(float screenWidth, float screenHeight,
-        FontText* font, GameTimer* timer);
     void Draw();
+
     void SetScreenSize(float screenWidth, float screenHeight);
+
     void Reset();
 
     bool IsGameFinished() const
@@ -33,6 +34,10 @@ public:
         return winnerSide_;
     }
 
+    //
+    bool Initialize(float screenWidth, float screenHeight,
+        FontText* font, FontText* japaneseFont, GameTimer* timer);
+
 private:
     void OnStartClicked();
     void OnStopClicked(int side);
@@ -42,6 +47,7 @@ private:
     float screenWidth_ = 800.0f;
     float screenHeight_ = 600.0f;
     FontText* font_ = nullptr;
+    FontText* japaneseFont_ = nullptr;
     GameTimer* timer_ = nullptr;
     int buttonSeHandle_ = -1;
     int winnerSeHandle_ = -1;
@@ -66,6 +72,8 @@ private:
     int rightFalseStarts_ = 0;
     int winnerSide_ = 0; //-1: 左、1: 右、0: 引き分け
     std::string resultText_;
+
+    std::chrono::steady_clock::time_point countdownStartTime_{};
 
     ControllerTest controllerTest_; //コントローラーのテスト用
 };

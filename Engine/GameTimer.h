@@ -19,7 +19,7 @@ public:
 
 private:
     using Clock = std::chrono::steady_clock;
-	static constexpr double WAIT_SECONDS = 3.0;//ここで待機時間を設定（秒）
+	static constexpr double WAIT_SECONDS = 5.0;//ここで待機時間を設定（秒）
 
     Clock::time_point startTime_{};
     double elapsedSeconds_ = 0.0;

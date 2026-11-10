@@ -39,11 +39,22 @@ void PlayScene::Initialize()
     //UI情報
     Instantiate<Infomation>(this);
 
-    //フォント
-    text_.Initialize("Fonts/Rye-Regular.ttf", 32.0f);
+    //英数字用フォント
+    text_.Initialize("Fonts/Rye-Regular.ttf", 42.0f);
+
+    //日本語用フォント
+    japaneseText_.Initialize(
+        "Fonts/aoyagireisyosimo_ttf_2_01.ttf", 62.0f);
 
     const ImVec2 size = ImGui::GetIO().DisplaySize;
-    playSceneButton_.Initialize(size.x, size.y, &text_, &timer_);
+    
+    playSceneButton_.Initialize(
+        size.x,
+        size.y,
+        &text_,
+        &japaneseText_,
+        &timer_
+    );
 }
 
 //更新
@@ -97,4 +108,5 @@ void PlayScene::Release()
         Audio::Stop(bgmHandle_);
     playSceneButton_.Reset();
     text_.Release();
+    japaneseText_.Release();
 }

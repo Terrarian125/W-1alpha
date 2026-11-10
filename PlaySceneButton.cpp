@@ -1,4 +1,4 @@
-#include "PlaySceneButton.h"
+﻿#include "PlaySceneButton.h"
 #include "Engine/Audio.h"
 #include "Engine/Input.h"
 #include <imgui.h>
@@ -8,13 +8,17 @@
 #include <cmath>
 #include <string>
 
+//初期化
 bool PlaySceneButton::Initialize(
-    float screenWidth, float screenHeight, FontText* font, GameTimer* timer)
+    float screenWidth, float screenHeight,
+    FontText* font, FontText* japaneseFont, GameTimer* timer)
 {
-    if (!font || !timer)
+	//フォントとタイマーが有効か確認
+    if (!font || !japaneseFont || !timer)
         return false;
 
     font_ = font;
+    japaneseFont_ = japaneseFont;
     timer_ = timer;
     buttonSeHandle_ = Audio::Load("Audio/Game01Se04.wav", false, 3);
     winnerSeHandle_ = Audio::Load("Audio/Game01Se00.wav");
@@ -116,7 +120,9 @@ void PlaySceneButton::OnStartClicked()
 
     static std::mt19937 engine((std::random_device())());
     std::uniform_int_distribution<int> distribution(10, 20);
+
     timer_->Start(distribution(engine));
+    countdownStartTime_ = std::chrono::steady_clock::now();
 
     startButton_->SetActive(false);
     leftStopButton_->SetActive(true);
@@ -138,8 +144,12 @@ void PlaySceneButton::ResetRound(bool restartTimer)
     if (rightStopButton_) rightStopButton_->SetActive(true);
     if (startButton_) startButton_->SetActive(false);
 
+    //
     if (restartTimer && timer_)
+    {
         timer_->Start(timer_->GetTargetSeconds());
+        countdownStartTime_ = std::chrono::steady_clock::now();
+    }
 }
 
 void PlaySceneButton::OnStopClicked(int side)
@@ -307,9 +317,41 @@ void PlaySceneButton::Draw()
         font_->Draw(screenWidth_ - 190.0f, 20.0f, buffer, 0xFFFFFFFF);
     }
 
+    //待機時間にゲーム説明
     if (timer_->IsWaiting())
     {
-        font_->Draw(screenWidth_ * 0.5f - 45.0f, 20.0f, "00.00", 0xFFFFFFFF);
+        //待機開始からの経過時間
+        const double elapsed =
+            std::chrono::duration<double>(
+                std::chrono::steady_clock::now() - countdownStartTime_
+            ).count();
+
+        //最初のFADE_START秒は不透明、最後のFADE_END秒でフェードアウト
+        constexpr double FADE_START = 3.0;
+        constexpr double FADE_END = 5.0;
+
+        double opacity = 1.0;
+
+        if (elapsed > FADE_START)
+        {
+            opacity = (std::max)(
+                0.0,
+                1.0 - (elapsed - FADE_START) / (FADE_END - FADE_START)
+                );
+        }
+
+        const unsigned int alpha =
+            static_cast<unsigned int>(opacity * 255.0);
+
+        const unsigned int messageColor =
+            (alpha << 24) | 0x00FFFFFF;
+
+        //ターゲット時間
+        std::snprintf(buffer,sizeof(buffer),"Target: %d second",timer_->GetTargetSeconds());
+
+        japaneseFont_->Draw(screenWidth_ * 0.4f - 100.0f,screenHeight_ * 0.5f - 40.0f,buffer,messageColor);
+
+        japaneseFont_->Draw(screenWidth_ * 0.4f - 130.0f,screenHeight_ * 0.5f + 10.0f,"Push [STOP]!!",messageColor);
     }
     else if (timer_->IsRunning() && timer_->GetTargetSeconds() > 0)
     {
