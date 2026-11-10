@@ -19,10 +19,18 @@ void ChickenRaceScene::Initialize()
 
 	Instantiate<BackGround>(this);
 	Instantiate<Table>(this);
+
+	// pJudge_ = Instantiate<Judge>(this);
 }
 
 void ChickenRaceScene::Update()
 {
+	/* if (confirmedConut == 2)
+	{
+		pJudge_.Judgement();
+		
+	}
+	*/
 }
 
 void ChickenRaceScene::Draw()
