@@ -179,8 +179,11 @@
     <ClCompile Include="ImGui\imgui_ja_gryph_ranges.cpp" />
     <ClCompile Include="ImGui\imgui_tables.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="Judge.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Table.cpp" />
+    <ClCompile Include="WaterFlow.cpp" />
+    <ClCompile Include="WaterFlowOrigin.cpp" />
     <ClCompile Include="WaterLevelHider.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -227,9 +230,12 @@
     <ClInclude Include="ImGui\imstb_rectpack.h" />
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
+    <ClInclude Include="Judge.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerAction.h" />
     <ClInclude Include="Table.h" />
+    <ClInclude Include="WaterFlow.h" />
+    <ClInclude Include="WaterFlowOrigin.h" />
     <ClInclude Include="WaterLevelHider.h" />
   </ItemGroup>
   <ItemGroup>

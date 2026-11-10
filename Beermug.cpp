@@ -9,8 +9,8 @@
 
 namespace
 {
-	const float MAX_WATER_LEVEL{ 140 };
-	const float SAFE_WATER_LEVEL{ 135 };
+	const float MAX_WATER_LEVEL{ 137.f };
+	const float OVERFLOW_RATE{ 1.025f };
 }
 
 Beermug::Beermug(GameObject *_pParent) :
@@ -34,13 +34,13 @@ void Beermug::Initialize()
 	hModels_[BEERMUG_CROSS_SECTION_R] = Model::Load("Model/beermug_R.fbx");
 	hModels_[BEERMUG]                 = Model::Load("Model/wood_beermug_mock.fbx");
 
-	beerMugID_ += 1;
+	beerMugCount_ += 1;
 }
 
 void Beermug::Update()
 {
 	// 注ぎ中
-	if (waterLevel_ <= 1.0f)
+	if (waterLevel_ <= OVERFLOW_RATE)
 	{
 		if (isFilling_)
 		{
@@ -56,10 +56,19 @@ void Beermug::Update()
 		isWLHInstanced_ = true;
 	}
 
+	ImGui::Begin("WL");
+	ImGui::InputFloat("WL", &waterLevel_);
+	ImGui::End();
+
 	// 溢れた
-	if (waterLevel_ >= 1.0f and pWLH_)
+	if (waterLevel_ >= OVERFLOW_RATE and pWLH_)
 	{
 		modelIdx_ = 2;
+     	if (beerMugID_ % 2 != 0) 
+		{
+			transform_.rotate_.y = 180.f;
+		}
+
 		if (not(pWLH_->IsDead()))
 		{
 			pWLH_->KillMe();

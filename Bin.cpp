@@ -3,6 +3,7 @@
 #include "Engine/Input.h"
 #include "Engine/Global.h"
 #include "Beermug.h"
+#include "WaterFlowOrigin.h"
 
 #include <algorithm>
 #include <cmath>
@@ -11,8 +12,8 @@
 
 namespace
 {
-	const float IDLE_ANGLE_Z{ -20.0f };
-	const float POURING_ANGLE_Z{ -40.f };
+	const float IDLE_ANGLE_Z{ -20.f };
+	const float POURING_ANGLE_Z{ -60.f };
 }
 
 Bin::Bin(GameObject *_pParent) :
@@ -29,10 +30,18 @@ Bin::Bin(GameObject *_pParent) :
 void Bin::Initialize()
 {
 	hModel_ = Model::Load("Model/bin_mock.fbx");
+
+	pWFO_ = Instantiate<WaterFlowOrigin>(this);
+	XMFLOAT3 wfoPos = Model::GetBonePosition(hModel_, "BottleMouse");
+	pWFO_->SetPosition(wfoPos);
+	pWFO_->Invisible();
+
+	transform_.position_.y = 0.6f;
 }
 
 void Bin::Update()
 {
+
 	if (not(beermugInstanceRetrieved_))
 	{
 		size_t pos = objectName_.size() - 1;
@@ -47,20 +56,35 @@ void Bin::Update()
 			pouringTime_++;
 			
 			isPouring_ = true;
-			if (transform_.rotate_.z >= POURING_ANGLE_Z)
+			static float bias{ 0.5 };
+			if (transform_.rotate_.z > IDLE_ANGLE_Z + POURING_ANGLE_Z)
 			{
 				// 正規化された注ぎ時の最大角度まで倒れる時間
 				float normalizedTime = std::clamp(pouringTime_ / 50.f, 0.0f, 1.f);
 
-				// 注ぎ時の最大角度に掛ける係数
+				// 注ぎ時の最大角度にかける係数
 				float c = sinf((normalizedTime * XM_PI) / 2);
-				transform_.rotate_.z = IDLE_ANGLE_Z - 20.f * c;
+
+#ifdef _DEBUG
+				ImGui::Begin("係数");
+				ImGui::InputFloat("係数:", &c);
+				ImGui::End();
+#endif
+
+				transform_.rotate_.z = IDLE_ANGLE_Z + (POURING_ANGLE_Z * c);
+
+			}
+			else if (transform_.rotate_.z < (POURING_ANGLE_Z + IDLE_ANGLE_Z) + bias)
+			{
+				pWFO_->Visible();
+				pWFO_->WFVisible(true);
+				pBeermug_->Fill();
 			}
 
-			 pBeermug_->Fill();
 		}
 		else
 		{
+			pWFO_->WFVisible(false);
 			// 注ぎコマンドが入力されていない場合、待機時の角度に戻る
 			if (transform_.rotate_.z < IDLE_ANGLE_Z)
 			{
@@ -70,6 +94,11 @@ void Bin::Update()
 				transform_.rotate_.z = std::lerp(transform_.rotate_.z,
 												 IDLE_ANGLE_Z + bias,
 												 0.1f);
+			}
+
+			if (transform_.rotate_.z > -80.f)
+			{
+				pWFO_->Invisible();
 			}
 		}
 	}
@@ -102,7 +131,8 @@ void Bin::Draw()
 }
 
 void Bin::Release()
-{}
+{
+}
 
 void Bin::Pouring()
 {

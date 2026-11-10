@@ -38,6 +38,7 @@ public:
 
 	// 液量を増加させる
 	void Fill();
+
 private:
 
 	inline static int beerMugCount_{0};

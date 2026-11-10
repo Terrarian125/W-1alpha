@@ -3,6 +3,7 @@
 #include "../Engine/GameObject.h"
 
 class Beermug;
+class WaterFlowOrigin;
 
 class Bin : public GameObject
 {
@@ -34,6 +35,8 @@ private:
 	bool isConfirmed_;
 
 	Beermug* pBeermug_;
+
+	WaterFlowOrigin *pWFO_;
 
 	// Beermugのインスタンスを取得できたか？
 	bool  beermugInstanceRetrieved_;

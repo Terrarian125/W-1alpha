@@ -327,7 +327,6 @@ void GameObject::DrawSub()
 {
 	Draw();
 
-
 	//リリース時は削除
 #ifdef _DEBUG
 		//コリジョンの描画
@@ -340,7 +339,10 @@ void GameObject::DrawSub()
 	//その子オブジェクトの描画処理
 	for (auto it = childList_.begin(); it != childList_.end(); it++)
 	{
-		(*it)->DrawSub();
+		if ((*it)->IsVisibled())
+		{
+			(*it)->DrawSub();
+		}
 	}
 }
 

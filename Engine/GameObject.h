@@ -170,6 +170,7 @@ private:
 	};
 	OBJECT_STATE state_;
 
+
 	//親オブジェクト
 	GameObject* pParent_;
 

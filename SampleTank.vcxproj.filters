@@ -141,6 +141,10 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="WaterLevelHider.cpp" />
     <ClCompile Include="Beverage.cpp" />
+    <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="WaterFlowOrigin.cpp" />
+    <ClCompile Include="WaterFlow.cpp" />
+    <ClCompile Include="Judge.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -251,6 +255,10 @@
     <ClInclude Include="PlayerAction.h" />
     <ClInclude Include="Beverage.h" />
     <ClInclude Include="WaterLevelHider.h" />
+    <ClInclude Include="BackGround.h" />
+    <ClInclude Include="WaterFlowOrigin.h" />
+    <ClInclude Include="WaterFlow.h" />
+    <ClInclude Include="Judge.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

@@ -14,7 +14,7 @@ WaterLevelHider::WaterLevelHider(GameObject *_pParent) :
 void WaterLevelHider::Initialize()
 {
 	hImage_ = Model::Load("Model/question_mark.fbx");
-	transform_.position_.y = 1.45;
+	transform_.position_.y = 1.55;
 	transform_.position_.z = -1;
 	SetScale(2.0f, 2.0f, 1.0f);
 }

@@ -49,11 +49,11 @@ void Table::Initialize()
 											Input::ANASSIGNED,
 											Pad(p2->GetPlayerID(), Input::ANASSIGNED))));
 
-	p1->SetPosition(XMFLOAT3(-1, 0.1, 0));
+	p1->SetPosition(XMFLOAT3(-0.55f, 0.1, 0));
 	p1->SetRotate(XMFLOAT3(0, 0, 0));
 	p1->InputSet() = pIS1;
 
-	p2->SetPosition(XMFLOAT3(1, 0.1, 0));
+	p2->SetPosition(XMFLOAT3(0.55f, 0.1, 0));
 	p2->SetRotate(XMFLOAT3(0, 180, 0));
 	p2->InputSet() = pIS2;
 }
