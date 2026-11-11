@@ -2,6 +2,7 @@
 
 #include "../Engine/GameObject.h"
 #include <array>
+#include "Stage.h"
 
 class Beermug;
 class Player;
@@ -19,5 +20,5 @@ public:
 private:
 	int hModel_;
 
-	std::array<Player*, 2> pPlayers_;
+	std::array<Player*, Stage::MAX_PLAYER_NUM> pPlayers_;
 };

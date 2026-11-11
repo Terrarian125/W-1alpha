@@ -1,10 +1,10 @@
-#pragma once
+﻿#pragma once
 
 #include "../Engine/GameObject.h"
 
-#include <vector>
+#include <array>
 
-class Beermug;
+class Player;
 
 class Judge : public GameObject
 {
@@ -16,7 +16,11 @@ public:
 	void Draw()       override;
 	void Release()    override;
 
-private:
-	std::vector<Beermug *> pBeermugs_;
+	void Judgement();
 
+	inline static int confirmedCount{0};
+	inline static std::string winnerName{"None"};
+
+private:
+	std::array<Player*, 2> pPlayers_;
 };

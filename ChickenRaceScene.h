@@ -3,6 +3,7 @@
 #include "../Engine/GameObject.h"
 
 class SceneManager;
+class Judge;
 
 class ChickenRaceScene : public GameObject
 {
@@ -15,4 +16,6 @@ public:
 	void Release()    override;
 
 private:
+	SceneManager *pSceneManager_;
+	Judge *pJudge_;
 };

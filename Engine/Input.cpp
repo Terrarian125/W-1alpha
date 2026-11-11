@@ -67,7 +67,12 @@ namespace Input
 		for (int i = 0; i < MAX_PAD_NUM; i++)
 		{
 			memcpy(&prevControllerState_[i], &controllerState_[i], sizeof(controllerState_[i]));
-			XInputGetState(i, &controllerState_[i]);
+			DWORD result = XInputGetState(i, &controllerState_[i]);
+
+			if (result != ERROR_SUCCESS)
+			{
+				ZeroMemory(&controllerState_[i], sizeof(XINPUT_STATE));
+			}
 		}
 
 	}
@@ -297,6 +302,10 @@ namespace Input
 	//左スティックの傾きを取得
 	XMFLOAT3 GetPadStickL(int padID)
 	{
+		if (padID < 0 or padID >= MAX_PAD_NUM)
+		{
+			return XMFLOAT3(0, 0, 0);
+		}
 		float x = GetAnalogValue(controllerState_[padID].Gamepad.sThumbLX, 32767, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
 		float y = GetAnalogValue(controllerState_[padID].Gamepad.sThumbLY, 32767, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
 		return XMFLOAT3(x, y, 0);

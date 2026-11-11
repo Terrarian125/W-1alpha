@@ -7,6 +7,7 @@
 #include "PlayerAction.h"
 
 struct InputBinding;
+class Text;
 
 class Bin;
 class Beermug;
@@ -31,7 +32,11 @@ public:
 		return playerID_;
 	}
 
+	float GetWaterLevel();
+
 private:
+	Text *pPlayerNameText_;
+
 	// Zero origin
 	inline static int playerCount_{0};
 

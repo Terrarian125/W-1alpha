@@ -2,7 +2,7 @@
 #include "Direct3D.h"
 #include "Text.h"
 
-Text::Text() : hPict_(-1), width_(16), height_(32), fileName_("char.png"), rowLength_(16)
+Text::Text() : hPict_(-1), width_(16), height_(32), fileName_("Picture/char.png"), rowLength_(16)
 {
 }
 
@@ -63,6 +63,7 @@ void Text::Draw(int x, int y, const char* str)
 		Transform transform;
 		transform.position_.x = px;
 		transform.position_.y = py;
+
 		Image::SetTransform(hPict_, transform);
 
 		//•\Ž¦‚·‚é”ÍˆÍ

@@ -19,6 +19,11 @@ public:
 	{
 		return isPouring_;
 	}
+	
+	bool IsConfirmed()
+	{
+		return isConfirmed_;
+	}
 
 	// 注ぐ
 	void Pouring();

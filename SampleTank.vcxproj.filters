@@ -145,6 +145,8 @@
     <ClCompile Include="WaterFlowOrigin.cpp" />
     <ClCompile Include="WaterFlow.cpp" />
     <ClCompile Include="Judge.cpp" />
+    <ClCompile Include="Stage.cpp" />
+    <ClCompile Include="ResultScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -259,6 +261,8 @@
     <ClInclude Include="WaterFlowOrigin.h" />
     <ClInclude Include="WaterFlow.h" />
     <ClInclude Include="Judge.h" />
+    <ClInclude Include="Stage.h" />
+    <ClInclude Include="ResultScene.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

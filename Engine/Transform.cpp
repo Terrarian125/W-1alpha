@@ -1,5 +1,5 @@
 #include "Transform.h"
-
+#include "Camera.h"
 
 
 Transform::Transform(): pParent_(nullptr)
@@ -43,4 +43,3 @@ XMMATRIX Transform::GetWorldMatrix()
 
 	return  matScale_ * matRotate_ * matTranslate_;
 }
-

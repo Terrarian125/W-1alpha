@@ -4,6 +4,7 @@
 #include "WaterLevelHider.h"
 #include "Beverage.h"
 #include "Bin.h"
+#include "Judge.h"
 
 #include <imgui.h>
 
@@ -28,7 +29,7 @@ Beermug::Beermug(GameObject *_pParent) :
 void Beermug::Initialize()
 {
 	pBeverage_ = Instantiate<Beverage>(this);
-	beerMugID_ = beerMugCount_;
+	beerMugID_ = beerMugCount_ + 1;
 
 	hModels_[BEERMUG_CROSS_SECTION_L] = Model::Load("Model/beermug_L.fbx");
 	hModels_[BEERMUG_CROSS_SECTION_R] = Model::Load("Model/beermug_R.fbx");
@@ -69,11 +70,26 @@ void Beermug::Update()
 			transform_.rotate_.y = 180.f;
 		}
 
-		if (not(pWLH_->IsDead()))
+		if (pWLH_)
 		{
-			pWLH_->KillMe();
+			if (not(pWLH_->IsDead()))
+			{
+				pWLH_->KillMe();
+			}
 		}
 	}
+
+	if (Judge::confirmedCount == 2)
+	{
+		if (pWLH_)
+		{
+			if (not(pWLH_->IsDead()))
+			{
+				pWLH_->KillMe();
+			}
+		}
+	}
+
 	isFilling_ = false;
 }
 
