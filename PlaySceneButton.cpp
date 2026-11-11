@@ -387,8 +387,7 @@ void PlaySceneButton::Draw()
     if (rightPressed_)
     {
         std::snprintf(buffer, sizeof(buffer), "%.2f", rightTime_);
-        font_->Draw(screenWidth_ - 180.0f - 24.0f + 48.0f,
-            resultY, buffer, 0xFFFFFFFF);
+        font_->Draw(screenWidth_ - 180.0f - 24.0f + 48.0f,resultY, buffer, 0xFFFFFFFF);
     }
 
     if (hasResult_)
