@@ -14,10 +14,6 @@ void Rock::Update()
 {
 }
 
-void Rock::Draw()
-{
-}
-
 void Rock::Release()
 {
 }

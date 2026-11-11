@@ -1,5 +1,7 @@
 #pragma once
 #include "../Engine/GameObject.h"
+#include "Horse.hpp"
+#include "Fence.hpp"
 
 class Stage : public GameObject
 {
@@ -11,4 +13,6 @@ public:
 	void Release() override;
 private:
 	int hModel_;
+	Horse* horse;
+	Fence* fence;
 };

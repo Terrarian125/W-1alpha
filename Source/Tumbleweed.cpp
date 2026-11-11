@@ -14,10 +14,6 @@ void Tumbleweed::Update()
 {
 }
 
-void Tumbleweed::Draw()
-{
-}
-
 void Tumbleweed::Release()
 {
 }

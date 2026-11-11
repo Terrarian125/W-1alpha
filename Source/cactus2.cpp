@@ -14,10 +14,6 @@ void cactus2::Update()
 {
 }
 
-void cactus2::Draw()
-{
-}
-
 void cactus2::Release()
 {
 }

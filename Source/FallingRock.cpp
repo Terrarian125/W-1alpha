@@ -14,10 +14,6 @@ void FallingRock::Update()
 {
 }
 
-void FallingRock::Draw()
-{
-}
-
 void FallingRock::Release()
 {
 }

@@ -1,8 +1,8 @@
 #include "RaceScene.hpp"
 #include "Horse.hpp"
 #include "Stage.hpp"
-#include "Fence.hpp"
 #include "../Engine/Image.h"
+#include "Fence.hpp"
 
 RaceScene::RaceScene(GameObject* parent)
 	:GameObject(parent, "RaceScene"), hImage_(-1)
@@ -15,7 +15,7 @@ void RaceScene::Initialize()
 
 	Instantiate<Horse>(this);
 	Instantiate<Stage>(this);
-	Instantiate<Fence>(this);
+	//Instantiate<Fence>(this);
 }
 
 void RaceScene::Update()

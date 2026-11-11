@@ -7,6 +7,5 @@ public:
 	cactus1(GameObject* parent);
 	void Initialize() override;
 	void Update() override;
-	void Draw() override;
 	void Release() override;
 };

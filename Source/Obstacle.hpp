@@ -3,6 +3,7 @@
 #include "../Engine/Model.h"
 #include "../Engine/BoxCollider.h"
 #include  "../Engine/SphereCollider.h"
+#include "Horse.hpp"
 
 // 障害物クラスを管理するクラス
 class Obstacle : public GameObject
@@ -21,6 +22,8 @@ protected:
 
 	BoxCollider* bCollider_;
 	SphereCollider* sCollider_;
+
+	Horse* horse_;
 
 	bool isColl_;
 
