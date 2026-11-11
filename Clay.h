@@ -12,8 +12,9 @@ class Clay : public GameObject
     XMFLOAT3 rotate_[10];   // 回転
     XMFLOAT3 scale_[10];    // 拡大率
 
-    int hModel_[10];     //モデル番号
-    //int hImage_;      // 画像読み込み
+    int hModel_[10];  //モデル番号
+    //int hImage_;    // 画像読み込み
+    int hSound_[5];   // サウンド読み込み
 
     int ClayNum_;
 

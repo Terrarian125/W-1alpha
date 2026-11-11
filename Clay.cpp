@@ -1,6 +1,7 @@
 #include "Clay.h"
 #include "Engine/Input.h"
 #include "Engine/Model.h"
+#include "Engine/Audio.h"
 #include "Engine/SceneManager.h"
 #include "ImGui/imgui.h"
 
@@ -14,7 +15,7 @@ int Clay::TotalScore_[2] = { 0, 0 };
 //コンストラクタ
 Clay::Clay(GameObject* parent)
     :GameObject(parent, "Clay"), position_{ { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f } },
-    hModel_{ (-1,-1,-1) }, OnDown_{ true, true, false }, IsDead_{ false, false, false },
+    hModel_{ (-1,-1,-1) }, hSound_{ (-1,-1,-1,-1,-1) }, OnDown_{ true, true, false }, IsDead_{ false, false, false },
     Score_{ (0, 0, 0) }, ClayNum_(10)
 {
 }
@@ -46,6 +47,14 @@ void Clay::Initialize()
         hModel_[i] = Model::Load("/Model/Dish00.fbx");
         assert(hModel_[i] >= 0);
     }
+
+    // サウンドデータのロード
+    hSound_[0] = Audio::Load("Audio/ガラスが割れる3.wav"); // クレーが壊れる音
+    assert(hSound_[0] >= 0);
+    hSound_[1] = Audio::Load("Audio/空き瓶が砕ける.wav");  // 空き瓶が割れる音
+    assert(hSound_[1] >= 0);
+    hSound_[2] = Audio::Load("Audio/爆発1.wav");           // 爆弾の爆発音
+    assert(hSound_[2] >= 0);
 
     // 一応あると楽だからここに
     // === 位置のメモ ===
@@ -387,7 +396,10 @@ bool Clay::TryBreak_1P(const XMFLOAT2& reticleNdc_1P)
     {
         if (!IsDead_[i]) allBroken = false;
     }
-    if (allBroken) KillMe();
+    if (allBroken) {
+        Audio::Play(hSound_[0]);
+        KillMe();
+    }
 
     return true;
 }
@@ -409,7 +421,10 @@ bool Clay::TryBreak_2P(const XMFLOAT2& reticleNdc_2P)
     {
         if (!IsDead_[i]) allBroken = false;
     }
-    if (allBroken) KillMe();
+    if (allBroken) {
+        Audio::Play(hSound_[0]);
+        KillMe();
+    }
 
     return true;
 }

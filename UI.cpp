@@ -1,6 +1,7 @@
 #include "UI.h"
 #include "Engine/Input.h"
 #include "Engine/Image.h"
+#include "Engine/Audio.h"
 #include "Engine/SceneManager.h"
 #include "ImGui/imgui.h"
 #include "Clay.h"
@@ -12,7 +13,7 @@ using namespace std;
 
 // コンストラクタ
 UI::UI(GameObject* parent)
-    : GameObject(parent, "Reticle"), position_{ { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f } }, hImage_{ (-1), (-1) },
+    : GameObject(parent, "Reticle"), position_{ { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f } }, hImage_{ -1, -1 }, hSound_(-1),
     Bullet_num{ 999, 999 }, /*Score(0),*/ Game_Timer(30.0f)
 {
 }
@@ -30,6 +31,10 @@ void UI::Initialize()
     assert(hImage_[0] >= 0);
     hImage_[1] = Image::Load("Image/UI_1.png");   // 木材
     assert(hImage_[1] >= 0);
+
+    // サウンドデータのロード
+    hSound_ = Audio::Load("Audio/拳銃を撃つ.wav"); // 弾
+    assert(hSound_ >= 0);
 
     // 一応あると楽だからここに
     position_[0] = { -0.92f, -0.75f, 0.0f }; // 位置
@@ -74,14 +79,15 @@ void UI::Update()
 
         if ((Input::IsMouseButtonDown(0)
             || Input::IsPadButtonDown(XINPUT_GAMEPAD_B, 0)
-            || triggerNow[0] && !triggerOld_[0]))
-        {
+            || triggerNow[0] && !triggerOld_[0])) {
+            Audio::Play(hSound_);
             Bullet_num[0]--;
             //Score += 20;
         }
         if ((Input::IsMouseButtonDown(1)
             || Input::IsPadButtonDown(XINPUT_GAMEPAD_B, 1)
             || triggerNow[1] && !triggerOld_[1])) {
+            Audio::Play(hSound_);
             Bullet_num[1]--;
         }
 

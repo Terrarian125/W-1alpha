@@ -19,6 +19,9 @@ class UI : public GameObject
     // 画像読み込み
     int hImage_[2];
 
+    // サウンド読み込み
+    int hSound_;
+
     int Bullet_num[2];  // 残弾数
     //int Score;        // スコア
     float Game_Timer;   // 試合時間
