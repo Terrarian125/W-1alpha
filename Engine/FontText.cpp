@@ -1,6 +1,39 @@
 #include "FontText.hpp"
-
 #include <imgui.h>
+
+/*
+フォントテキスト描画クラス
+【使い方】
+1.Initialize() でフォントを読み込む
+2.Draw() で指定した座標に文字を描画する
+3.不要になったら Release() を呼び出す
+
+【使用例】
+//フォントテキスト描画クラスのインスタンスを作成
+FontText font;
+
+//フォントの読み込み（Ryeフォント、サイズ42）
+font.Initialize("Fonts/Rye-Regular.ttf", 42.0f);
+
+//文字の描画
+font.Draw(100.0f, 100.0f, "Hello World");
+
+//解放
+font.Release();
+
+ 【注意事項】
+
+ ・Main.cppについて、
+ 　FontText::IInitialize() は ImGui::CreateContext() の実行後に呼び出すこと。
+   ImGuiの初期化前はフォントを読み込めない。
+
+ ・FontTextを使用するクラスより先に破棄しないこと。
+   例えば、PlaySceneがFontTextを所有し、
+   PlaySceneButtonがポインタで参照する場合、
+   PlaySceneButtonが使用している間はFontTextを保持する。
+
+ ・ImGui::DestroyContext() は FontText の使用終了後に呼び出すこと。
+*/
 
 HRESULT FontText::Initialize(const char* fileName, float fontSize)
 {
