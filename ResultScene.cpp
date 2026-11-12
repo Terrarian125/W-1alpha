@@ -42,7 +42,31 @@ void ResultScene::Draw()
 	pText_->Draw((Direct3D::screenWidth_ * 0.5f) - offset * 0.5f,
 				  Direct3D::screenHeight_ * 0.5f,
 				  resultMessage.c_str());
+
+	std::string str{ "Reason:" };
+	offset = 16 * str.length();
+	pText_->Draw( (Direct3D::screenWidth_ * 0.5f ) - offset * 0.5f,
+				  450,
+				  str.c_str());
+
+	offset = 16 * Judge::reason.length();
+	pText_->Draw( (Direct3D::screenWidth_ * 0.5f) - offset * 0.5f,
+				  480,
+				  Judge::reason.c_str() );
+
+	if (Judge::jr != Judge::WATER_OVERFLOW)
+	{
+		std::string p1WaterLevel{ "p1 : " + std::to_string(Judge::p1WaterLevel) + "ml"};
+		std::string p2WaterLevel{ "p2 : " + std::to_string( Judge::p2WaterLevel ) + "ml" };
+		std::string waterLevel{ p1WaterLevel + "  |  " + p2WaterLevel};
+
+		offset = 16 * waterLevel.length();
+		pText_->Draw((Direct3D::screenWidth_ * 0.5f) - offset * 0.5f,
+					 540,
+					 waterLevel.c_str());
+	}
 }
 
 void ResultScene::Release()
-{}
+{
+}

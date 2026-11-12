@@ -5,6 +5,7 @@
 #include "Beverage.h"
 #include "Bin.h"
 #include "Judge.h"
+#include "Puddle.h"
 
 #include <imgui.h>
 
@@ -21,8 +22,10 @@ Beermug::Beermug(GameObject *_pParent) :
 	waterLevel_(0),
 	pWLH_(),
 	pBeverage_(),
+	pPuddle_(),
 	isFilling_(false),
-	isWLHInstanced_(false)
+	isWLHInstanced_(false),
+	isOverFlow_(false)
 {
 }
 
@@ -53,15 +56,29 @@ void Beermug::Update()
 	// 半分超えた
 	if (waterLevel_ >= 0.5f and isWLHInstanced_ == false)
 	{
-		pWLH_ = Instantiate<WaterLevelHider>(this);
+		if (pWLH_ == nullptr)
+		{
+			pWLH_ = Instantiate<WaterLevelHider>(this);
+		}
+		pWLH_->SetPosition( 0.125f, 1.6f, -1.0f );
+		if (beerMugID_ == 2)
+		{
+			pWLH_->SetPosition( -0.125f, 1.6f, -1.0f );
+		}
 		isWLHInstanced_ = true;
 	}
 
 	// 溢れた
-	if (waterLevel_ >= OVERFLOW_RATE and pWLH_)
+	if (waterLevel_ >= OVERFLOW_RATE)
 	{
+		if (pPuddle_ == nullptr)
+		{
+			pPuddle_ = Instantiate<Puddle>( this );
+		}
+
+		isOverFlow_ = true;
 		modelIdx_ = 2;
-     	if (beerMugID_ % 2 != 0) 
+     	if (beerMugID_ == 2) 
 		{
 			transform_.rotate_.y = 180.f;
 		}

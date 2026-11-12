@@ -29,6 +29,8 @@ Bin::Bin(GameObject *_pParent) :
 
 void Bin::Initialize()
 {
+	binID_ = binCount_ + 1;
+
 	hModel_ = Model::Load("Model/bin_mock.fbx");
 
 	pWFO_ = Instantiate<WaterFlowOrigin>(this);
@@ -37,6 +39,8 @@ void Bin::Initialize()
 	pWFO_->Invisible();
 
 	transform_.position_.y = 0.6f;
+
+	binCount_++;
 }
 
 void Bin::Update()
@@ -59,7 +63,7 @@ void Bin::Update()
 			static float bias{ 0.5 };
 			if (transform_.rotate_.z > IDLE_ANGLE_Z + POURING_ANGLE_Z)
 			{
-				// 正規化された注ぎ時の最大角度まで倒れる時間
+				// 正規化された注ぎ中の最大角度まで倒れる時間
 				float normalizedTime = std::clamp(pouringTime_ / 50.f, 0.0f, 1.f);
 
 				// 注ぎ時の最大角度にかける係数
@@ -132,6 +136,7 @@ void Bin::Draw()
 
 void Bin::Release()
 {
+	binCount_ = 0;
 }
 
 void Bin::Pouring()
@@ -146,4 +151,10 @@ void Bin::Conform()
 {
 	isConfirmed_ = true;
 	transform_.rotate_.z = 0;
+	transform_.position_.x += -0.25f;
+
+	if (pWFO_)
+	{
+		pWFO_->Invisible();
+	}
 }

@@ -34,8 +34,11 @@ public:
 
 	float GetWaterLevel();
 
+	bool IsOverFlow();
+
+
 private:
-	Text *pPlayerNameText_;
+	Text *pText_;
 
 	// Zero origin
 	inline static int playerCount_{0};
@@ -45,4 +48,7 @@ private:
 	
 	Bin* pBin_;
 	Beermug* pBeermug_;
+
+	bool overFlowTextVisible_;
+	float overFlowTextTimer_;
 };

@@ -32,6 +32,9 @@ public:
 	void Conform();
 
 private:
+	inline static int binCount_{ 0 };
+	int binID_;
+
 	int  hModel_;
 
 	// 注ぎ操作を行った時間（フレーム単位）

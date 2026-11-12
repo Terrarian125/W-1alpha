@@ -182,6 +182,7 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Judge.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Puddle.cpp" />
     <ClCompile Include="ResultScene.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="Table.cpp" />
@@ -239,6 +240,7 @@
     <ClInclude Include="Judge.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerAction.h" />
+    <ClInclude Include="Puddle.h" />
     <ClInclude Include="ResultScene.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="Table.h" />

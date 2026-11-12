@@ -4,6 +4,7 @@
 
 class WaterLevelHider;
 class Beverage;
+class Puddle;
 
 class Beermug : public GameObject
 {
@@ -29,6 +30,11 @@ public:
 		return waterLevel_;
 	}
 
+	bool IsOverFlow()
+	{
+		return isOverFlow_;
+	}
+
 	enum BeermugVariation
 	{
 		BEERMUG_CROSS_SECTION_L = 0,
@@ -50,8 +56,10 @@ private:
 
 	WaterLevelHider *pWLH_;
 	Beverage *pBeverage_;
+	Puddle* pPuddle_;
 
 	float waterLevel_;
 	bool  isFilling_;
 	bool  isWLHInstanced_;
+	bool  isOverFlow_;
 };
