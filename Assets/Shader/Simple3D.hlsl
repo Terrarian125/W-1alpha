@@ -98,8 +98,13 @@ float4 PS(VS_OUT inData) : SV_Target
 
 	//環境光（アンビエント）
 	//これはMaya側で指定し、グローバル変数で受け取ったものをそのまま
-    const float A = 0.4;
-    float4 ambient = float4(a, a, a, 1.0f);
+    
+    float4 ambient = g_vecAmbient;
+    if (g_vecAmbient.x < 0.1f)
+    {
+        const float A = 0.4;
+        ambient = float4(A, A, A, 1.0f);
+    }
     
 	//鏡面反射光（スペキュラー）
     float4 speculer = float4(0, 0, 0, 0); //とりあえずハイライトは無しにしておいて…
