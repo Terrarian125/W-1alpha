@@ -56,12 +56,15 @@ void Player::Update()
         pBin_->Pouring();
     }
 
-    bool stickInputConform{ Input::GetPadStickL(playerID_ - 1).y <= -0.5f };
-    if ((IsDown(inputSet_.at(PlayerAction::CONFIRMED)) and not(pBin_->IsConfirmed())) or
-        stickInputConform and not(pBin_->IsConfirmed()))
+    if (pBeermug_->GetWaterLevel() > Beermug::wlhSpawnLevel)
     {
-        pBin_->Conform();
-        Judge::confirmedCount += 1;
+        bool stickInputConform{ Input::GetPadStickL(playerID_ - 1).y <= -0.5f };
+        if ((IsDown(inputSet_.at(PlayerAction::CONFIRMED)) and not(pBin_->IsConfirmed())) or
+            stickInputConform and not(pBin_->IsConfirmed()))
+        {
+            pBin_->Conform();
+            Judge::confirmedCount += 1;
+        }
     }
 }
 

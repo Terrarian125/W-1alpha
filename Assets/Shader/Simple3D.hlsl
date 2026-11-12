@@ -69,6 +69,7 @@ VS_OUT VS(float4 pos : POSITION, float4 Normal : NORMAL, float2 Uv : TEXCOORD)
 //───────────────────────────────────────
 float4 PS(VS_OUT inData) : SV_Target
 {
+
 	//ライトの向き
     float4 lightDir = g_vecLightDir; //グルーバル変数は変更できないので、いったんローカル変数へ
     lightDir = normalize(lightDir); //向きだけが必要なので正規化
@@ -97,8 +98,9 @@ float4 PS(VS_OUT inData) : SV_Target
 
 	//環境光（アンビエント）
 	//これはMaya側で指定し、グローバル変数で受け取ったものをそのまま
-    float4 ambient = g_vecAmbient;
-
+    const float A = 0.4;
+    float4 ambient = float4(a, a, a, 1.0f);
+    
 	//鏡面反射光（スペキュラー）
     float4 speculer = float4(0, 0, 0, 0); //とりあえずハイライトは無しにしておいて…
     if (g_vecSpeculer.a != 0)	//スペキュラーの情報があれば

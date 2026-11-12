@@ -440,7 +440,7 @@ void FbxParts::Draw(Transform& transform)
 		CONSTANT_BUFFER cb;
 		cb.worldVewProj =	XMMatrixTranspose(transform.GetWorldMatrix() * Camera::GetViewMatrix() * Camera::GetProjectionMatrix());						// リソースへ送る値をセット
 		cb.world =		XMMatrixTranspose(transform.GetWorldMatrix());
-		cb.normalTrans =	XMMatrixTranspose(transform.matRotate_ * XMMatrixInverse(nullptr, transform.matScale_));
+		cb.normalTrans =	XMMatrixTranspose(XMMatrixInverse(nullptr, transform.GetWorldMatrix()));
 		cb.ambient = pMaterial_[i].ambient;
 		cb.diffuse = pMaterial_[i].diffuse;
 		cb.speculer = pMaterial_[i].specular;
