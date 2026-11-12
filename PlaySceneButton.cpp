@@ -1,4 +1,5 @@
-﻿#include "PlaySceneButton.h"
+﻿
+#include "PlaySceneButton.h"
 #include "Engine/Audio.h"
 #include "Engine/Input.h"
 #include <imgui.h>
@@ -13,7 +14,7 @@ bool PlaySceneButton::Initialize(
     float screenWidth, float screenHeight,
     FontText* font, FontText* japaneseFont, GameTimer* timer)
 {
-	//フォントとタイマーが有効か確認
+    //フォントとタイマーが有効か確認
     if (!font || !japaneseFont || !timer)
         return false;
 
@@ -92,6 +93,9 @@ void PlaySceneButton::Reset()
     winnerSide_ = 0;
     resultText_.clear();
     winnerFollowupPending_ = false;
+
+    //フライング表示もリセット
+    falseStartPending_ = false;
 
     if (startButton_) startButton_->SetActive(true);
     if (leftStopButton_) leftStopButton_->SetActive(false);
@@ -192,7 +196,17 @@ void PlaySceneButton::OnStopClicked(int side)
             return;
         }
 
-        ResetRound(true);
+        //フライング表示後、n秒待って仕切り直す
+        timer_->Stop();
+
+        falseStartPending_ = true;
+        falseStartMessageEndTime_ =
+            std::chrono::steady_clock::now() + std::chrono::seconds(3);//<-まつ秒すう
+
+        //操作を無効化
+        leftStopButton_->SetActive(false);
+        rightStopButton_->SetActive(false);
+
         return;
     }
 
@@ -265,6 +279,14 @@ void PlaySceneButton::Draw()
     if (!font_ || !timer_)
         return;
 
+    //フライング表示が終了したらラウンドを仕切り直す
+    if (falseStartPending_
+        && std::chrono::steady_clock::now() >= falseStartMessageEndTime_)
+    {
+        falseStartPending_ = false;
+        ResetRound(true);
+    }
+
     //コントローラーのAボタン入力
     const bool pad0A = Input::IsPadButtonDown(XINPUT_GAMEPAD_A, 0);
     const bool pad1A = Input::IsPadButtonDown(XINPUT_GAMEPAD_A, 1);
@@ -272,22 +294,26 @@ void PlaySceneButton::Draw()
     //START可能な状態か確認
     const bool canStart = !timer_->IsWaiting() && !timer_->IsRunning();
 
-    if (canStart && (pad0A || pad1A))
+    //フライング表示中は入力を受け付けない
+    if (!falseStartPending_)
     {
-        //どちらかがAを押したらゲーム開始
-        OnStartClicked();
-    }
-    else
-    {
-        //ゲーム中は各プレイヤーのSTOPとして扱う
-        if (pad0A)
+        if (canStart && (pad0A || pad1A))
         {
-            OnStopClicked(-1);
+            //どちらかのAボタンを押したらゲーム開始
+            OnStartClicked();
         }
-
-        if (pad1A)
+        else
         {
-            OnStopClicked(1);
+            //ゲーム中は各プレイヤーのSTOPとして扱う
+            if (pad0A)
+            {
+                OnStopClicked(-1);
+            }
+
+            if (pad1A)
+            {
+                OnStopClicked(1);
+            }
         }
     }
 
@@ -347,22 +373,33 @@ void PlaySceneButton::Draw()
             (alpha << 24) | 0x00FFFFFF;
 
         //ターゲット時間
-        std::snprintf(buffer,sizeof(buffer),"Target: %d second",timer_->GetTargetSeconds());
+        std::snprintf(buffer, sizeof(buffer), "Target: %d second", timer_->GetTargetSeconds());
 
-        japaneseFont_->Draw(screenWidth_ * 0.4f - 100.0f,screenHeight_ * 0.5f - 40.0f,buffer,messageColor);
+        japaneseFont_->Draw(screenWidth_ * 0.4f - 100.0f, screenHeight_ * 0.5f - 40.0f, buffer, messageColor);
 
-        japaneseFont_->Draw(screenWidth_ * 0.3f - 130.0f,screenHeight_ * 0.5f + 10.0f,"Click[STOP] or XBOX(A)",messageColor);
+        japaneseFont_->Draw(screenWidth_ * 0.3f - 130.0f, screenHeight_ * 0.5f + 10.0f, "Click[STOP] or XBOX(A)", messageColor);
     }
     else if (timer_->IsRunning() && timer_->GetTargetSeconds() > 0)
     {
         const double elapsed = timer_->GetElapsedSeconds();
-		constexpr double FADE_SECONDS = 5.0;//この秒数まで徐々に透明化していく
+        constexpr double FADE_SECONDS = 5.0;//この秒数まで徐々に透明化していく
         const double opacity = (std::max)(0.0, 1.0 - elapsed / FADE_SECONDS);
         const unsigned int alpha = static_cast<unsigned int>(opacity * 255.0);
         const unsigned int timerColor = (alpha << 24) | 0x00FFFFFF;
 
         std::snprintf(buffer, sizeof(buffer), "%05.2f", elapsed);
         font_->Draw(screenWidth_ * 0.5f - 45.0f, 20.0f, buffer, timerColor);
+    }
+
+    //フライング表示
+    if (falseStartPending_)
+    {
+        font_->Draw(
+            screenWidth_ * 0.5f - 130.0f,
+            screenHeight_ * 0.5f - 30.0f,
+            "TOO EARLY!",
+            0xFFFF5555
+        );
     }
 
     //各ボタンの下にフライング回数をXで表示
@@ -387,7 +424,7 @@ void PlaySceneButton::Draw()
     if (rightPressed_)
     {
         std::snprintf(buffer, sizeof(buffer), "%.2f", rightTime_);
-        font_->Draw(screenWidth_ - 180.0f - 24.0f + 48.0f,resultY, buffer, 0xFFFFFFFF);
+        font_->Draw(screenWidth_ - 180.0f - 24.0f + 48.0f, resultY, buffer, 0xFFFFFFFF);
     }
 
     if (hasResult_)

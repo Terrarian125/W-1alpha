@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include "Engine/GuiButton.h"
@@ -56,6 +57,10 @@ private:
     int countdownSeHandle_ = -1;
     bool winnerFollowupPending_ = false;
     std::chrono::steady_clock::time_point winnerFollowupTime_{};
+
+    //フライング表示用
+    bool falseStartPending_ = false;
+    std::chrono::steady_clock::time_point falseStartMessageEndTime_{};
 
     std::unique_ptr<GuiButton> startButton_;
     std::unique_ptr<GuiButton> leftStopButton_;
