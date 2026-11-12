@@ -1,53 +1,67 @@
 #pragma once
-#include <vector>
 #include <string>
+#include <vector>
 
-//-----------------------------------------------------------
-//CSVファイルを扱うクラス
-//-----------------------------------------------------------
-class CsvReader
-{
-	//読み込んだデータを入れておく2次元配列
-	std::vector<std::vector<std::string>> data_;
-
-	//「,」か「改行」までの文字列を取得
-	//引数：reuult	結果を入れるアドレス
-	//引数：data	もとの文字列データ
-	//引数：index	何文字目から調べるか
-	//戻値：なし
-	void GetToComma(std::string *result, std::string data, DWORD* index);
-
+/// <summary>
+/// CSVファイルを読み、セルごとにデータを返します
+/// データは、string型、int型、float型で返します
+/// 3つの横並びのセルで、VECTOR型を返すこともできます
+/// 範囲外を指定した場合は、assertします
+/// </summary>
+class CsvReader {
 public:
-	//コンストラクタ
-	CsvReader();
-
-	//デストラクタ
+	/// <summary>
+	/// このクラスは、コンストラクタでファイルを読み、
+	/// CSVファイルを読んで、値を保持します。
+	/// コンストラクタ終了時には、ファイルを閉じています。
+	/// </summary>
+	/// <param name="filename">ファイル名</param>
+	CsvReader(std::string filename);
 	~CsvReader();
 
-	//CSVファイルのロード
-	//引数：fileName　ファイル名
-	//戻値：成功→true　失敗→false
-	bool Load(std::string fileName);
+	/// <summary>
+	/// CSVの行数を取得します
+	/// </summary>
+	/// <returns></returns>
+	int GetLines();
 
+	/// <summary>
+	/// 指定した行のカラム数を取得します
+	/// </summary>
+	/// <param name="line">行番号</param>
+	/// <returns>カラム数</returns>
+	int GetColumns(int line);
 
-	//指定した位置のデータを文字列で取得
-	//引数：x,y　取得したい位置
-	//戻値：取得した文字列
-	std::string GetString(DWORD x, DWORD y);
+	/// <summary>
+	/// 指定した行・列のデータを文字列で返します
+	/// </summary>
+	/// <param name="line">行番号</param>
+	/// <param name="column">列番号</param>
+	/// <returns>文字列</returns>
+	std::string GetString(int line, int column);
 
-	//指定した位置のデータを整数で取得
-	//引数：x,y　取得したい位置
-	//戻値：取得した値
-	int GetValue(DWORD x, DWORD y);
+	/// <summary>
+	/// 指定した行・列のデータをint型の数値で返します
+	/// データが入ってない場合は0を返します
+	/// </summary>
+	/// <param name="line">行番号</param>
+	/// <param name="column">列番号</param>
+	/// <returns>数値</returns>
+	int GetInt(int line, int column);
 
-	//ファイルの列数を取得
-	//引数：なし
-	//戻値：列数
-	size_t GetWidth();
-
-	//ファイルの行数を取得
-	//引数：なし
-	//戻値：行数
-	size_t GetHeight();
+	/// <summary>
+	/// 指定した行・列のデータをint型の数値で返します
+	/// データが入ってない場合は0を返します
+	/// </summary>
+	/// <param name="line"></param>
+	/// <param name="column"></param>
+	/// <param name="line">行番号</param>
+	/// <param name="column">列番号</param>
+	/// <returns>小数値</returns>
+	float GetFloat(int line, int column);
+private:
+	struct LINEREC {
+		std::vector<std::string> record;
+	};
+	std::vector<LINEREC> all;
 };
-

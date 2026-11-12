@@ -13,6 +13,7 @@ void RaceScene::Initialize()
 	hImage_ = Image::Load("Picture/yuuhi.jpg");
 
 	Instantiate<Stage>(this);
+
 	horse = (Horse*)FindChildObject("Horse");
 }
 
