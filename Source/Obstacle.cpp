@@ -26,6 +26,11 @@ void Obstacle::Release()
 {
 }
 
+void Obstacle::SetPosition(XMFLOAT3 pos)
+{
+	transform_.position_ = pos;
+}
+
 void Obstacle::SetBoxCollider(XMFLOAT3 center, XMFLOAT3 size)
 {
 	AddCollider(new BoxCollider(center, size));

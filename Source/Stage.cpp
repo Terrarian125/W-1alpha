@@ -1,6 +1,12 @@
 #include "Stage.hpp"
 #include "../Engine/Model.h"
+#include "../Engine/csvReader.h"
+
 #include "Fence.hpp"
+#include "Rock.hpp"
+#include "cactus1.hpp"
+#include "cactus2.hpp"
+
 
 Stage::Stage(GameObject* parent)
 	:GameObject(parent, "Stage"), hModel_(-1)
@@ -15,12 +21,19 @@ void Stage::Initialize()
 	transform_.scale_ = XMFLOAT3(1, 1, 50);
 
 	horse = Instantiate<Horse>(GetParent());
-	fence = Instantiate<Fence>(GetParent());
+
+	LoadStageCsv();
 }
 
 void Stage::Update()
 {
-	horse->Collision(fence);
+    for (auto& obstacle : obs)
+    {
+        if (obstacle != nullptr)
+        {
+            horse->Collision(obstacle);
+        }
+    }
 }
 
 void Stage::Draw()
@@ -31,4 +44,60 @@ void Stage::Draw()
 
 void Stage::Release()
 {
+}
+
+void Stage::LoadStageCsv()
+{
+    CsvReader csv("Data/Stage.csv");
+
+    const float xPositions[4] =
+    {
+        -300.0f,
+        -100.0f,
+         100.0f,
+         300.0f
+    };
+
+    for (int i = 0; i < csv.GetLines(); i++)
+    {
+		static const int numColumns = 4;
+        for (int j = 0; j < numColumns; j++)
+        {
+            int type = csv.GetInt(i, j);
+
+            if (type == 0)
+                continue;
+
+            Obstacle* obstacle = nullptr;
+
+            switch (type)
+            {
+            case 1:
+                obstacle = Instantiate<Fence>(GetParent());
+                break;
+
+            case 2:
+                obstacle = Instantiate<Rock>(GetParent());
+                break;
+
+            case 3:
+                obstacle = Instantiate<cactus1>(GetParent());
+                break;
+
+            case 4:
+                obstacle = Instantiate<cactus2>(GetParent());
+                break;
+            }
+
+            if (obstacle != nullptr)
+            {
+                float x = xPositions[j];
+                float z = (i + 1) * 1000.0f;
+
+                obstacle->SetPosition(XMFLOAT3(x, 0, z));
+
+                obs.push_back(obstacle);
+            }
+        }
+    }
 }

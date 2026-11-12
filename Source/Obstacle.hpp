@@ -15,6 +15,7 @@ public:
 	void Draw() override;
 	void Release() override;
 
+	void SetPosition(XMFLOAT3 pos);
 protected:
 	void SetBoxCollider(XMFLOAT3 center, XMFLOAT3 size);
 
