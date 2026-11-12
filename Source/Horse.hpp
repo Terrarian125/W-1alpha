@@ -16,6 +16,8 @@ public:
 	void NockBack();
 
 	void OnCollision(GameObject* pTarget) override;
+
+	XMFLOAT3 GetPosition(){return transform_.position_;}
 private:
 	int hModel_;
 	float speed_;
@@ -26,6 +28,7 @@ private:
 	float gravity_;
 	float jumpPower_;
 
+	bool isHit_;
 	XMFLOAT3 knockbackVelocity_;
 	float knockbackTime_;
 

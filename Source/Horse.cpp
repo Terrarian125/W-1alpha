@@ -6,7 +6,7 @@
 
 Horse::Horse(GameObject* parent)
 	:GameObject(parent, "Horse"), hModel_(-1), speed_(0.0f), jumpPower_(600.0f), 
-	velocity_(-9.8f), gravity_(-980.0f), isGround_(true)
+	velocity_(-9.8f), gravity_(-980.0f), isGround_(true), isHit_(false)
 {
 }
 
@@ -31,34 +31,39 @@ void Horse::Update()
 	static float dt;
 	dt += deltaTime;
 
-	NockBack();
-
-	Run();
-
-	Jump();
-
-	// 左右移動
-	if (transform_.position_.x < -400.0f)
+	if (knockbackTime_ > 0.0f)
 	{
-		transform_.position_.x = -400.0f;
-	}
-	else if (transform_.position_.x > 400.0f)
-	{
-		transform_.position_.x = 400.0f;
-	}
-	if (Input::IsPadButton(XINPUT_GAMEPAD_DPAD_LEFT) || Input::IsKey(DIK_LEFT))
-	{
-		transform_.position_.x -= 5.0f;
-		transform_.rotate_.y = -15.0f;
-	}
-	else if (Input::IsPadButton(XINPUT_GAMEPAD_DPAD_RIGHT) || Input::IsKey(DIK_RIGHT))
-	{
-		transform_.position_.x += 5.0f;
-		transform_.rotate_.y = 15.0f;
+		NockBack();
 	}
 	else
 	{
-		transform_.rotate_.y = 0.0f;
+		Run();
+
+		Jump();
+
+		// 左右移動
+		if (transform_.position_.x < -400.0f)
+		{
+			transform_.position_.x = -400.0f;
+		}
+		else if (transform_.position_.x > 400.0f)
+		{
+			transform_.position_.x = 400.0f;
+		}
+		if (Input::IsPadButton(XINPUT_GAMEPAD_DPAD_LEFT) || Input::IsKey(DIK_LEFT))
+		{
+			transform_.position_.x -= 5.0f;
+			transform_.rotate_.y = -15.0f;
+		}
+		else if (Input::IsPadButton(XINPUT_GAMEPAD_DPAD_RIGHT) || Input::IsKey(DIK_RIGHT))
+		{
+			transform_.position_.x += 5.0f;
+			transform_.rotate_.y = 15.0f;
+		}
+		else
+		{
+			transform_.rotate_.y = 0.0f;
+		}
 	}
 
 	constexpr float upPosition = 500.0f;
@@ -77,6 +82,7 @@ void Horse::Update()
 	ImGui::InputFloat("Position Z", &transform_.position_.z);
 	ImGui::InputFloat("delta",&deltaTime);
 	ImGui::InputFloat("Speed", &speed_);
+	ImGui::Text("Is Hit: %s", isHit_ ? "true" : "false");
 	ImGui::End();
 
 	ImGui::Begin("Time Info");
@@ -103,7 +109,7 @@ void Horse::Run()
 
 	if (speed_ < 15.0f)
 	{
-		speed_ += 0.01f;
+		speed_ += 0.5f;
 	}
 }
 
@@ -175,11 +181,11 @@ void Horse::OnCollision(GameObject* pTarget)
 		dir.z = -1.0f;
 	}
 
-	float power = 10.0f;
+	float power = 500.0f;
 
 	knockbackVelocity_.x = dir.x * power;
 	knockbackVelocity_.y = 0.0f;
 	knockbackVelocity_.z = dir.z * power;
 
-	knockbackTime_ = 0.2f;
+	knockbackTime_ = 0.5f;
 }

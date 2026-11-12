@@ -177,8 +177,12 @@
       <Filter>01Engine\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="Engine\MyCursor.cpp" />
-    <ClCompile Include="Source\ClearScene.cpp" />
-    <ClCompile Include="Source\GameoverScene.cpp" />
+    <ClCompile Include="Source\ClearScene.cpp">
+      <Filter>03Scene\02Clear</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameoverScene.cpp">
+      <Filter>03Scene\03Gameover</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -316,8 +320,12 @@
     </ClInclude>
     <ClInclude Include="Engine\InputBinding.h" />
     <ClInclude Include="Engine\MyCursor.h" />
-    <ClInclude Include="Source\ClearScene.h" />
-    <ClInclude Include="Source\GameoverScene.h" />
+    <ClInclude Include="Source\ClearScene.h">
+      <Filter>03Scene\02Clear</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameoverScene.h">
+      <Filter>03Scene\03Gameover</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".github\copilot-instructions.md" />

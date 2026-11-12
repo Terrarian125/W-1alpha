@@ -1,5 +1,6 @@
 #include "ClearScene.h"
 #include "../Engine/Image.h"
+#include "../Engine/SceneManager.h"
 
 //コンストラクタ
 ClearScene::ClearScene(GameObject * parent)
