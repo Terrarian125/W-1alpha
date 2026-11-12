@@ -108,7 +108,7 @@ namespace Input
 	//U“®‚³‚¹‚é
 	void SetPadVibration(int l, int r, int padID = 0);
 
-
+	extern const int MAX_PAD_NUM;
 
 
 	//ŠJ•ú

@@ -1,6 +1,9 @@
-#include <stdlib.h>
-#include "Direct3D.h"
 #include "Text.h"
+
+#include <cstdlib>
+
+#include "Direct3D.h"
+#include "Camera.h"
 
 Text::Text() : hPict_(-1), width_(16), height_(32), fileName_("Picture/char.png"), rowLength_(16)
 {
@@ -30,6 +33,46 @@ HRESULT Text::Initialize(const char* fileName, const unsigned int charWidth, con
 	height_ = charHeight;
 	rowLength_ = rowLength;
 	return Initialize();
+}
+
+XMFLOAT2 Text::GetScreenPos(Transform& _t)
+{
+	XMVECTOR worldPos = XMVector3Transform(XMVectorZero(), _t.GetWorldMatrix());
+	XMMATRIX vp = Camera::GetViewMatrix() * Camera::GetProjectionMatrix();
+
+	XMVECTOR clip = XMVector4Transform(XMVectorSetW(worldPos, 1.0f), vp);
+	float w = XMVectorGetW(clip);
+
+	float ndcX = XMVectorGetX(clip) / w;
+	float ndcY = XMVectorGetY(clip) / w;
+
+	XMFLOAT2 ret{};
+	ret.x = (ndcX * 0.5f + 0.5f) * Direct3D::screenWidth_;
+	ret.y = (1.0f - (ndcY * 0.5f + 0.5f)) * Direct3D::screenHeight_;
+
+	return ret;
+}
+
+void Text::GetScreenPos(float& _x, float& _y)
+{
+	Transform t{};
+	t.position_ = XMFLOAT3(_x, _y, 0.0f);
+	XMVECTOR worldPos = XMVector3Transform(XMVectorZero(), t.GetWorldMatrix());
+	XMMATRIX vp = Camera::GetViewMatrix() * Camera::GetProjectionMatrix();
+
+	XMVECTOR clip = XMVector4Transform(XMVectorSetW(worldPos, 1.0f), vp);
+	float w = XMVectorGetW(clip);
+
+	float ndcX = XMVectorGetX(clip) / w;
+	float ndcY = XMVectorGetY(clip) / w;
+
+	_x = (ndcX * 0.5f + 0.5f) * Direct3D::screenWidth_;
+	_y = (1.0f - (ndcY * 0.5f + 0.5f)) * Direct3D::screenHeight_;
+}
+
+void Text::GetScreenPos(XMFLOAT3& _pos)
+{
+	GetScreenPos(_pos.x, _pos.y);
 }
 
 

@@ -67,24 +67,16 @@ void Player::Update()
 
 void Player::Draw()
 {
-    XMVECTOR worldPos = XMVector3Transform(XMVectorZero(), transform_.GetWorldMatrix());
-    XMMATRIX vp = Camera::GetViewMatrix() * Camera::GetProjectionMatrix();
+    XMFLOAT2 textPos{};
 
-    XMVECTOR clip = XMVector4Transform(XMVectorSetW(worldPos, 1.0f), vp);
-    float w = XMVectorGetW(clip);
-
-    float ndcX = XMVectorGetX(clip) / w;
-    float ndcY = XMVectorGetY(clip) / w;
-
-    float textPosX = (ndcX * 0.5f + 0.5f) * Direct3D::screenWidth_;
-    float textPosY = (1.0f - (ndcY * 0.5f + 0.5f)) * Direct3D::screenHeight_;
-    textPosY += 100;
-
-    pPlayerNameText_->Draw(textPosX, textPosY, objectName_.c_str());
+    textPos = pPlayerNameText_->GetScreenPos(transform_);
+    textPos.y += 100.f;
+    pPlayerNameText_->Draw((int)textPos.x, (int)textPos.y, objectName_.c_str());
 }
 
 void Player::Release()
 {
+    playerCount_ = 0;
 }
 
 float Player::GetWaterLevel()

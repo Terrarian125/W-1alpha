@@ -57,10 +57,6 @@ void Beermug::Update()
 		isWLHInstanced_ = true;
 	}
 
-	ImGui::Begin("WL");
-	ImGui::InputFloat("WL", &waterLevel_);
-	ImGui::End();
-
 	// 溢れた
 	if (waterLevel_ >= OVERFLOW_RATE and pWLH_)
 	{
@@ -101,6 +97,7 @@ void Beermug::Draw()
 
 void Beermug::Release()
 {
+	beerMugCount_ = 0;
 }
 
 void Beermug::Fill()

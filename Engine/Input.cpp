@@ -302,7 +302,7 @@ namespace Input
 	//左スティックの傾きを取得
 	XMFLOAT3 GetPadStickL(int padID)
 	{
-		if (padID < 0 or padID >= MAX_PAD_NUM)
+		if (padID < 0 or padID > MAX_PAD_NUM - 1)
 		{
 			return XMFLOAT3(0, 0, 0);
 		}

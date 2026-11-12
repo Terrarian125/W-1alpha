@@ -27,6 +27,7 @@ void Judge::Draw()
 
 void Judge::Release()
 {
+	confirmedCount = 0;
 }
 
 void Judge::Judgement()

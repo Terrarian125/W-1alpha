@@ -3,7 +3,6 @@
 #include "../Engine/GameObject.h"
 
 class SceneManager;
-class Judge;
 class Text;
 
 class ResultScene : public GameObject

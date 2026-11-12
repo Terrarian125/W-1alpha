@@ -2,6 +2,7 @@
 
 #include "Engine/SceneManager.h"
 #include "Engine/Text.h"
+#include "Engine/Input.h"
 
 #include "Judge.h"
 
@@ -22,6 +23,15 @@ void ResultScene::Initialize()
 
 void ResultScene::Update()
 {
+
+	for (size_t i = 0; i < Input::MAX_PAD_NUM; i++)
+	{
+		if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A, i) or
+			Input::IsKeyDown(DIK_SPACE))
+		{
+			pSceneManager_->ChangeScene(SCENE_ID_TITLE);
+		}
+	}
 }
 
 void ResultScene::Draw()

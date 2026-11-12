@@ -147,6 +147,9 @@
     <ClCompile Include="Judge.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="ResultScene.cpp" />
+    <ClCompile Include="TitleScene.cpp" />
+    <ClCompile Include="TitleLogo.cpp" />
+    <ClCompile Include="TitleMessage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -263,6 +266,9 @@
     <ClInclude Include="Judge.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="ResultScene.h" />
+    <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="TitleLogo.h" />
+    <ClInclude Include="TitleMessage.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">
@@ -272,6 +278,9 @@
       <Filter>02Shader</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\Debug3D.hlsl">
+      <Filter>02Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\BillBoard.hlsl">
       <Filter>02Shader</Filter>
     </FxCompile>
   </ItemGroup>
