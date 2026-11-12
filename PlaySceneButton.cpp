@@ -351,7 +351,7 @@ void PlaySceneButton::Draw()
 
         japaneseFont_->Draw(screenWidth_ * 0.4f - 100.0f,screenHeight_ * 0.5f - 40.0f,buffer,messageColor);
 
-        japaneseFont_->Draw(screenWidth_ * 0.4f - 130.0f,screenHeight_ * 0.5f + 10.0f,"Push [STOP]!!",messageColor);
+        japaneseFont_->Draw(screenWidth_ * 0.3f - 130.0f,screenHeight_ * 0.5f + 10.0f,"Click[STOP] or XBOX(A)",messageColor);
     }
     else if (timer_->IsRunning() && timer_->GetTargetSeconds() > 0)
     {
