@@ -7,7 +7,7 @@ cactus1::cactus1(GameObject* parent)
 
 void cactus1::Initialize()
 {
-	hModel_ = Model::Load("Assets/Model/cactus00.fbx");
+	hModel_ = Model::Load("Model/cactus00.fbx");
 
 	SetBoxCollider(XMFLOAT3(0.0f, 0.0f, 0.0f), { 200, 200, 100 });
 }

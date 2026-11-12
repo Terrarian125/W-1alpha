@@ -7,7 +7,7 @@ Tumbleweed::Tumbleweed(GameObject* parent)
 
 void Tumbleweed::Initialize()
 {
-	hModel_ = Model::Load("Assets/Model/Tumbleweed00.fbx");
+	hModel_ = Model::Load("Model/Tumbleweed00.fbx");
 }
 
 void Tumbleweed::Update()
