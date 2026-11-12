@@ -13,8 +13,12 @@ using namespace std;
 
 // コンストラクタ
 UI::UI(GameObject* parent)
-    : GameObject(parent, "Reticle"), position_{ { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f } }, hImage_{ -1, -1 }, hSound_(-1),
-    Bullet_num{ 999, 999 }, /*Score(0),*/ Game_Timer(30.0f)
+    : GameObject(parent, "Reticle"),
+    position_{ { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f },{ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f } },
+    rotate_{ { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f },{ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f } },
+    scale_{ { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f },{ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f } },
+    hImage_{ -1, -1 }, hSound_(-1),
+    Bullet_num{ 999, 999 }, /*Score(0),*/ Game_Timer(10.0f)
 {
 }
 

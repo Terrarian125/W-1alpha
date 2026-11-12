@@ -64,25 +64,25 @@ void Clay::Initialize()
     // Z - 6.5～ - 8.0
 
     position_[0] = { 0.0f, 3.0f, 1.0f }; // 位置
-    rotate_[0]   = { 0.0f, 0.0f, 0.0f }; // 回転
-    scale_[0]    = { 0.2f, 0.2f, 0.2f }; // 拡大率
+    rotate_[0] = { 0.0f, 0.0f, 0.0f }; // 回転
+    scale_[0] = { 0.2f, 0.2f, 0.2f }; // 拡大率
     Score_[0] = 10; // スコア
 
     position_[1] = { 0.8f, 1.0f, 0.0f }; // 位置
-    rotate_[1]   = { 0.0f, 0.0f, 0.0f }; // 回転
-    scale_[1]    = { 0.2f, 0.2f, 0.2f }; // 拡大率
+    rotate_[1] = { 0.0f, 0.0f, 0.0f }; // 回転
+    scale_[1] = { 0.2f, 0.2f, 0.2f }; // 拡大率
     Score_[1] = 50; // スコア
 
     position_[2] = { -0.4f, 0.0f, 0.2f }; // 位置
-    rotate_[2]   = { 0.0f, 0.0f, 0.0f }; // 回転
-    scale_[2]    = { 0.2f, 0.2f, 0.2f }; // 拡大率
+    rotate_[2] = { 0.0f, 0.0f, 0.0f }; // 回転
+    scale_[2] = { 0.2f, 0.2f, 0.2f }; // 拡大率
     Score_[2] = 15; // スコア
 
     // デバック用
     {
         for (int i = 3; i < ClayNum_; i++)
         {
-            position_[i] = { 1.0f + ((float)(i - 3) * 1.0f), -2.5f + ((float)(i - 3) * 1.0f), 0.0f}; // 位置
+            position_[i] = { 1.0f + ((float)(i - 3) * 1.0f), -2.5f + ((float)(i - 3) * 1.0f), 0.0f }; // 位置
             rotate_[i] = { 0.0f, 0.0f, 0.0f }; // 回転
             scale_[i] = { 0.2f, 0.2f, 0.2f }; // 拡大率
             Score_[i] = 50; // スコア
@@ -222,8 +222,8 @@ void Clay::Move()
     //左旋回
     if (Input::IsKey(DIK_P))
     {
-       //rotate_[0].x -= 2.5f;
-       //position_[1].y -= 2.5f;
+        //rotate_[0].x -= 2.5f;
+        //position_[1].y -= 2.5f;
     }
 
     position_[0].x += 0.08f;
@@ -232,7 +232,7 @@ void Clay::Move()
 
     position_[1].x -= 0.10f;
     rotate_[1].x -= 1.0f;
-    if(OnDown_[1]) position_[1].y -= 0.02f;
+    if (OnDown_[1]) position_[1].y -= 0.02f;
     else position_[1].y += 0.02f;
 
     position_[2].x += 0.15f;
@@ -256,8 +256,8 @@ void Clay::Draw()
         if (IsDead_[i]) continue;
 
         transform_.position_ = { position_[i].x, position_[i].y, position_[i].z };  // 位置
-        transform_.rotate_   = { rotate_[i].x, rotate_[i].y, rotate_[i].z };        // 回転
-        transform_.scale_    = { scale_[i].x, scale_[i].y, scale_[0].z };           // 拡大率
+        transform_.rotate_ = { rotate_[i].x, rotate_[i].y, rotate_[i].z };        // 回転
+        transform_.scale_ = { scale_[i].x, scale_[i].y, scale_[0].z };           // 拡大率
         Model::SetTransform(hModel_[i], transform_);
         Model::Draw(hModel_[i]);
     }

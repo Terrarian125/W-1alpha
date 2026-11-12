@@ -16,7 +16,11 @@ using namespace std;
 
 // コンストラクタ
 Reticle::Reticle(GameObject* parent)
-    :GameObject(parent, "Reticle"), position_{ {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} }, hImage_{ -1,-1 }
+    :GameObject(parent, "Reticle"),
+    position_{ {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} },
+    rotate_{ 0.0f,0.0f,0.0f },
+    scale_{ 0.0f, 0.0f,0.0f },
+    hImage_{ -1,-1 }
 {
 }
 

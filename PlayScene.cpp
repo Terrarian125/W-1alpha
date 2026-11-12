@@ -30,7 +30,7 @@ void PlayScene::Initialize()
     Instantiate<Reticle>(this);
 
     // 銃表示（銃はレティクルの子クラス）
-    Instantiate<Gun>(this);
+    Instantiate<Gun>(GetParent());
 
     Instantiate<UI>(this);
 

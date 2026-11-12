@@ -10,7 +10,11 @@ using namespace std;
 
 // ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 Gun::Gun(GameObject* parent)
-    :GameObject(parent, "Reticle"), position_{ {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} }, hModel_(-1)
+    :GameObject(parent, "Reticle"),
+    position_{ {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} },
+    rotate_{ {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} },
+    scale_{ {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} },
+    hModel_(-1)
 {
 }
 
@@ -28,12 +32,12 @@ void Gun::Initialize()
     
     // ˆê‰ž‚ ‚é‚ÆŠy‚¾‚©‚ç‚±‚±‚É
     position_[0] = { -3.5f,  -7.0f,  -6.0f}; // ˆÊ’u
-    rotate_[0] = { 0.0f, -103.0f, -12.0f}; // ‰ñ“]
-    scale_[0] = { 0.5f,   0.5f,  0.5f};  // Šg‘å—¦
+    rotate_[0] = { 0.0f, -103.0f, -12.0f};   // ‰ñ“]
+    scale_[0] = { 0.5f,   0.5f,  0.5f};      // Šg‘å—¦
 
     position_[1] = { 3.8f,  -7.0f,  -6.0f }; // ˆÊ’u
-    rotate_[1] = { 0.0f, -77.0f, -12.0f }; // ‰ñ“]
-    scale_[1] = { 0.5f,   0.5f,  0.5f };  // Šg‘å—¦
+    rotate_[1] = { 0.0f, -77.0f, -12.0f };   // ‰ñ“]
+    scale_[1] = { 0.5f,   0.5f,  0.5f };     // Šg‘å—¦
 
     textGun_.Initialize("Fonts/Rye-Regular.ttf", 28.0f);
 }
