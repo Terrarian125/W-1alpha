@@ -193,6 +193,7 @@
     <ClCompile Include="Source\Obstacle.cpp" />
     <ClCompile Include="Source\RaceScene.cpp" />
     <ClCompile Include="Source\Rock.cpp" />
+    <ClCompile Include="Source\Title.cpp" />
     <ClCompile Include="Source\Tumbleweed.cpp" />
     <ClCompile Include="Source\Stage.cpp" />
   </ItemGroup>
@@ -247,6 +248,7 @@
     <ClInclude Include="Source\RaceScene.hpp" />
     <ClInclude Include="Source\Rock.hpp" />
     <ClInclude Include="Source\Stage.hpp" />
+    <ClInclude Include="Source\Title.hpp" />
     <ClInclude Include="Source\Tumbleweed.hpp" />
   </ItemGroup>
   <ItemGroup>

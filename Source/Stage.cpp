@@ -58,7 +58,7 @@ void Stage::LoadStageCsv()
          300.0f
     };
 
-    for (int i = 0; i < csv.GetLines(); i++)
+    for (int i = 0; i < 15; i++)
     {
 		static const int numColumns = 4;
         for (int j = 0; j < numColumns; j++)
@@ -92,7 +92,7 @@ void Stage::LoadStageCsv()
             if (obstacle != nullptr)
             {
                 float x = xPositions[j];
-                float z = (i + 1) * 1000.0f;
+                float z = (i + 1) * 1500.0f;
 
                 obstacle->SetPosition(XMFLOAT3(x, 0, z));
 

@@ -20,6 +20,14 @@ void ClearScene::Initialize()
 //更新
 void ClearScene::Update()
 {
+	static float dt;
+	dt += deltaTime;
+	if(dt >= 3.0f)
+	{
+		// シーンを切り替える
+		SceneManager* sceneManager = (SceneManager*)GetParent();
+		sceneManager->ChangeScene(SCENE_ID_TITLE);
+	}
 }
 
 //描画

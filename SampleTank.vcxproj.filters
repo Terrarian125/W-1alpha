@@ -42,6 +42,9 @@
     <Filter Include="01Engine\ImGui">
       <UniqueIdentifier>{762a9b9f-5862-4e0e-88e6-b2fb52d76d26}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03Scene\00Title">
+      <UniqueIdentifier>{96fe7913-ab3d-4a7f-baee-2a0bb28c839f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\BoxCollider.cpp">
@@ -177,11 +180,14 @@
       <Filter>01Engine\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="Engine\MyCursor.cpp" />
-    <ClCompile Include="Source\ClearScene.cpp">
-      <Filter>03Scene\02Clear</Filter>
+    <ClCompile Include="Source\Title.cpp">
+      <Filter>03Scene\00Title</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameoverScene.cpp">
       <Filter>03Scene\03Gameover</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ClearScene.cpp">
+      <Filter>03Scene\02Clear</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -320,11 +326,14 @@
     </ClInclude>
     <ClInclude Include="Engine\InputBinding.h" />
     <ClInclude Include="Engine\MyCursor.h" />
-    <ClInclude Include="Source\ClearScene.h">
-      <Filter>03Scene\02Clear</Filter>
+    <ClInclude Include="Source\Title.hpp">
+      <Filter>03Scene\00Title</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameoverScene.h">
       <Filter>03Scene\03Gameover</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ClearScene.h">
+      <Filter>03Scene\02Clear</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

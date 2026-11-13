@@ -3,6 +3,7 @@
 #include "../Source/RaceScene.hpp"
 #include "../Source/ClearScene.h"
 #include "../Source/GameoverScene.h"
+#include "../Source/Title.hpp"
 #include "Model.h"
 #include "Image.h"
 #include "Audio.h"
@@ -18,9 +19,9 @@ SceneManager::SceneManager(GameObject * parent)
 void SceneManager::Initialize()
 {
 	//最初のシーンを準備
-	currentSceneID_ = SCENE_ID_TEST;
+	currentSceneID_ = SCENE_ID_TITLE;
 	nextSceneID_ = currentSceneID_;
-	Instantiate<RaceScene>(this);
+	Instantiate<Title>(this);
 }
 
 //更新
@@ -41,6 +42,7 @@ void SceneManager::Update()
 		switch (nextSceneID_)
 		{
 		case SCENE_ID_TEST: Instantiate<RaceScene>(this); break;
+		case SCENE_ID_TITLE: Instantiate<Title>(this); break;
 		case SCENE_ID_PLAY: Instantiate<RaceScene>(this); break;
 		case SCENE_ID_CLEAR: Instantiate<ClearScene>(this); break;
 		case SCENE_ID_GAMEOVER: Instantiate<GameoverScene>(this); break;
