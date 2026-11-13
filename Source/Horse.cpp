@@ -109,7 +109,7 @@ void Horse::Run()
 
 	if (speed_ < 15.0f)
 	{
-		speed_ += 0.5f;
+		speed_ += 0.1f;
 	}
 }
 
@@ -188,4 +188,6 @@ void Horse::OnCollision(GameObject* pTarget)
 	knockbackVelocity_.z = dir.z * power;
 
 	knockbackTime_ = 0.5f;
+
+	speed_ = 0.5f;
 }

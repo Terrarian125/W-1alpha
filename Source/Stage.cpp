@@ -85,7 +85,7 @@ void Stage::LoadStageCsv()
                 break;
 
             case 4:
-                obstacle = Instantiate<cactus2>(GetParent());
+                //obstacle = Instantiate<cactus2>(GetParent());
                 break;
             }
 

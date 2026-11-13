@@ -9,7 +9,7 @@ void Rock::Initialize()
 {
 	hModel_ = Model::Load("Model/Rock00.fbx");
 
-	SetBoxCollider(XMFLOAT3(0.0f, 0.0f, 0.0f), { 200, 200, 100 });
+	SetBoxCollider(XMFLOAT3(0.0f, 0.0f, 0.0f), { 200, 400, 200 });
 }
 
 void Rock::Update()
