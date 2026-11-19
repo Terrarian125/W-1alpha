@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include "Engine/FontText.hpp"
+#include "Config.h"
 
 // 銃のレティクルを管理するクラス
 class Reticle : public GameObject
@@ -8,21 +9,20 @@ class Reticle : public GameObject
     FontText textReticle_;       //テキスト描画用のオブジェクト
 
     // レティクルの座標
-    XMFLOAT3 position_[2];
+    XMFLOAT3 position_[Config::PLAYER_NUM];
     XMFLOAT3 rotate_;   // 回転
-    XMFLOAT3 scale_;
+    XMFLOAT3 scale_;    // 拡大率
 
     // 画像読み込み
-    int hImage_[2];
+    int hImage_[Config::PLAYER_NUM];
 
     // 標準移動
     void Move();
 
-    // 発射
-    void Shoot_1P();
-    void Shoot_2P();
+    // 発射(二人分)
+    void Shoot(int player);
 
-    bool triggerOld_[2] = { false, false };
+    bool triggerOld_[Config::PLAYER_NUM] = { false, false };
 
 public:
     // コンストラクタ

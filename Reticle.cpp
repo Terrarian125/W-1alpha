@@ -13,6 +13,23 @@
 
 using namespace DirectX;
 using namespace std;
+using namespace Config;
+
+namespace
+{
+    // レティクルの初期値
+    const XMFLOAT3 Init_Pos[PLAYER_NUM] = { { -0.3f, 0.0f, 0.0f }, { 0.3f, 0.0f, 0.0f } };
+    const float    Reticle_scale = 0.2f; // 拡大率
+
+    // レティクルの移動速度
+    const float Speed = 0.02f;
+
+    // 移動の範囲
+    const float Limit_X_Left  = -0.9f;
+    const float Limit_X_Right =  0.9f;
+    const float Limit_Y_Up    =  0.82f;
+    const float Limit_Y_Down  = -0.5f;
+}
 
 // コンストラクタ
 Reticle::Reticle(GameObject* parent)
@@ -32,9 +49,6 @@ Reticle::~Reticle()
 // 初期化
 void Reticle::Initialize()
 {
-    // 銃表示（銃はレティクルの子クラス）
-    //Instantiate<Gun>(this);
-
     // レティクルの画像のロード
     hImage_[0] = Image::Load("Image/Reticle_1P.png");
     assert(hImage_[0] >= 0);
@@ -42,10 +56,8 @@ void Reticle::Initialize()
     assert(hImage_[1] >= 0);
 
     // 一応あると楽だからここに
-    position_[0] = { -0.3f, 0.0f, 0.0f };  // 位置
-    position_[1] = {  0.3f, 0.0f, 0.0f };  // 位置
-    rotate_   = { 0.0f,0.0f,0.0f };  // 回転
-    scale_    = { 0.2f, 0.2f,0.2f }; // 拡大率
+    rotate_ = { 0.0f, 0.0f, 0.0f };                            // 回転
+    scale_  = { Reticle_scale, Reticle_scale, Reticle_scale }; // 拡大率
 
     textReticle_.Initialize("Fonts/Rye-Regular.ttf", 28.0f);
 }
@@ -56,37 +68,31 @@ void Reticle::Update()
     // 標準移動
     Move();
 
-    // 発射
-    Shoot_1P();
-    Shoot_2P();
+    // 二人分
+    for (int i = 0; i < PLAYER_NUM; i++) {
+        // 発射
+        Shoot(i);
 
-    // 画面を超えないように指定
-    {
-        const float Limit_X_MAX =  -0.9f, Limit_X_MIN =  0.9f;
-        const float Limit_Y_MAX =  0.82f, Limit_Y_MIN = -0.5f;
-        for (int i = 0; i < 2; i++) {
-            if (position_[i].x <= Limit_X_MAX) position_[i].x = Limit_X_MAX; // 左
-            if (position_[i].x >= Limit_X_MIN) position_[i].x = Limit_X_MIN; // 右
-            if (position_[i].y >= Limit_Y_MAX) position_[i].y = Limit_Y_MAX; // 上
-            if (position_[i].y <= Limit_Y_MIN) position_[i].y = Limit_Y_MIN; // 下
-        }
+        // 画面を超えないように指定
+        if (position_[i].x <= Limit_X_Left)  position_[i].x = Limit_X_Left;  // 左
+        if (position_[i].x >= Limit_X_Right) position_[i].x = Limit_X_Right; // 右
+        if (position_[i].y >= Limit_Y_Up)    position_[i].y = Limit_Y_Up;    // 上
+        if (position_[i].y <= Limit_Y_Down)  position_[i].y = Limit_Y_Down;  // 下
     }
 }
 
 // 描画
 void Reticle::Draw()
 {
-    transform_.rotate_ = { rotate_.x, rotate_.y, rotate_.z };      // 回転
-    transform_.scale_ = { scale_.x, scale_.y, scale_.z };          // 拡大率
+    transform_.rotate_ = rotate_;   // 回転
+    transform_.scale_  = scale_;    // 拡大率
 
     // レティクル表示
-    transform_.position_ = { position_[0].x,position_[0].y,position_[0].z};  // 位置
-    Image::SetTransform(hImage_[0], transform_);
-    Image::Draw(hImage_[0]);
-
-    transform_.position_ = { position_[1].x,position_[1].y,position_[1].z };  // 位置
-    Image::SetTransform(hImage_[1], transform_);
-    Image::Draw(hImage_[1]);
+    for (int i = 0; i < PLAYER_NUM; i++) {
+        transform_.position_ = position_[i];  // 位置
+        Image::SetTransform(hImage_[i], transform_);
+        Image::Draw(hImage_[i]);
+    }
 
     // ImGui (デバック用)
     {
@@ -136,87 +142,46 @@ void Reticle::Release()
 // 標準移動
 void Reticle::Move()
 {
-    float f = 0.02f;
-
-    //移動ベクトル
-    XMFLOAT3 moveVector[2] = { Input::GetPadStickL(0), Input::GetPadStickL(1) };
-
     // コントローラー対応
+    for (int i = 0; i < PLAYER_NUM; i++)
     {
+        //移動ベクトル
+        XMFLOAT3 moveVector = Input::GetPadStickL(i);
+
         // XMFLOAT3 から float への変換が必要
-        position_[0].x += moveVector[0].x * f;
-        position_[0].y += moveVector[0].y * f;
-
-        position_[1].x += moveVector[1].x * f;
-        position_[1].y += moveVector[1].y * f;
+        position_[i].x += moveVector.x * Speed;
+        position_[i].y += moveVector.y * Speed;
     }
 
-    //前進
-    if (Input::IsKey(DIK_W))
-    {
-        position_[0].y += f;
-    }
+    // 1P
+    if (Input::IsKey(DIK_W)) position_[PLAYER_1].y += Speed;  // 上
+    if (Input::IsKey(DIK_S)) position_[PLAYER_1].y -= Speed;  // 下
+    if (Input::IsKey(DIK_D)) position_[PLAYER_1].x += Speed;  // 右
+    if (Input::IsKey(DIK_A)) position_[PLAYER_1].x -= Speed;  // 左
 
-    //後退
-    if (Input::IsKey(DIK_S))
-    {
-        position_[0].y -= f;
-    }
-
-    //右旋回
-    if (Input::IsKey(DIK_D))
-    {
-        position_[0].x += f;
-    }
-
-    //左旋回
-    if (Input::IsKey(DIK_A))
-    {
-        position_[0].x -= f;
-    }
-
-    // ↓デバック用
-    {
-        //前進
-        if (Input::IsKey(DIK_I))
-        {
-            position_[1].y += f;
-        }
-
-        //後退
-        if (Input::IsKey(DIK_K))
-        {
-            position_[1].y -= f;
-        }
-
-        //右旋回
-        if (Input::IsKey(DIK_L))
-        {
-            position_[1].x += f;
-        }
-
-        //左旋回
-        if (Input::IsKey(DIK_J))
-        {
-            position_[1].x -= f;
-        }
-    }
+    // 2P ※デバッグ用
+    if (Input::IsKey(DIK_I)) position_[PLAYER_2].y += Speed;  // 上
+    if (Input::IsKey(DIK_K)) position_[PLAYER_2].y -= Speed;  // 下
+    if (Input::IsKey(DIK_L)) position_[PLAYER_2].x += Speed;  // 右
+    if (Input::IsKey(DIK_J)) position_[PLAYER_2].x -= Speed;  // 左
 }
 
 // 発射
-void Reticle::Shoot_1P()
+void Reticle::Shoot(int player)
 {
-    // 右トリガーを一瞬だけ押したときに使う、メンバ変数
-    bool triggerNow = Input::GetPadTrrigerR(0) > 0.5f;
+    if (player < 0 || player >= PLAYER_NUM) return;
 
-    if (Input::IsMouseButtonDown(0)
-        || Input::IsPadButtonDown(XINPUT_GAMEPAD_B, 0)
-        || triggerNow && !triggerOld_[0])
+    // 右トリガーを一瞬だけ押したときに使う、メンバ変数
+    bool triggerNow = Input::GetPadTrrigerR(player) > 0.5f;
+
+    if (Input::IsMouseButtonDown(player)
+        || Input::IsPadButtonDown(XINPUT_GAMEPAD_B, player)
+        || triggerNow && !triggerOld_[player])
     {
         // クレーとの当たり判定
         Clay* pClay = static_cast<Clay*>(FindObject("Clay"));
         if (pClay != nullptr) {
-            pClay->TryBreak_1P(XMFLOAT2(position_[0].x, position_[0].y));
+            pClay->TryBreak(player,XMFLOAT2(position_[player].x, position_[player].y));
         }
 
         //弾をシーンに追加
@@ -236,25 +201,5 @@ void Reticle::Shoot_1P()
         //pBullet->Shot(position_, dir);
     }
 
-    triggerOld_[0] = triggerNow;
-}
-
-// 発射
-void Reticle::Shoot_2P()
-{
-    // 右トリガーを一瞬だけ押したときに使う、メンバ変数
-    bool triggerNow = Input::GetPadTrrigerR(1) > 0.5f;
-
-    if (Input::IsMouseButtonDown(1)
-        || Input::IsPadButtonDown(XINPUT_GAMEPAD_B, 1)
-        || triggerNow && !triggerOld_[1])
-    {
-        // クレーとの当たり判定
-        Clay* pClay = static_cast<Clay*>(FindObject("Clay"));
-        if (pClay != nullptr) {
-            pClay->TryBreak_2P(XMFLOAT2(position_[1].x, position_[1].y));
-        }
-    }
-
-    triggerOld_[1] = triggerNow;
+    triggerOld_[player] = triggerNow;
 }

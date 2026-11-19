@@ -18,7 +18,7 @@ UI::UI(GameObject* parent)
     rotate_{ { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f },{ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f } },
     scale_{ { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f },{ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f } },
     hImage_{ -1, -1 }, hSound_(-1),
-    Bullet_num{ 999, 999 }, /*Score(0),*/ Game_Timer(10.0f)
+    Bullet_num{ 999, 999 }, /*Score(0),*/ Game_Timer(13.0f)
 {
 }
 

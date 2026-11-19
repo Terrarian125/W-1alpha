@@ -1,33 +1,40 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include "Engine/FontText.hpp"
+#include "Config.h"
 
 // クレーを管理するクラス
 class Clay : public GameObject
 {
+public:
+    static const int Clay_Max = 10;   // クレーの最大数
+
+private:
     FontText textClay_;       //テキスト描画用のオブジェクト
 
     // クレーの座標
-    XMFLOAT3 position_[10]; // 位置
-    XMFLOAT3 rotate_[10];   // 回転
-    XMFLOAT3 scale_[10];    // 拡大率
+    XMFLOAT3 position_[Clay_Max]; // 位置
+    XMFLOAT3 rotate_[Clay_Max];   // 回転
+    XMFLOAT3 scale_[Clay_Max];    // 拡大率
 
-    int hModel_[10];  //モデル番号
-    //int hImage_;    // 画像読み込み
-    int hSound_[5];   // サウンド読み込み
+    int hModel_[Clay_Max];  // モデル番号
+    int hSound_[Clay_Max];  // サウンド読み込み
 
-    int ClayNum_;
+    bool OnDown_[Clay_Max]; // 下がるか上がるかのフラグ　    ※ true：下がる / false：上がる
+    bool IsDead_[Clay_Max]; // クレーの死亡しているかフラグ  ※ true：死亡 / false：生存
+
+    const float HitRange = 0.5f; // 当たり判定の大きさ
+
+    // 各クレーごとにスコア
+    int Score_[Clay_Max];
+    // 合計のスコア
+    static int TotalScore_[Config::PLAYER_NUM];
 
     //移動
     void Move();
 
-    bool OnDown_[10]; // 下がるか上がるかのフラグ　    ※ true：下がる / false：上がる
-    bool IsDead_[10]; // クレーの死亡しているかフラグ　※ true：死亡 / false：生存
-
-    const float HitRange = 0.5f; // 当たり判定の大きさ
-
-    int Score_[10];            // 各クレーごとにスコア
-    static int TotalScore_[2]; // 合計のスコア
+    // 全てのクレーが壊れているか
+    bool AllBroken() const;
 
 public:
 
@@ -54,18 +61,20 @@ public:
     //void OnCollision(GameObject* pTarget) override;
 
     // レティクルの中心がクレーに重なっているかの確認処理
-    int FindOverlap_1P(const XMFLOAT2& reticleNdc_1P) const;
-    int FindOverlap_2P(const XMFLOAT2& reticleNdc_2P) const;
+    int FindOverlap(const XMFLOAT2& reticleNdc) const;
 
     // 発砲時、レティクルが重なっているクレーがあれば壊す
-    bool TryBreak_1P(const XMFLOAT2& reticleNdc_1P);
-    bool TryBreak_2P(const XMFLOAT2& reticleNdc_2P);
+    bool TryBreak(int player, const XMFLOAT2& reticleNdc);
+    bool TryBreak_1P(const XMFLOAT2& reticleNdc) { return TryBreak(Config::PLAYER_1, reticleNdc); }
+    bool TryBreak_2P(const XMFLOAT2& reticleNdc) { return TryBreak(Config::PLAYER_2, reticleNdc); }
 
     // 合計スコアを取得
-    static int GetTotalScore_1P() { return TotalScore_[0]; }
-    static int GetTotalScore_2P() { return TotalScore_[1]; }
+    static int GetTotalScore_1P() { return TotalScore_[Config::PLAYER_1]; }
+    static int GetTotalScore_2P() { return TotalScore_[Config::PLAYER_2]; }
 
     // 合計スコアをリセット
-    static void ScoreReset() { TotalScore_[0] = 0, TotalScore_[1] = 0; }
-
+    static void ScoreReset()
+    {
+        for (int i = 0; i < Config::PLAYER_NUM; i++) TotalScore_[i] = 0;
+    }
 };

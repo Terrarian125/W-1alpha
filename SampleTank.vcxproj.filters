@@ -33,9 +33,6 @@
     <Filter Include="03Scene\02Clear">
       <UniqueIdentifier>{050c7a69-d230-4c93-8612-4aecb0548afd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03Scene\03Gameover">
-      <UniqueIdentifier>{241ee9f3-a84c-496c-8609-08c136f3420f}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\BoxCollider.cpp">
@@ -103,9 +100,6 @@
     </ClCompile>
     <ClCompile Include="ClearScene.cpp">
       <Filter>03Scene\02Clear</Filter>
-    </ClCompile>
-    <ClCompile Include="GameoverScene.cpp">
-      <Filter>03Scene\03Gameover</Filter>
     </ClCompile>
     <ClCompile Include="Engine\FontText.cpp">
       <Filter>01Engine\ResourceManager</Filter>
@@ -198,9 +192,6 @@
     <ClInclude Include="ClearScene.h">
       <Filter>03Scene\02Clear</Filter>
     </ClInclude>
-    <ClInclude Include="GameoverScene.h">
-      <Filter>03Scene\03Gameover</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\FontText.hpp">
       <Filter>01Engine\ResourceManager</Filter>
     </ClInclude>
@@ -227,6 +218,9 @@
       <Filter>01Engine\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="UI.h">
+      <Filter>03Scene\01Play</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
       <Filter>03Scene\01Play</Filter>
     </ClInclude>
   </ItemGroup>

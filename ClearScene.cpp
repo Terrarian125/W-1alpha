@@ -63,8 +63,8 @@ void ClearScene::Initialize()
     scale_[1]    = {  0.5f, 0.5f, 0.0f }; // 拡大率（「WIN」,「LOSE」表示用）
     scale_[2]    = {  1.2f, 3.0f, 0.0f }; // 拡大率（後ろの枠表示用）
 
-    //textP_num_.Initialize("Fonts/Rye-Regular.ttf", 86.0f);
-    //textFinal_S_.Initialize("Fonts/Rye-Regular.ttf", 64.0f);
+    //textP_num_.Initialize("Fonts/Rye-Regular.ttf", 72.0f);
+    //textFinal_S_.Initialize("Fonts/Rye-Regular.ttf", 72.0f);
 }
 
 //更新
@@ -128,17 +128,17 @@ void ClearScene::Draw()
     {
         char str[64];
         sprintf_s(str, "%.5d", Clay::GetTotalScore_1P());
-        // textFinal_S_.Draw(120, 20, str);
+        //textFinal_S_.Draw(370, 280, str);
         DrawTextAt(370, 280, 72.0f, str);
 
         //char str[64];
         sprintf_s(str, "%.5d", Clay::GetTotalScore_2P());
-        // textFinal_S_.Draw(880, 20, str);
+        //textFinal_S_.Draw(700, 280, str);
         DrawTextAt(700, 280, 72.0f, str);
     }
 
-    //textP_num_.Draw(32, 32, "Player1");
-    //textP_num_.Draw(90, 32, "Player2");
+    // textP_num_.Draw(360, 140, "Player1");
+    // textP_num_.Draw(680, 140, "Player2");
     DrawTextAt(360, 140, 72.0f, "Player1");
     DrawTextAt(680, 140, 72.0f, "Player2");
 }

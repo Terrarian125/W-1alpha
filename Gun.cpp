@@ -7,13 +7,32 @@
 
 using namespace DirectX;
 using namespace std;
+using namespace Config;
+
+namespace
+{
+    // 銃の初期値
+    const XMFLOAT3 Init_Pos[PLAYER_NUM] = { { -3.5f, -7.0f, -6.0f }, { 3.8f, -7.0f, -6.0f } };
+    const XMFLOAT3 Init_Rot[PLAYER_NUM] = { { 0.0f, -103.0f, -12.0f }, { 0.0f, -77.0f, -12.0f } };
+    const float    Gun_scale = 0.5f; // 拡大率
+
+    // 回転の範囲
+    const float Rot_Y_Left_Limit  = -124.0f; // 左へ向ける限界
+    const float Rot_Y_Right_Limit =  -60.0f; // 右へ向ける限界
+    const float Rot_Z_UP_Limit    =    8.0f; // 上へ向ける限界
+    const float Rot_Z_Down_Limit  =  -24.0f; // 下へ向ける限界
+
+    // 回転速度
+    const float Rot_Z_Speed = 0.5f; // 上下
+    const float Rot_Y_Speed = 0.7f; // 左右
+}
 
 // コンストラクタ
 Gun::Gun(GameObject* parent)
     :GameObject(parent, "Reticle"),
     position_{ {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} },
-    rotate_{ {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} },
-    scale_{ {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} },
+    rotate_  { {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} },
+    scale_   { {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} },
     hModel_(-1)
 {
 }
@@ -31,13 +50,12 @@ void Gun::Initialize()
     assert(hModel_ >= 0);
     
     // 一応あると楽だからここに
-    position_[0] = { -3.5f,  -7.0f,  -6.0f}; // 位置
-    rotate_[0] = { 0.0f, -103.0f, -12.0f};   // 回転
-    scale_[0] = { 0.5f,   0.5f,  0.5f};      // 拡大率
-
-    position_[1] = { 3.8f,  -7.0f,  -6.0f }; // 位置
-    rotate_[1] = { 0.0f, -77.0f, -12.0f };   // 回転
-    scale_[1] = { 0.5f,   0.5f,  0.5f };     // 拡大率
+    for (int i = 0; i < PLAYER_NUM; i++)
+    {
+        position_[i] = Init_Pos[i];
+        rotate_[i]   = Init_Rot[i];
+        scale_[i]    = { Gun_scale, Gun_scale, Gun_scale };
+    }
 
     textGun_.Initialize("Fonts/Rye-Regular.ttf", 28.0f);
 }
@@ -49,13 +67,11 @@ void Gun::Update()
 
     // 銃の回転の上限指定
     {
-        const float Limit_Y_MAX = -124.0f, Limit_Y_MIN = -60.0f;
-        const float Limit_Z_MAX = 8.0f, Limit_Z_MIN = -24.0f;
-        for (int i = 0; i < 2; i++) {
-            if (rotate_[i].y <= Limit_Y_MAX) rotate_[i].y = Limit_Y_MAX; // 左
-            if (rotate_[i].y >= Limit_Y_MIN) rotate_[i].y = Limit_Y_MIN; // 右
-            if (rotate_[i].z >= Limit_Z_MAX) rotate_[i].z = Limit_Z_MAX; // 上
-            if (rotate_[i].z <= Limit_Z_MIN) rotate_[i].z = Limit_Z_MIN; // 下
+        for (int i = 0; i < PLAYER_NUM; i++) {
+            if (rotate_[i].y <= Rot_Y_Left_Limit)  rotate_[i].y = Rot_Y_Left_Limit;  // 左
+            if (rotate_[i].y >= Rot_Y_Right_Limit) rotate_[i].y = Rot_Y_Right_Limit; // 右
+            if (rotate_[i].z >= Rot_Z_UP_Limit)    rotate_[i].z = Rot_Z_UP_Limit;    // 上
+            if (rotate_[i].z <= Rot_Z_Down_Limit)  rotate_[i].z = Rot_Z_Down_Limit;  // 下
         }
     }
 }
@@ -63,20 +79,15 @@ void Gun::Update()
 // 描画
 void Gun::Draw()
 {
-    //position_ = { -3.5f,  -7.0f, -6.0f };
-    transform_.position_ = { position_[0].x, position_[0].y, position_[0].z}; // 位置
-    transform_.rotate_   = { rotate_[0].x, rotate_[0].y, rotate_[0].z};       // 回転
-    transform_.scale_    = { scale_[0].x, scale_[0].y, scale_[0].z};          // 拡大率
+    for (int i = 0; i < PLAYER_NUM; i++)
+    {
+        transform_.position_ = position_[i]; // 位置
+        transform_.rotate_   = rotate_[i];   // 回転
+        transform_.scale_    = scale_[i];    // 拡大率
 
-    Model::SetTransform(hModel_, transform_);
-    Model::Draw(hModel_);
-
-    transform_.position_ = { position_[1].x, position_[1].y, position_[1].z }; // 位置
-    transform_.rotate_ = { rotate_[1].x, rotate_[1].y, rotate_[1].z };       // 回転
-    transform_.scale_ = { scale_[1].x, scale_[1].y, scale_[1].z };          // 拡大率
-
-    Model::SetTransform(hModel_, transform_);
-    Model::Draw(hModel_);
+        Model::SetTransform(hModel_, transform_);
+        Model::Draw(hModel_);
+    }
 
     // ImGui (デバック用)
     {
@@ -107,69 +118,26 @@ void Gun::Release()
 
 void Gun::Move()
 {
-    float f_z = 0.5f, f_y = 0.7f;
-
-    //移動ベクトル
-    XMFLOAT3 moveVector[2] = { Input::GetPadStickL(0), Input::GetPadStickL(1) };
-
     // コントローラー対応
+    for (int i = 0; i < PLAYER_NUM; i++)
     {
+        //移動ベクトル
+        XMFLOAT3 moveVector = Input::GetPadStickL(i);
+
         // XMFLOAT3 から float への変換が必要
-        rotate_[0].z += moveVector[0].y * f_z;
-        rotate_[0].y += moveVector[0].x * f_y;
-
-        rotate_[1].z += moveVector[1].y * f_z;
-        rotate_[1].y += moveVector[1].x * f_y;
+        rotate_[i].z += moveVector.y * Rot_Z_Speed;
+        rotate_[i].y += moveVector.x * Rot_Y_Speed;
     }
 
-    //前進
-    if (Input::IsKey(DIK_W))
-    {
-        rotate_[0].z += f_z;
-    }
+    // 1P
+    if (Input::IsKey(DIK_W)) rotate_[PLAYER_1].z += Rot_Z_Speed; //上
+    if (Input::IsKey(DIK_S)) rotate_[PLAYER_1].z -= Rot_Z_Speed; //下
+    if (Input::IsKey(DIK_D)) rotate_[PLAYER_1].y += Rot_Y_Speed; //右旋回
+    if (Input::IsKey(DIK_A)) rotate_[PLAYER_1].y -= Rot_Y_Speed; //左旋回
 
-    //後退
-    if (Input::IsKey(DIK_S))
-    {
-        rotate_[0].z -= f_z;
-    }
-
-    //右旋回
-    if (Input::IsKey(DIK_D))
-    {
-        rotate_[0].y += f_y;
-    }
-
-    //左旋回
-    if (Input::IsKey(DIK_A))
-    {
-        rotate_[0].y -= f_y;
-    }
-
-    // ↓デバック用
-    {
-        //前進
-        if (Input::IsKey(DIK_I))
-        {
-            rotate_[1].z += f_z;
-        }
-
-        //後退
-        if (Input::IsKey(DIK_K))
-        {
-            rotate_[1].z -= f_z;
-        }
-
-        //右旋回
-        if (Input::IsKey(DIK_L))
-        {
-            rotate_[1].y += f_y;
-        }
-
-        //左旋回
-        if (Input::IsKey(DIK_J))
-        {
-            rotate_[1].y -= f_y;
-        }
-    }
+    // 2P ※デバッグ用
+    if (Input::IsKey(DIK_I)) rotate_[PLAYER_2].z += Rot_Z_Speed; //上
+    if (Input::IsKey(DIK_K)) rotate_[PLAYER_2].z -= Rot_Z_Speed; //下
+    if (Input::IsKey(DIK_L)) rotate_[PLAYER_2].y += Rot_Y_Speed; //右旋回
+    if (Input::IsKey(DIK_J)) rotate_[PLAYER_2].y -= Rot_Y_Speed; //左旋回
 }
